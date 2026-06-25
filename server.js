@@ -130,8 +130,8 @@ async function handler(req, res) {
 // Vercel serverless export
 export default handler;
 
-// Local HTTP server (only runs when executed directly, not imported by Vercel)
-if (process.env.PORT || process.argv[1] === fileURLToPath(import.meta.url)) {
+// Local HTTP server only — Vercel uses the export default above
+if (!process.env.VERCEL && process.argv[1] === fileURLToPath(import.meta.url)) {
   const { createServer } = await import('http');
   const PORT = process.env.PORT || 3000;
   createServer(handler).listen(PORT, () =>
