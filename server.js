@@ -1,13 +1,9 @@
-import http from 'http';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import Groq from 'groq-sdk';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PORT = process.env.PORT || 3000;
-
-const client = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 const SYSTEM_PROMPT = `أنت مساعد ذكي ديال منصة DabaNet، كاتساعد الخريجين المغاربة باش يلقاو خدمة.
 **خاصك دايما تجاوب بالدارجة المغربية** (مزيج ديال العربية الدارجة والفرنسية كيما كايتكلم المغاربة).
@@ -37,14 +33,12 @@ const ANAPEC_SECTORS = [
   { title: "Infirmier / Technicien de santé", region: "Toutes régions", contrat: "CDD" },
   { title: "Opérateur de saisie / Secrétaire", region: "Toutes régions", contrat: "CDD" },
   { title: "Responsable Logistique / Supply Chain", region: "Casablanca, Tanger", contrat: "CDI" },
-  { title: "Chef de projet / Coordinateur", region: "Rabat, Casablanca", contrat: "CDI" },
-  { title: "Agent de sécurité / Gardien", region: "Toutes régions", contrat: "CDI" },
 ];
 
 async function fetchAnapecJobs(query = "") {
   try {
-    const searchTerm = encodeURIComponent(query || "توظيف");
-    const url = `https://www.anapec.org/sigec-app-rv/front/chercheurs/recherche_offre?motcle=${searchTerm}&region=&secteur=&typeContrat=&niveauEtude=&page=1`;
+    const searchTerm = encodeURIComponent(query || "emploi");
+    const url = `https://www.anapec.org/sigec-app-rv/front/chercheurs/recherche_offre?motcle=${searchTerm}`;
     const res = await fetch(url, {
       headers: { "User-Agent": "Mozilla/5.0", "Accept-Language": "fr-MA,fr;q=0.9" },
       signal: AbortSignal.timeout(5000),
@@ -58,15 +52,13 @@ async function fetchAnapecJobs(query = "") {
       const titleMatch = line.match(/title="([^"]{5,80})"/);
       const h3Match = line.match(/<h3[^>]*>([^<]{5,80})<\/h3>/);
       const strongMatch = line.match(/<strong[^>]*>([^<]{5,60})<\/strong>/);
-      if (titleMatch && !currentJob.title) { currentJob.title = titleMatch[1].trim(); }
-      if (h3Match && !currentJob.title) { currentJob.title = h3Match[1].trim(); }
-      if (strongMatch && !currentJob.company) { currentJob.company = strongMatch[1].trim(); }
+      if (titleMatch && !currentJob.title) currentJob.title = titleMatch[1].trim();
+      if (h3Match && !currentJob.title) currentJob.title = h3Match[1].trim();
+      if (strongMatch && !currentJob.company) currentJob.company = strongMatch[1].trim();
       if (currentJob.title && jobs.length < 8) { jobs.push({ ...currentJob }); currentJob = {}; }
     }
     return jobs.length > 0 ? jobs : null;
-  } catch (err) {
-    return null;
-  }
+  } catch { return null; }
 }
 
 const MIME = {
@@ -74,48 +66,75 @@ const MIME = {
   '.js': 'application/javascript',
   '.css': 'text/css',
   '.json': 'application/json',
+  '.png': 'image/png',
+  '.ico': 'image/x-icon',
 };
 
-const server = http.createServer(async (req, res) => {
+async function handleChat(req, res) {
+  let body = '';
+  await new Promise(resolve => { req.on('data', c => body += c); req.on('end', resolve); });
+  try {
+    const { messages } = JSON.parse(body);
+    const lastMsg = messages[messages.length - 1]?.content || "";
+    const keywords = lastMsg.match(/\b(informatique|comptable|ingénieur|commercial|médecin|infirmier|enseignant|électricien|logistique|RH|marketing|développeur|web|مهندس|محاسب|تجاري|مبرمج|offre|emploi)\b/gi);
+    const liveJobs = await fetchAnapecJobs(keywords?.[0] || "");
+    const jobsContext = liveJobs?.length > 0
+      ? `\n\n--- OFFRES ANAPEC EN TEMPS RÉEL ---\n` + liveJobs.map((j, i) => `${i + 1}. ${j.title}${j.company ? ` — ${j.company}` : ""}`).join("\n") + `\nhttps://www.anapec.org/sigec-app-rv/front/chercheurs/recherche_offre`
+      : `\n\n--- SECTEURS ANAPEC ---\n` + ANAPEC_SECTORS.map((j, i) => `${i + 1}. ${j.title} | ${j.region} | ${j.contrat}`).join("\n") + `\nhttps://www.anapec.org/sigec-app-rv/front/chercheurs/recherche_offre`;
+
+    const client = new Groq({ apiKey: process.env.GROQ_API_KEY });
+    const response = await client.chat.completions.create({
+      model: 'llama-3.1-8b-instant',
+      max_tokens: 600,
+      messages: [{ role: 'system', content: SYSTEM_PROMPT + jobsContext }, ...messages],
+    });
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ reply: response.choices[0].message.content }));
+  } catch (err) {
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: err.message }));
+  }
+}
+
+function handleStatic(req, res) {
+  let filePath = req.url === '/' ? '/index.html' : req.url.split('?')[0];
+  filePath = path.join(__dirname, filePath);
+  fs.readFile(filePath, (err, data) => {
+    if (err) {
+      // Fallback to index.html for SPA routing
+      fs.readFile(path.join(__dirname, 'index.html'), (err2, data2) => {
+        if (err2) { res.writeHead(404); return res.end('Not found'); }
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        res.end(data2);
+      });
+      return;
+    }
+    const ext = path.extname(filePath);
+    res.writeHead(200, { 'Content-Type': MIME[ext] || 'text/plain' });
+    res.end(data);
+  });
+}
+
+// Main request handler (used by both local HTTP server and Vercel)
+async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') { res.writeHead(204); return res.end(); }
 
   if (req.method === 'POST' && req.url === '/api/chat') {
-    let body = '';
-    req.on('data', chunk => body += chunk);
-    req.on('end', async () => {
-      try {
-        const { messages } = JSON.parse(body);
-        const lastMsg = messages[messages.length - 1]?.content || "";
-        const keywords = lastMsg.match(/\b(informatique|comptable|ingénieur|commercial|médecin|infirmier|enseignant|électricien|logistique|RH|marketing|développeur|web|مهندس|محاسب|تجاري|مبرمج|خدمة|عمل|offre|emploi)\b/gi);
-        const liveJobs = await fetchAnapecJobs(keywords?.[0] || "");
-        let jobsContext = liveJobs?.length > 0
-          ? `\n\n--- OFFRES ANAPEC EN TEMPS RÉEL ---\n` + liveJobs.map((j,i) => `${i+1}. ${j.title}${j.company ? ` — ${j.company}` : ""}`).join("\n") + `\nhttps://www.anapec.org/sigec-app-rv/front/chercheurs/recherche_offre`
-          : `\n\n--- SECTEURS ANAPEC ---\n` + ANAPEC_SECTORS.map((j,i) => `${i+1}. ${j.title} | ${j.region} | ${j.contrat}`).join("\n") + `\nhttps://www.anapec.org/sigec-app-rv/front/chercheurs/recherche_offre`;
-
-        const response = await client.chat.completions.create({
-          model: 'llama-3.1-8b-instant',
-          max_tokens: 600,
-          messages: [{ role: 'system', content: SYSTEM_PROMPT + jobsContext }, ...messages],
-        });
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ reply: response.choices[0].message.content }));
-      } catch (err) {
-        res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: err.message }));
-      }
-    });
-    return;
+    return handleChat(req, res);
   }
+  handleStatic(req, res);
+}
 
-  let filePath = req.url === '/' ? '/index.html' : req.url;
-  filePath = path.join(__dirname, filePath);
-  fs.readFile(filePath, (err, data) => {
-    if (err) { res.writeHead(404); return res.end('Not found'); }
-    res.writeHead(200, { 'Content-Type': MIME[path.extname(filePath)] || 'text/plain' });
-    res.end(data);
-  });
-});
+// Vercel serverless export
+export default handler;
 
-server.listen(PORT, () => console.log(`\n✅ DabaNet → http://localhost:${PORT}\n`));
+// Local HTTP server (only runs when executed directly, not imported by Vercel)
+if (process.env.PORT || process.argv[1] === fileURLToPath(import.meta.url)) {
+  const { createServer } = await import('http');
+  const PORT = process.env.PORT || 3000;
+  createServer(handler).listen(PORT, () =>
+    console.log(`\n✅ DabaNet → http://localhost:${PORT}\n`)
+  );
+}
