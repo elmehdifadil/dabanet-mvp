@@ -1,6 +1,6 @@
-import Anthropic from "@anthropic-ai/sdk";
+import Groq from "groq-sdk";
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const client = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 const SYSTEM_PROMPT = `أنت مساعد ذكي لمنصة DabaNet، منصة مغربية لمواكبة الخريجين الباحثين عن عمل.
 مهمتك مساعدة المستخدمين في:
@@ -24,14 +24,16 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await client.messages.create({
-      model: "claude-haiku-4-5-20251001",
+    const response = await client.chat.completions.create({
+      model: "llama-3.1-8b-instant",
       max_tokens: 512,
-      system: SYSTEM_PROMPT,
-      messages: messages,
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        ...messages,
+      ],
     });
 
-    res.status(200).json({ reply: response.content[0].text });
+    res.status(200).json({ reply: response.choices[0].message.content });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "خطأ في الاتصال بالمساعد الذكي" });
