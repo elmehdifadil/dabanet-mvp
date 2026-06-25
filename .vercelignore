@@ -2,5 +2,5 @@ server.js
 deploy.ps1
 .env
 .env.example
-index.html
+public/
 api/chat.js
