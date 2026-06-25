@@ -1742,7 +1742,23 @@
       <div class="wa-msg bot">مرحباً 👋 أنا مساعد DabaNet الذكي. كيف يمكنني مساعدتك في مسيرتك المهنية؟</div>
     </div>
 
+    <!-- WhatsApp Alert Subscription Panel -->
+    <div id="waAlertPanel" style="display:none;padding:12px 14px;background:#f0fdf4;border-top:1px solid #bbf7d0;">
+      <div style="font-size:0.82rem;font-weight:700;color:#166534;margin-bottom:8px;text-align:right;">🔔 تلقّ عروض العمل على WhatsApp</div>
+      <div style="display:flex;gap:8px;direction:ltr;">
+        <input id="waPhoneInput" type="tel" placeholder="+212 6XX XXX XXX"
+          style="flex:1;padding:8px 10px;border:1.5px solid #86efac;border-radius:8px;font-size:0.85rem;outline:none;">
+        <button id="waSubscribeBtn"
+          style="background:#25D366;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:0.82rem;font-weight:700;cursor:pointer;white-space:nowrap;">
+          S'inscrire
+        </button>
+      </div>
+      <div id="waAlertMsg" style="font-size:0.78rem;margin-top:6px;text-align:right;"></div>
+    </div>
+
     <div class="wa-input-row">
+      <button id="waAlertToggle" title="Alertes WhatsApp"
+        style="background:none;border:none;cursor:pointer;padding:4px 6px;color:#25D366;font-size:1.1rem;flex-shrink:0;" aria-label="Alertes WhatsApp">🔔</button>
       <textarea id="waInput" rows="1" placeholder="اكتب رسالتك…" dir="auto"></textarea>
       <button class="wa-send-btn" id="waSendBtn" aria-label="إرسال">
         <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
@@ -1830,6 +1846,50 @@
     fab.classList.add('hidden');
     chat.classList.remove('hidden');
     input.focus();
+  });
+
+  // WhatsApp Alert Panel
+  var alertToggle = document.getElementById('waAlertToggle');
+  var alertPanel  = document.getElementById('waAlertPanel');
+  var phoneInput  = document.getElementById('waPhoneInput');
+  var subscribeBtn= document.getElementById('waSubscribeBtn');
+  var alertMsg    = document.getElementById('waAlertMsg');
+
+  alertToggle.addEventListener('click', function() {
+    alertPanel.style.display = alertPanel.style.display === 'none' ? 'block' : 'none';
+    if (alertPanel.style.display === 'block') phoneInput.focus();
+  });
+
+  subscribeBtn.addEventListener('click', async function() {
+    var phone = phoneInput.value.trim();
+    if (!phone) { alertMsg.textContent = '⚠️ Entrez votre numéro WhatsApp'; alertMsg.style.color='#dc2626'; return; }
+    subscribeBtn.disabled = true;
+    subscribeBtn.textContent = '...';
+    alertMsg.textContent = '';
+    try {
+      var r = await fetch('/api/notify', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ phone: phone, type: 'subscribe' })
+      });
+      var d = await r.json();
+      if (d.success) {
+        alertMsg.textContent = '✅ Inscrit ! Vérifiez votre WhatsApp.';
+        alertMsg.style.color = '#166534';
+        phoneInput.value = '';
+        subscribeBtn.textContent = '✓ Inscrit';
+      } else {
+        alertMsg.textContent = '❌ ' + (d.error || 'Erreur. Réessayez.');
+        alertMsg.style.color = '#dc2626';
+        subscribeBtn.disabled = false;
+        subscribeBtn.textContent = "S'inscrire";
+      }
+    } catch(e) {
+      alertMsg.textContent = '❌ Connexion impossible.';
+      alertMsg.style.color = '#dc2626';
+      subscribeBtn.disabled = false;
+      subscribeBtn.textContent = "S'inscrire";
+    }
   });
 })();
 </script>
