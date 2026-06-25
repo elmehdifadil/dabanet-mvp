@@ -3,9 +3,5 @@
   "builds": [
     { "src": "index.html", "use": "@vercel/static" },
     { "src": "api/chat.mjs", "use": "@vercel/node" }
-  ],
-  "routes": [
-    { "src": "/api/chat", "dest": "/api/chat.mjs" },
-    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
