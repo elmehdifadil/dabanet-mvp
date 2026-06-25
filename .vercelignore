@@ -1,3 +1,5 @@
+server.js
 deploy.ps1
 .env
 .env.example
+index.html
