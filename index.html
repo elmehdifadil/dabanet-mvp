@@ -1722,6 +1722,55 @@
   }
 </style>
 
+<!-- ===== MODAL INSCRIPTION ===== -->
+<div id="registerModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:18px;width:min(540px,95vw);max-height:90vh;overflow-y:auto;padding:28px 30px;position:relative;box-shadow:0 24px 60px rgba(58,15,69,0.25);">
+    <button onclick="document.getElementById('registerModal').style.display='none'" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:#7C6B82;">✕</button>
+    <div style="text-align:center;margin-bottom:20px;">
+      <div style="font-size:2rem;margin-bottom:6px;">🎯</div>
+      <h3 style="font-family:'Cairo',sans-serif;font-size:1.2rem;color:#3A0F45;margin:0 0 4px;">أنشئ ملفك المهني</h3>
+      <p style="color:#7C6B82;font-size:0.82rem;margin:0;">يقوم الذكاء الاصطناعي بتشخيص ملفك واقتراح خطة عمل شخصية</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;">
+      <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;">الاسم الكامل *</label>
+        <input id="reg-nom" type="text" placeholder="مثال: أحمد بنعلي" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
+      <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;">السن *</label>
+        <input id="reg-age" type="number" min="16" max="60" placeholder="25" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
+      <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;">المدينة *</label>
+        <input id="reg-ville" type="text" placeholder="الرباط، كازابلانكا..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
+      <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;">البريد الإلكتروني</label>
+        <input id="reg-email" type="email" placeholder="exemple@gmail.com" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
+      <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;">المستوى الدراسي *</label>
+        <select id="reg-niveau" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;background:#fff;">
+          <option value="">اختر...</option>
+          <option>Bac</option><option>Bac+2 / DEUG</option><option>Bac+3 / Licence</option>
+          <option>Bac+5 / Master</option><option>Doctorat</option><option>Formation professionnelle</option>
+        </select></div>
+      <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;">التخصص / الشعبة *</label>
+        <input id="reg-filiere" type="text" placeholder="إعلاميات، محاسبة، هندسة..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
+      <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;">الخبرة المهنية</label>
+        <select id="reg-experience" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;background:#fff;">
+          <option value="">اختر...</option>
+          <option>بدون خبرة</option><option>تدريب فقط (stage)</option>
+          <option>أقل من سنة</option><option>1-3 سنوات</option>
+          <option>3-5 سنوات</option><option>أكثر من 5 سنوات</option>
+        </select></div>
+      <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;">اللغات</label>
+        <input id="reg-langues" type="text" placeholder="العربية، الفرنسية، الإنجليزية..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
+      <div style="grid-column:span 2;"><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;">المهارات الأساسية</label>
+        <input id="reg-competences" type="text" placeholder="برمجة، Excel، تواصل، تسيير مشاريع..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
+      <div style="grid-column:span 2;"><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;">القطاع المستهدف والهدف المهني</label>
+        <textarea id="reg-objectif" rows="2" placeholder="مثال: أبحث عن عمل في مجال تطوير الويب بكازابلانكا..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;resize:none;"></textarea></div>
+    </div>
+
+    <button id="regSubmitBtn" onclick="submitRegistration()" style="width:100%;margin-top:18px;padding:14px;background:linear-gradient(135deg,#7E1F78,#4F1359);color:#fff;border:none;border-radius:12px;font-family:'Cairo',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;letter-spacing:0.5px;">
+      🤖 احصل على تشخيص ملفك الآن
+    </button>
+    <p style="text-align:center;font-size:0.75rem;color:#7C6B82;margin-top:10px;">يتم تحليل ملفك بالذكاء الاصطناعي في ثوانٍ • مجاني تماماً</p>
+  </div>
+</div>
+
 <!-- Widget HTML -->
 <div class="wa-widget" id="waWidget">
 
@@ -1781,7 +1830,7 @@
   var sendBtn = document.getElementById('waSendBtn');
   var msgBox  = document.getElementById('waMessages');
 
-  var history = []; // {role, content}[]
+  var history = window.chatHistory = []; // {role, content}[] — shared with diagnosis
 
   function addMsg(text, role) {
     var div = document.createElement('div');
@@ -1816,7 +1865,7 @@
       var res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: history })
+        body: JSON.stringify({ messages: history, profile: window.userProfile || {} })
       });
       var data = await res.json();
       setTyping(false);
@@ -1846,6 +1895,14 @@
     fab.classList.add('hidden');
     chat.classList.remove('hidden');
     input.focus();
+  });
+
+  // ── Open modal on all "Créer profil" buttons ──
+  document.querySelectorAll('a[href="#profil"], #saveProfileBtn, [data-i18n="heroCta"], [data-i18n="navCta"]').forEach(function(el) {
+    el.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('registerModal').style.display = 'flex';
+    });
   });
 
   // WhatsApp Alert Panel
@@ -1891,6 +1948,117 @@
       subscribeBtn.textContent = "S'inscrire";
     }
   });
+})();
+
+// ── Global profile store ──
+window.userProfile = {};
+
+// ── Registration + AI Diagnosis ──
+window.submitRegistration = async function() {
+  var nom        = document.getElementById('reg-nom').value.trim();
+  var age        = document.getElementById('reg-age').value.trim();
+  var ville      = document.getElementById('reg-ville').value.trim();
+  var email      = document.getElementById('reg-email').value.trim();
+  var niveau     = document.getElementById('reg-niveau').value;
+  var filiere    = document.getElementById('reg-filiere').value.trim();
+  var experience = document.getElementById('reg-experience').value;
+  var langues    = document.getElementById('reg-langues').value.trim();
+  var competences= document.getElementById('reg-competences').value.trim();
+  var objectif   = document.getElementById('reg-objectif').value.trim();
+
+  if (!nom || !age || !ville || !niveau || !filiere) {
+    alert('⚠️ Remplissez les champs obligatoires (*)');
+    return;
+  }
+
+  // Save profile globally
+  window.userProfile = { nom, age, ville, email, niveau, filiere, experience, langues, competences, objectif };
+
+  // Close modal
+  document.getElementById('registerModal').style.display = 'none';
+
+  // Open chat
+  var chat   = document.getElementById('waChat');
+  var fab    = document.getElementById('waFab');
+  var msgBox = document.getElementById('waMessages');
+  chat.classList.remove('hidden');
+  fab.classList.add('hidden');
+
+  // Clear history and messages for fresh diagnosis
+  window.chatHistory.length = 0;
+  msgBox.innerHTML = '';
+
+  // Scroll to top so chat is visible
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Welcome message
+  var welcomeDiv = document.createElement('div');
+  welcomeDiv.className = 'wa-msg bot';
+  welcomeDiv.textContent = '✅ مرحباً ' + nom + '! جاري تحليل ملفك المهني بالذكاء الاصطناعي...';
+  msgBox.appendChild(welcomeDiv);
+  msgBox.scrollTop = msgBox.scrollHeight;
+
+  // Trigger automatic diagnosis
+  var diagPrompt = 'Fais un diagnostic complet de mon profil et propose-moi un plan d\'action détaillé pour trouver un emploi au Maroc.';
+  if (niveau && filiere) {
+    diagPrompt = 'Je suis ' + nom + ', j\'ai ' + age + ' ans, je vis à ' + ville +
+      '. J\'ai un niveau ' + niveau + ' en ' + filiere +
+      (experience ? ', expérience : ' + experience : '') +
+      (competences ? ', compétences : ' + competences : '') +
+      (langues ? ', langues : ' + langues : '') +
+      (objectif ? '. Mon objectif : ' + objectif : '') +
+      '. Fais un diagnostic complet de mon profil (score, points forts, points faibles) et propose un plan d\'action concret avec les offres ANAPEC adaptées.';
+  }
+
+  // Add typing indicator
+  var typingDiv = document.createElement('div');
+  typingDiv.className = 'wa-msg bot typing';
+  typingDiv.id = 'diagTyping';
+  typingDiv.textContent = '🤖 تحليل الملف جارٍ...';
+  msgBox.appendChild(typingDiv);
+  msgBox.scrollTop = msgBox.scrollHeight;
+
+  try {
+    var res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: [{ role: 'user', content: diagPrompt }],
+        profile: window.userProfile
+      })
+    });
+    var data = await res.json();
+    var typing = document.getElementById('diagTyping');
+    if (typing) typing.remove();
+
+    var replyDiv = document.createElement('div');
+    replyDiv.className = 'wa-msg bot';
+    replyDiv.style.cssText = 'white-space:pre-wrap;line-height:1.6;';
+    replyDiv.textContent = data.reply || 'حدث خطأ. حاول مرة أخرى.';
+    msgBox.appendChild(replyDiv);
+    msgBox.scrollTop = msgBox.scrollHeight;
+
+    // Save to history for follow-up questions
+    if (window.chatHistory) {
+      window.chatHistory.push({ role: 'user', content: diagPrompt });
+      window.chatHistory.push({ role: 'assistant', content: data.reply });
+    }
+  } catch(e) {
+    var typing = document.getElementById('diagTyping');
+    if (typing) typing.remove();
+    var errDiv = document.createElement('div');
+    errDiv.className = 'wa-msg bot';
+    errDiv.textContent = '❌ تعذّر الاتصال. تأكد من الاتصال بالإنترنت.';
+    msgBox.appendChild(errDiv);
+  }
+};
+
+// ── Patch sendMessage to include profile context ──
+(function patchSend() {
+  var origFetch = window.fetch;
+  // We just ensure profile is always sent — done via fetch interceptor on /api/chat
+  var _origBody = null;
+  document.addEventListener('dabanet:send', function(e) {});
 })();
 </script>
 </body>
