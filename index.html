@@ -489,11 +489,11 @@
 
       <nav class="nav-links" id="navLinks">
         <a href="#top" data-scroll data-i18n="navHome">الرئيسية</a>
-        <a href="#dashboard" data-scroll data-i18n="navDashboard">لوحة التحكم</a>
-        <a href="#reco" data-scroll data-i18n="navReco">التوصيات</a>
+        <a href="#actualites" data-scroll data-i18n="navNews">الأخبار</a>
+        <a href="#monEspace" id="navEspace" data-scroll style="display:none;">فضائي</a>
         <a href="#footer-contact" data-scroll data-i18n="navContact">اتصل بنا</a>
-        <a href="#profil" data-scroll class="cta-auth" data-i18n="navAuth">تسجيل الدخول</a>
-        <a href="#profil" data-scroll class="cta-small" data-i18n="navCta">إنشاء ملفي الشخصي</a>
+        <a href="#" class="cta-auth" data-i18n="navAuth">تسجيل الدخول</a>
+        <a href="#" class="cta-small" data-i18n="navCta">إنشاء ملفي الشخصي</a>
       </nav>
 
       <div class="lang-switch" id="langSwitch">
@@ -519,14 +519,125 @@
       <div class="tagline" data-i18n="heroTagline">طريقك نحو الإدماج المهني</div>
       <p class="desc" data-i18n="heroDesc">فضاء رقمي يواكب خريجي الجامعات الباحثين عن عمل خطوة بخطوة: من التشخيص الذكي لملفك، إلى التكوين المناسب، إلى التوجيه الدقيق نحو الفرص المتاحة.</p>
       <div class="hero-actions">
-        <a href="#profil" class="btn btn-primary" data-scroll data-i18n="heroCta">إنشاء ملفي الشخصي</a>
-        <a href="#cv-builder" class="btn btn-outline" data-scroll data-i18n="heroCvCta">إنشاء سيرتي الذاتية الذكية</a>
+        <a href="#" class="btn btn-primary" data-i18n="heroCta">إنشاء ملفي الشخصي</a>
+        <a href="#actualites" class="btn btn-outline" data-scroll data-i18n="heroNewsCta">تصفّح الأخبار والفرص</a>
       </div>
     </div>
   </section>
 
-  <!-- ===== dashboard ===== -->
-  <section class="dashboard" id="dashboard">
+  <!-- ===== ACTUALITÉS ===== -->
+  <section class="section" id="actualites" style="padding:56px 0;">
+    <div class="container">
+      <div class="section-head" style="text-align:center;margin-bottom:34px;">
+        <span class="eyebrow" data-i18n="newsEyebrow">آخر المستجدات</span>
+        <h2 style="font-family:'Cairo',sans-serif;color:#3A0F45;">الأخبار والفرص</h2>
+        <p style="color:#7C6B82;">تابع آخر أخبار التشغيل، المعارض، التكوينات والفرص في المغرب</p>
+      </div>
+
+      <div id="newsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px;">
+        <!-- news cards injected by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MON ESPACE (shown after login) ===== -->
+  <section class="section" id="monEspace" style="display:none;background:linear-gradient(180deg,#FAF3FB,#fff);padding:50px 0;">
+    <div class="container">
+
+      <!-- Profile header -->
+      <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:#fff;border:1px solid #E8DEEC;border-radius:18px;padding:22px 26px;box-shadow:0 6px 20px rgba(58,15,69,0.08);margin-bottom:26px;">
+        <div id="esp-avatar" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#7E1F78,#4F1359);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Cairo',sans-serif;font-weight:800;font-size:1.3rem;flex-shrink:0;">؟</div>
+        <div style="flex:1;min-width:180px;">
+          <h3 id="esp-nom" style="font-family:'Cairo',sans-serif;color:#3A0F45;margin:0 0 4px;font-size:1.15rem;">ملفي الشخصي</h3>
+          <p id="esp-meta" style="color:#7C6B82;margin:0;font-size:0.85rem;">—</p>
+        </div>
+        <button onclick="document.getElementById('registerModal').style.display='flex'" style="background:#EFD9F0;color:#4F1359;border:none;border-radius:10px;padding:9px 16px;font-weight:700;font-size:0.82rem;cursor:pointer;">✏️ تعديل الملف</button>
+      </div>
+
+      <!-- Score + quick actions -->
+      <div style="display:grid;grid-template-columns:280px 1fr;gap:22px;margin-bottom:26px;" id="esp-topgrid">
+        <!-- Completion score -->
+        <div style="background:#fff;border:1px solid #E8DEEC;border-radius:18px;padding:24px;text-align:center;box-shadow:0 6px 20px rgba(58,15,69,0.08);">
+          <div style="position:relative;width:130px;height:130px;margin:0 auto 12px;">
+            <svg width="130" height="130" viewBox="0 0 130 130" style="transform:rotate(-90deg);">
+              <circle cx="65" cy="65" r="56" fill="none" stroke="#E8DEEC" stroke-width="13"/>
+              <circle id="esp-gauge" cx="65" cy="65" r="56" fill="none" stroke="#9C2484" stroke-width="13" stroke-linecap="round" stroke-dasharray="351.86" stroke-dashoffset="351.86" style="transition:stroke-dashoffset 1s ease;"/>
+            </svg>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+              <span id="esp-score" style="font-family:'Cairo',sans-serif;font-size:1.9rem;font-weight:800;color:#3A0F45;">0</span>
+              <span style="font-size:0.72rem;color:#7C6B82;">من 100</span>
+            </div>
+          </div>
+          <h4 style="font-family:'Cairo',sans-serif;color:#3A0F45;margin:0 0 6px;font-size:0.95rem;">نسبة اكتمال الملف</h4>
+          <p id="esp-scoretip" style="color:#7C6B82;font-size:0.8rem;margin:0;">أكمل ملفك للحصول على اقتراحات أدق</p>
+        </div>
+
+        <!-- Quick actions -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <button onclick="openChatDiagnosis()" style="background:linear-gradient(135deg,#7E1F78,#4F1359);color:#fff;border:none;border-radius:16px;padding:22px 18px;text-align:right;cursor:pointer;box-shadow:0 6px 20px rgba(58,15,69,0.12);">
+            <div style="font-size:1.6rem;margin-bottom:8px;">🤖</div>
+            <div style="font-family:'Cairo',sans-serif;font-weight:800;font-size:0.98rem;margin-bottom:3px;">تشخيص الملف بالذكاء الاصطناعي</div>
+            <div style="font-size:0.78rem;opacity:0.85;">احصل على تحليل وخطة عمل شخصية</div>
+          </button>
+          <button onclick="document.getElementById('rdvForm').scrollIntoView({behavior:'smooth'})" style="background:#fff;border:1.5px solid #D88400;color:#B36C00;border-radius:16px;padding:22px 18px;text-align:right;cursor:pointer;box-shadow:0 6px 20px rgba(58,15,69,0.06);">
+            <div style="font-size:1.6rem;margin-bottom:8px;">📅</div>
+            <div style="font-family:'Cairo',sans-serif;font-weight:800;font-size:0.98rem;margin-bottom:3px;">موعد مع مستشار التشغيل</div>
+            <div style="font-size:0.78rem;opacity:0.75;">احجز لقاءً مع مستشار متخصص</div>
+          </button>
+          <button onclick="document.getElementById('esp-offres').scrollIntoView({behavior:'smooth'})" style="background:#fff;border:1.5px solid #9C2484;color:#7E1F78;border-radius:16px;padding:22px 18px;text-align:right;cursor:pointer;box-shadow:0 6px 20px rgba(58,15,69,0.06);">
+            <div style="font-size:1.6rem;margin-bottom:8px;">💼</div>
+            <div style="font-family:'Cairo',sans-serif;font-weight:800;font-size:0.98rem;margin-bottom:3px;">عروض العمل المناسبة</div>
+            <div style="font-size:0.78rem;opacity:0.75;">عروض مختارة حسب ملفك</div>
+          </button>
+          <button onclick="document.getElementById('esp-ateliers').scrollIntoView({behavior:'smooth'})" style="background:#fff;border:1.5px solid #166534;color:#166534;border-radius:16px;padding:22px 18px;text-align:right;cursor:pointer;box-shadow:0 6px 20px rgba(58,15,69,0.06);">
+            <div style="font-size:1.6rem;margin-bottom:8px;">🎓</div>
+            <div style="font-family:'Cairo',sans-serif;font-weight:800;font-size:0.98rem;margin-bottom:3px;">التسجيل في الورشات</div>
+            <div style="font-size:0.78rem;opacity:0.75;">ورشات تكوين وتحضير للمقابلات</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Suggestions: Offres -->
+      <div id="esp-offres" style="margin-bottom:26px;">
+        <h3 style="font-family:'Cairo',sans-serif;color:#3A0F45;font-size:1.05rem;margin:0 0 14px;display:flex;align-items:center;gap:8px;">💼 عروض عمل مقترحة لك</h3>
+        <div id="esp-offresList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+      </div>
+
+      <!-- Suggestions: Formations -->
+      <div id="esp-formations" style="margin-bottom:26px;">
+        <h3 style="font-family:'Cairo',sans-serif;color:#3A0F45;font-size:1.05rem;margin:0 0 14px;display:flex;align-items:center;gap:8px;">📚 تكوينات موصى بها</h3>
+        <div id="esp-formationsList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+      </div>
+
+      <!-- Suggestions: Ateliers -->
+      <div id="esp-ateliers" style="margin-bottom:26px;">
+        <h3 style="font-family:'Cairo',sans-serif;color:#3A0F45;font-size:1.05rem;margin:0 0 14px;display:flex;align-items:center;gap:8px;">🎓 ورشات متاحة للتسجيل</h3>
+        <div id="esp-ateliersList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+      </div>
+
+      <!-- RDV Conseiller -->
+      <div id="rdvForm" style="background:#fff;border:1px solid #E8DEEC;border-radius:18px;padding:26px;box-shadow:0 6px 20px rgba(58,15,69,0.08);">
+        <h3 style="font-family:'Cairo',sans-serif;color:#3A0F45;font-size:1.05rem;margin:0 0 6px;">📅 احجز موعداً مع مستشار التشغيل</h3>
+        <p style="color:#7C6B82;font-size:0.83rem;margin:0 0 18px;">مستشار متخصص يساعدك في توجيه مسارك المهني — اللقاء مجاني عبر الهاتف أو حضورياً في وكالة ANAPEC.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;">
+          <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;">التاريخ المفضل</label>
+            <input id="rdv-date" type="date" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;"></div>
+          <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;">نوع اللقاء</label>
+            <select id="rdv-type" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;background:#fff;">
+              <option>عبر الهاتف</option><option>حضورياً (وكالة ANAPEC)</option><option>عبر الفيديو</option>
+            </select></div>
+          <div style="grid-column:span 2;"><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;">موضوع اللقاء</label>
+            <textarea id="rdv-sujet" rows="2" placeholder="مثال: أحتاج مساعدة في توجيه بحثي عن عمل..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;resize:none;"></textarea></div>
+        </div>
+        <button onclick="submitRdv()" style="width:100%;margin-top:16px;padding:13px;background:linear-gradient(135deg,#D88400,#B36C00);color:#fff;border:none;border-radius:12px;font-family:'Cairo',sans-serif;font-size:0.95rem;font-weight:800;cursor:pointer;">تأكيد طلب الموعد</button>
+        <p id="rdv-msg" style="text-align:center;font-size:0.82rem;margin-top:10px;"></p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== dashboard (demo — hidden) ===== -->
+  <section class="dashboard" id="dashboard" style="display:none;">
     <div class="container">
 
       <div class="dash-welcome">
@@ -608,8 +719,8 @@
     </div>
   </section>
 
-  <!-- ===== CV assistant ===== -->
-  <section class="section" id="cv-assistant">
+  <!-- ===== CV assistant (hidden) ===== -->
+  <section class="section" id="cv-assistant" style="display:none;">
     <div class="container">
       <div class="cv-assistant">
         <div class="cv-icon">
@@ -627,8 +738,8 @@
     </div>
   </section>
 
-  <!-- ===== CV builder (Mon CV intelligent) ===== -->
-  <section class="section" id="cv-builder">
+  <!-- ===== CV builder (hidden) ===== -->
+  <section class="section" id="cv-builder" style="display:none;">
     <div class="container">
       <div class="section-head">
         <span class="eyebrow" data-i18n="cvbEyebrow">قالب ذكي</span>
@@ -704,8 +815,8 @@
     </div>
   </section>
 
-  <!-- ===== user profile ===== -->
-  <section class="section alt" id="profil">
+  <!-- ===== user profile (old form — hidden) ===== -->
+  <section class="section alt" id="profil" style="display:none;">
     <div class="container">
       <div class="section-head">
         <span class="eyebrow" data-i18n="profileEyebrow">حسابي</span>
@@ -765,8 +876,8 @@
     </div>
   </section>
 
-  <!-- ===== satisfaction questionnaire ===== -->
-  <section class="section" id="satisfaction">
+  <!-- ===== satisfaction questionnaire (hidden) ===== -->
+  <section class="section" id="satisfaction" style="display:none;">
     <div class="container">
       <div class="section-head">
         <span class="eyebrow" data-i18n="satEyebrow">استبيان قصير</span>
@@ -1897,8 +2008,8 @@
     input.focus();
   });
 
-  // ── Open modal on all "Créer profil" buttons ──
-  document.querySelectorAll('a[href="#profil"], #saveProfileBtn, [data-i18n="heroCta"], [data-i18n="navCta"]').forEach(function(el) {
+  // ── Open modal on all "Créer profil / Login" buttons ──
+  document.querySelectorAll('[data-i18n="heroCta"], [data-i18n="navCta"], [data-i18n="navAuth"]').forEach(function(el) {
     el.addEventListener('click', function(e) {
       e.preventDefault();
       document.getElementById('registerModal').style.display = 'flex';
@@ -1953,113 +2064,240 @@
 // ── Global profile store ──
 window.userProfile = {};
 
-// ── Registration + AI Diagnosis ──
-window.submitRegistration = async function() {
-  var nom        = document.getElementById('reg-nom').value.trim();
-  var age        = document.getElementById('reg-age').value.trim();
-  var ville      = document.getElementById('reg-ville').value.trim();
-  var email      = document.getElementById('reg-email').value.trim();
-  var niveau     = document.getElementById('reg-niveau').value;
-  var filiere    = document.getElementById('reg-filiere').value.trim();
-  var experience = document.getElementById('reg-experience').value;
-  var langues    = document.getElementById('reg-langues').value.trim();
-  var competences= document.getElementById('reg-competences').value.trim();
-  var objectif   = document.getElementById('reg-objectif').value.trim();
+// ══════════ ACTUALITÉS (news) ══════════
+var NEWS = [
+  { tag:'معرض تشغيل', color:'#7E1F78', date:'15 يوليوز 2026', title:'الملتقى الوطني للتشغيل بالدار البيضاء',
+    desc:'أكثر من 120 شركة تعرض فرص عمل مباشرة. دخول مجاني للخريجين مع تسجيل مسبق عبر ANAPEC.', link:'https://www.anapec.org' },
+  { tag:'تكوين مجاني', color:'#166534', date:'10 يوليوز 2026', title:'برنامج تكوين في الرقمنة والذكاء الاصطناعي',
+    desc:'OFPPT تطلق تكوينات مجانية في البرمجة، تحليل البيانات والتسويق الرقمي لحاملي الشهادات.', link:'https://www.ofppt.ma' },
+  { tag:'فرصة', color:'#B36C00', date:'5 يوليوز 2026', title:'مبادرة "فرصة" لدعم المقاولات الشابة',
+    desc:'تمويل يصل إلى 100.000 درهم بدون ضمانات لأصحاب المشاريع الشباب من 18 إلى 45 سنة.', link:'https://www.anapec.org' },
+  { tag:'توظيف', color:'#9C2484', date:'1 يوليوز 2026', title:'حملة توظيف كبرى في قطاع الترحال (Offshoring)',
+    desc:'شركات في طنجة والدار البيضاء توظف ناطقين بالفرنسية والإنجليزية. تكوين مؤدى عنه.', link:'https://www.anapec.org' },
+  { tag:'ورشة', color:'#4F1359', date:'28 يونيو 2026', title:'ورشة إعداد السيرة الذاتية ومقابلة العمل',
+    desc:'ورشات تفاعلية لمساعدتك على اجتياز المقابلات بثقة وإعداد CV احترافي يجذب المشغّلين.', link:'#' },
+  { tag:'تكوين', color:'#166534', date:'20 يونيو 2026', title:'منح للتكوين في الطاقات المتجددة',
+    desc:'قطاع الطاقة الشمسية وطاقة الرياح يبحث عن تقنيين ومهندسين. تكوينات ممولة متاحة.', link:'https://www.ofppt.ma' },
+];
 
-  if (!nom || !age || !ville || !niveau || !filiere) {
-    alert('⚠️ Remplissez les champs obligatoires (*)');
+function renderNews() {
+  var grid = document.getElementById('newsGrid');
+  if (!grid) return;
+  grid.innerHTML = NEWS.map(function(n) {
+    return '<div style="background:#fff;border:1px solid #E8DEEC;border-radius:16px;overflow:hidden;box-shadow:0 6px 20px rgba(58,15,69,0.07);display:flex;flex-direction:column;transition:transform .2s;" onmouseover="this.style.transform=\'translateY(-4px)\'" onmouseout="this.style.transform=\'none\'">' +
+      '<div style="height:6px;background:' + n.color + ';"></div>' +
+      '<div style="padding:18px 20px;flex:1;display:flex;flex-direction:column;">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">' +
+          '<span style="background:' + n.color + '18;color:' + n.color + ';font-size:0.72rem;font-weight:800;padding:4px 10px;border-radius:20px;">' + n.tag + '</span>' +
+          '<span style="color:#A99BB0;font-size:0.72rem;">' + n.date + '</span>' +
+        '</div>' +
+        '<h4 style="font-family:\'Cairo\',sans-serif;color:#3A0F45;font-size:0.98rem;margin:0 0 8px;line-height:1.4;">' + n.title + '</h4>' +
+        '<p style="color:#7C6B82;font-size:0.83rem;line-height:1.6;margin:0 0 14px;flex:1;">' + n.desc + '</p>' +
+        '<a href="' + n.link + '" target="_blank" style="color:' + n.color + ';font-weight:700;font-size:0.82rem;text-decoration:none;">اقرأ المزيد ←</a>' +
+      '</div></div>';
+  }).join('');
+}
+
+// ══════════ Profile completion score ══════════
+function computeScore(p) {
+  var fields = ['nom','age','ville','email','niveau','filiere','experience','langues','competences','objectif'];
+  var weights = { nom:8, age:8, ville:8, email:8, niveau:12, filiere:14, experience:12, langues:10, competences:12, objectif:8 };
+  var score = 0;
+  fields.forEach(function(f) { if (p[f] && String(p[f]).trim()) score += weights[f]; });
+  return Math.min(100, score);
+}
+
+// ══════════ Suggestions adapted to profile ══════════
+function buildSuggestions(p) {
+  var f = (p.filiere || '').toLowerCase();
+  var sector = 'général';
+  if (/informat|développ|web|program|digital|réseau|data/.test(f)) sector = 'tech';
+  else if (/compt|finan|gestion|banque|économ/.test(f)) sector = 'finance';
+  else if (/génie|ingénieur|électr|mécan|btp|civil/.test(f)) sector = 'ingenierie';
+  else if (/commerc|market|vente/.test(f)) sector = 'commerce';
+  else if (/santé|infirm|médic/.test(f)) sector = 'sante';
+
+  var OFFERS = {
+    tech: [{t:'Développeur Web Full-Stack',c:'Casablanca · CDI',s:'8000-14000 DH'},{t:'Technicien Support IT',c:'Rabat · CDD',s:'5000-7000 DH'},{t:'Data Analyst Junior',c:'Casablanca · CDI',s:'7000-11000 DH'}],
+    finance: [{t:'Assistant Comptable',c:'Casablanca · CDI',s:'5000-8000 DH'},{t:'Chargé de clientèle bancaire',c:'Toutes régions · CDI',s:'6000-9000 DH'},{t:'Contrôleur de gestion junior',c:'Rabat · CDD',s:'7000-10000 DH'}],
+    ingenierie: [{t:'Ingénieur Génie Civil',c:'Marrakech · CDI',s:'9000-15000 DH'},{t:'Technicien Électromécanique',c:'Tanger · CDI',s:'6000-9000 DH'},{t:'Responsable HSE',c:'Casablanca · CDI',s:'8000-12000 DH'}],
+    commerce: [{t:'Commercial B2B',c:'Casablanca · CDI',s:'5000+commissions'},{t:'Community Manager',c:'Rabat · CDD',s:'5000-8000 DH'},{t:'Chef de rayon',c:'Toutes régions · CDI',s:'6000-9000 DH'}],
+    sante: [{t:'Infirmier polyvalent',c:'Toutes régions · CDD',s:'6000-9000 DH'},{t:'Technicien de laboratoire',c:'Casablanca · CDI',s:'5000-8000 DH'},{t:'Aide-soignant',c:'Toutes régions · CDD',s:'4000-6000 DH'}],
+    'général': [{t:'Agent administratif',c:'Toutes régions · CDD',s:'4000-6000 DH'},{t:'Chargé de saisie',c:'Casablanca · CDD',s:'4000-5500 DH'},{t:'Assistant polyvalent',c:'Rabat · CDI',s:'5000-7000 DH'}],
+  };
+  var FORMATIONS = {
+    tech: [{t:'Certification Full-Stack JavaScript',o:'OFPPT · 6 mois · Gratuit'},{t:'Data Science & Python',o:'En ligne · 3 mois'},{t:'Cybersécurité fondamentale',o:'OFPPT · 4 mois'}],
+    finance: [{t:'Comptabilité sur SAGE',o:'OFPPT · 3 mois · Gratuit'},{t:'Analyse financière avancée',o:'En ligne · 2 mois'},{t:'Fiscalité marocaine',o:'CNSS · 1 mois'}],
+    ingenierie: [{t:'AutoCAD & Revit',o:'OFPPT · 4 mois · Gratuit'},{t:'Gestion de projet PMP',o:'En ligne · 3 mois'},{t:'Normes qualité ISO',o:'IMANOR · 2 mois'}],
+    commerce: [{t:'Marketing Digital complet',o:'OFPPT · 4 mois · Gratuit'},{t:'Techniques de vente',o:'ANAPEC · 1 mois'},{t:'CRM & prospection',o:'En ligne · 2 mois'}],
+    sante: [{t:'Premiers secours certifiés',o:'Croix-Rouge · 1 mois'},{t:'Gestion des dossiers médicaux',o:'OFPPT · 2 mois'},{t:'Anglais médical',o:'En ligne · 3 mois'}],
+    'général': [{t:'Bureautique & Excel avancé',o:'OFPPT · 2 mois · Gratuit'},{t:'Communication professionnelle',o:'ANAPEC · 1 mois'},{t:'Langues (Français/Anglais)',o:'En ligne · 3 mois'}],
+  };
+  return { offers: OFFERS[sector], formations: FORMATIONS[sector] };
+}
+
+var ATELIERS = [
+  {t:'ورشة إعداد السيرة الذاتية (CV)',d:'الأربعاء 22 يوليوز · 10:00',lieu:'وكالة ANAPEC الرباط',places:'8 أماكن متبقية'},
+  {t:'التحضير لمقابلة العمل',d:'الجمعة 24 يوليوز · 14:00',lieu:'عن بُعد (Zoom)',places:'15 مكان متبقي'},
+  {t:'البحث الفعّال عن عمل عبر الإنترنت',d:'الاثنين 27 يوليوز · 10:00',lieu:'وكالة ANAPEC الدار البيضاء',places:'5 أماكن متبقية'},
+  {t:'تطوير المهارات الشخصية (Soft Skills)',d:'الأربعاء 29 يوليوز · 15:00',lieu:'عن بُعد (Zoom)',places:'20 مكان متبقي'},
+];
+
+function populateEspace(p) {
+  // Avatar + meta
+  var initials = (p.nom || '؟').trim().split(/\s+/).map(function(w){return w[0];}).slice(0,2).join('');
+  document.getElementById('esp-avatar').textContent = initials;
+  document.getElementById('esp-nom').textContent = p.nom;
+  document.getElementById('esp-meta').textContent =
+    [p.niveau, p.filiere, p.ville].filter(Boolean).join(' · ');
+
+  // Score gauge
+  var score = computeScore(p);
+  var circ = 351.86;
+  document.getElementById('esp-score').textContent = score;
+  document.getElementById('esp-gauge').style.strokeDashoffset = circ - (circ * score / 100);
+  var tip = document.getElementById('esp-scoretip');
+  if (score >= 80) { tip.textContent = 'ملف ممتاز! جاهز للتقديم على العروض 🎉'; }
+  else if (score >= 50) { tip.textContent = 'ملف جيد. أكمل باقي المعلومات لتحسينه'; }
+  else { tip.textContent = 'أكمل ملفك للحصول على اقتراحات أدق'; }
+
+  // Suggestions
+  var sug = buildSuggestions(p);
+  document.getElementById('esp-offresList').innerHTML = sug.offers.map(function(o){
+    return '<div style="background:#fff;border:1px solid #E8DEEC;border-radius:14px;padding:16px 18px;box-shadow:0 4px 14px rgba(58,15,69,0.06);">' +
+      '<div style="font-family:\'Cairo\',sans-serif;font-weight:800;color:#3A0F45;font-size:0.92rem;margin-bottom:6px;">' + o.t + '</div>' +
+      '<div style="color:#7C6B82;font-size:0.8rem;margin-bottom:4px;">📍 ' + o.c + '</div>' +
+      '<div style="color:#166534;font-size:0.8rem;font-weight:700;margin-bottom:10px;">💰 ' + o.s + '</div>' +
+      '<a href="https://www.anapec.org/sigec-app-rv/front/chercheurs/recherche_offre" target="_blank" style="display:inline-block;background:#9C2484;color:#fff;text-decoration:none;font-size:0.78rem;font-weight:700;padding:7px 14px;border-radius:8px;">التقديم عبر ANAPEC</a>' +
+      '</div>';
+  }).join('');
+
+  document.getElementById('esp-formationsList').innerHTML = sug.formations.map(function(fo){
+    return '<div style="background:#fff;border:1px solid #E8DEEC;border-radius:14px;padding:16px 18px;box-shadow:0 4px 14px rgba(58,15,69,0.06);">' +
+      '<div style="font-family:\'Cairo\',sans-serif;font-weight:800;color:#3A0F45;font-size:0.92rem;margin-bottom:6px;">' + fo.t + '</div>' +
+      '<div style="color:#7C6B82;font-size:0.8rem;margin-bottom:10px;">🎓 ' + fo.o + '</div>' +
+      '<a href="https://www.ofppt.ma" target="_blank" style="display:inline-block;background:#166534;color:#fff;text-decoration:none;font-size:0.78rem;font-weight:700;padding:7px 14px;border-radius:8px;">معلومات التسجيل</a>' +
+      '</div>';
+  }).join('');
+
+  document.getElementById('esp-ateliersList').innerHTML = ATELIERS.map(function(a, i){
+    return '<div style="background:#fff;border:1px solid #E8DEEC;border-radius:14px;padding:16px 18px;box-shadow:0 4px 14px rgba(58,15,69,0.06);">' +
+      '<div style="font-family:\'Cairo\',sans-serif;font-weight:800;color:#3A0F45;font-size:0.92rem;margin-bottom:8px;">' + a.t + '</div>' +
+      '<div style="color:#7C6B82;font-size:0.78rem;margin-bottom:3px;">🗓️ ' + a.d + '</div>' +
+      '<div style="color:#7C6B82;font-size:0.78rem;margin-bottom:3px;">📍 ' + a.lieu + '</div>' +
+      '<div style="color:#B36C00;font-size:0.78rem;font-weight:700;margin-bottom:10px;">🔥 ' + a.places + '</div>' +
+      '<button onclick="registerAtelier(' + i + ',this)" style="background:#166534;color:#fff;border:none;font-size:0.78rem;font-weight:700;padding:8px 14px;border-radius:8px;cursor:pointer;">سجّل في الورشة</button>' +
+      '</div>';
+  }).join('');
+}
+
+window.registerAtelier = function(i, btn) {
+  btn.textContent = '✓ تم التسجيل';
+  btn.style.background = '#9CA3AF';
+  btn.disabled = true;
+  var w = ATELIERS[i];
+  alert('✅ تم تسجيلك في ورشة "' + w.t + '"\n🗓️ ' + w.d + '\n📍 ' + w.lieu + '\n\nستصلك رسالة تأكيد عبر البريد الإلكتروني.');
+};
+
+window.submitRdv = function() {
+  var date = document.getElementById('rdv-date').value;
+  var type = document.getElementById('rdv-type').value;
+  var msg  = document.getElementById('rdv-msg');
+  if (!date) { msg.textContent = '⚠️ اختر تاريخاً للموعد'; msg.style.color = '#dc2626'; return; }
+  msg.textContent = '✅ تم إرسال طلب موعدك (' + type + ' بتاريخ ' + date + '). سيتصل بك مستشار خلال 48 ساعة.';
+  msg.style.color = '#166534';
+};
+
+// ══════════ Registration → Mon Espace ══════════
+window.submitRegistration = function() {
+  var p = {
+    nom:        document.getElementById('reg-nom').value.trim(),
+    age:        document.getElementById('reg-age').value.trim(),
+    ville:      document.getElementById('reg-ville').value.trim(),
+    email:      document.getElementById('reg-email').value.trim(),
+    niveau:     document.getElementById('reg-niveau').value,
+    filiere:    document.getElementById('reg-filiere').value.trim(),
+    experience: document.getElementById('reg-experience').value,
+    langues:    document.getElementById('reg-langues').value.trim(),
+    competences:document.getElementById('reg-competences').value.trim(),
+    objectif:   document.getElementById('reg-objectif').value.trim()
+  };
+  if (!p.nom || !p.age || !p.ville || !p.niveau || !p.filiere) {
+    alert('⚠️ يرجى ملء الحقول الإجبارية (*)');
     return;
   }
-
-  // Save profile globally
-  window.userProfile = { nom, age, ville, email, niveau, filiere, experience, langues, competences, objectif };
+  window.userProfile = p;
 
   // Close modal
   document.getElementById('registerModal').style.display = 'none';
 
-  // Open chat
+  // Populate + reveal Mon Espace
+  populateEspace(p);
+  var esp = document.getElementById('monEspace');
+  esp.style.display = 'block';
+  document.getElementById('navEspace').style.display = '';
+  esp.scrollIntoView({ behavior: 'smooth' });
+};
+
+// ══════════ AI Diagnosis in chat ══════════
+window.openChatDiagnosis = async function() {
+  var p = window.userProfile || {};
+  if (!p.nom) { document.getElementById('registerModal').style.display = 'flex'; return; }
+
   var chat   = document.getElementById('waChat');
   var fab    = document.getElementById('waFab');
   var msgBox = document.getElementById('waMessages');
   chat.classList.remove('hidden');
   fab.classList.add('hidden');
-
-  // Clear history and messages for fresh diagnosis
   window.chatHistory.length = 0;
   msgBox.innerHTML = '';
 
-  // Scroll to top so chat is visible
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  var welcome = document.createElement('div');
+  welcome.className = 'wa-msg bot';
+  welcome.textContent = '✅ مرحباً ' + p.nom + '! جاري تحليل ملفك بالذكاء الاصطناعي...';
+  msgBox.appendChild(welcome);
 
-  // Welcome message
-  var welcomeDiv = document.createElement('div');
-  welcomeDiv.className = 'wa-msg bot';
-  welcomeDiv.textContent = '✅ مرحباً ' + nom + '! جاري تحليل ملفك المهني بالذكاء الاصطناعي...';
-  msgBox.appendChild(welcomeDiv);
-  msgBox.scrollTop = msgBox.scrollHeight;
+  var diagPrompt = 'Je suis ' + p.nom + ', ' + p.age + ' ans, à ' + p.ville +
+    '. Niveau ' + p.niveau + ' en ' + p.filiere +
+    (p.experience ? ', expérience : ' + p.experience : '') +
+    (p.competences ? ', compétences : ' + p.competences : '') +
+    (p.langues ? ', langues : ' + p.langues : '') +
+    (p.objectif ? '. Objectif : ' + p.objectif : '') +
+    '. Fais un diagnostic complet de mon profil (score, points forts, points faibles) et un plan d\'action concret avec les offres ANAPEC adaptées.';
 
-  // Trigger automatic diagnosis
-  var diagPrompt = 'Fais un diagnostic complet de mon profil et propose-moi un plan d\'action détaillé pour trouver un emploi au Maroc.';
-  if (niveau && filiere) {
-    diagPrompt = 'Je suis ' + nom + ', j\'ai ' + age + ' ans, je vis à ' + ville +
-      '. J\'ai un niveau ' + niveau + ' en ' + filiere +
-      (experience ? ', expérience : ' + experience : '') +
-      (competences ? ', compétences : ' + competences : '') +
-      (langues ? ', langues : ' + langues : '') +
-      (objectif ? '. Mon objectif : ' + objectif : '') +
-      '. Fais un diagnostic complet de mon profil (score, points forts, points faibles) et propose un plan d\'action concret avec les offres ANAPEC adaptées.';
-  }
-
-  // Add typing indicator
-  var typingDiv = document.createElement('div');
-  typingDiv.className = 'wa-msg bot typing';
-  typingDiv.id = 'diagTyping';
-  typingDiv.textContent = '🤖 تحليل الملف جارٍ...';
-  msgBox.appendChild(typingDiv);
+  var typing = document.createElement('div');
+  typing.className = 'wa-msg bot typing';
+  typing.id = 'diagTyping';
+  typing.textContent = '🤖 تحليل جارٍ...';
+  msgBox.appendChild(typing);
   msgBox.scrollTop = msgBox.scrollHeight;
 
   try {
     var res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: [{ role: 'user', content: diagPrompt }],
-        profile: window.userProfile
-      })
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: [{ role:'user', content: diagPrompt }], profile: p })
     });
     var data = await res.json();
-    var typing = document.getElementById('diagTyping');
-    if (typing) typing.remove();
-
-    var replyDiv = document.createElement('div');
-    replyDiv.className = 'wa-msg bot';
-    replyDiv.style.cssText = 'white-space:pre-wrap;line-height:1.6;';
-    replyDiv.textContent = data.reply || 'حدث خطأ. حاول مرة أخرى.';
-    msgBox.appendChild(replyDiv);
+    var t = document.getElementById('diagTyping'); if (t) t.remove();
+    var reply = document.createElement('div');
+    reply.className = 'wa-msg bot';
+    reply.style.cssText = 'white-space:pre-wrap;line-height:1.6;';
+    reply.textContent = data.reply || 'حدث خطأ. حاول مرة أخرى.';
+    msgBox.appendChild(reply);
     msgBox.scrollTop = msgBox.scrollHeight;
-
-    // Save to history for follow-up questions
-    if (window.chatHistory) {
-      window.chatHistory.push({ role: 'user', content: diagPrompt });
-      window.chatHistory.push({ role: 'assistant', content: data.reply });
-    }
+    window.chatHistory.push({ role:'user', content: diagPrompt });
+    window.chatHistory.push({ role:'assistant', content: data.reply });
   } catch(e) {
-    var typing = document.getElementById('diagTyping');
-    if (typing) typing.remove();
-    var errDiv = document.createElement('div');
-    errDiv.className = 'wa-msg bot';
-    errDiv.textContent = '❌ تعذّر الاتصال. تأكد من الاتصال بالإنترنت.';
-    msgBox.appendChild(errDiv);
+    var t2 = document.getElementById('diagTyping'); if (t2) t2.remove();
+    var err = document.createElement('div');
+    err.className = 'wa-msg bot';
+    err.textContent = '❌ تعذّر الاتصال. تأكد من الإنترنت.';
+    msgBox.appendChild(err);
   }
 };
 
-// ── Patch sendMessage to include profile context ──
-(function patchSend() {
-  var origFetch = window.fetch;
-  // We just ensure profile is always sent — done via fetch interceptor on /api/chat
-  var _origBody = null;
-  document.addEventListener('dabanet:send', function(e) {});
-})();
+// Init news on load
+renderNews();
 </script>
 </body>
 </html>
