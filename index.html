@@ -986,6 +986,7 @@
       </div>
       <div class="foot-bottom">
         <span data-i18n="footCopyright">© 2026 DabaNet — جميع الحقوق محفوظة</span>
+        <a href="/admin" style="color:#A985AD;text-decoration:none;font-size:0.78rem;" data-ar="🔐 دخول المستشارين والجامعات" data-fr="🔐 Accès conseillers & universités">🔐 دخول المستشارين والجامعات</a>
         <span class="disclaimer" data-i18n="footDisclaimer">هذا الموقع نموذج أولي لأغراض العرض التوضيحي.</span>
       </div>
     </div>
@@ -2098,10 +2099,26 @@ var NEWS = [
     desc:{ar:'قطاع الطاقة الشمسية وطاقة الرياح يبحث عن تقنيين ومهندسين. تكوينات ممولة متاحة.',fr:'Les secteurs solaire et éolien recherchent techniciens et ingénieurs. Formations financées disponibles.'}, link:'https://www.ofppt.ma' },
 ];
 
+// News published from the back office (plain strings, shown in both languages)
+function getAdminNews() {
+  try {
+    return JSON.parse(localStorage.getItem('dabanet_news') || '[]').map(function(n){
+      return {
+        color: n.color || '#7E1F78',
+        tag:   { ar: n.tag,   fr: n.tag },
+        date:  { ar: n.date,  fr: n.date },
+        title: { ar: n.title, fr: n.title },
+        desc:  { ar: n.desc,  fr: n.desc },
+        link:  n.link || '#'
+      };
+    });
+  } catch(e) { return []; }
+}
+
 function renderNews() {
   var grid = document.getElementById('newsGrid');
   if (!grid) return;
-  grid.innerHTML = NEWS.map(function(n) {
+  grid.innerHTML = getAdminNews().concat(NEWS).map(function(n) {
     return '<div style="background:#fff;border:1px solid #E8DEEC;border-radius:16px;overflow:hidden;box-shadow:0 6px 20px rgba(58,15,69,0.07);display:flex;flex-direction:column;transition:transform .2s;" onmouseover="this.style.transform=\'translateY(-4px)\'" onmouseout="this.style.transform=\'none\'">' +
       '<div style="height:6px;background:' + n.color + ';"></div>' +
       '<div style="padding:18px 20px;flex:1;display:flex;flex-direction:column;">' +
@@ -2154,6 +2171,21 @@ function buildSuggestions(p) {
   return { offers: OFFERS[sector], formations: FORMATIONS[sector] };
 }
 
+// Ateliers published from the back office (plain strings for both languages)
+function getAdminAteliers() {
+  try {
+    return JSON.parse(localStorage.getItem('dabanet_ateliers') || '[]').map(function(a){
+      return {
+        t:      { ar: a.t,      fr: a.t },
+        d:      { ar: a.d,      fr: a.d },
+        lieu:   { ar: a.lieu,   fr: a.lieu },
+        places: { ar: a.places, fr: a.places }
+      };
+    });
+  } catch(e) { return []; }
+}
+function getAllAteliers() { return getAdminAteliers().concat(ATELIERS); }
+
 var ATELIERS = [
   {t:{ar:'ورشة إعداد السيرة الذاتية (CV)',fr:'Atelier de rédaction de CV'},d:{ar:'الأربعاء 22 يوليوز · 10:00',fr:'Mercredi 22 juillet · 10h00'},lieu:{ar:'وكالة ANAPEC الرباط',fr:'Agence ANAPEC Rabat'},places:{ar:'8 أماكن متبقية',fr:'8 places restantes'}},
   {t:{ar:'التحضير لمقابلة العمل',fr:'Préparation à l\'entretien d\'embauche'},d:{ar:'الجمعة 24 يوليوز · 14:00',fr:'Vendredi 24 juillet · 14h00'},lieu:{ar:'عن بُعد (Zoom)',fr:'À distance (Zoom)'},places:{ar:'15 مكان متبقي',fr:'15 places restantes'}},
@@ -2198,7 +2230,7 @@ function populateEspace(p) {
       '</div>';
   }).join('');
 
-  document.getElementById('esp-ateliersList').innerHTML = ATELIERS.map(function(a, i){
+  document.getElementById('esp-ateliersList').innerHTML = getAllAteliers().map(function(a, i){
     return '<div style="background:#fff;border:1px solid #E8DEEC;border-radius:14px;padding:16px 18px;box-shadow:0 4px 14px rgba(58,15,69,0.06);">' +
       '<div style="font-family:\'Cairo\',sans-serif;font-weight:800;color:#3A0F45;font-size:0.92rem;margin-bottom:8px;">' + L(a.t.ar,a.t.fr) + '</div>' +
       '<div style="color:#7C6B82;font-size:0.78rem;margin-bottom:3px;">🗓️ ' + L(a.d.ar,a.d.fr) + '</div>' +
@@ -2213,7 +2245,18 @@ window.registerAtelier = function(i, btn) {
   btn.textContent = L('✓ تم التسجيل','✓ Inscrit');
   btn.style.background = '#9CA3AF';
   btn.disabled = true;
-  var w = ATELIERS[i];
+  var w = getAllAteliers()[i];
+  // Track workshop registration for the back office
+  try {
+    var insc = JSON.parse(localStorage.getItem('dabanet_inscriptions') || '[]');
+    insc.push({
+      atelier: w.t.fr,
+      nom: (window.userProfile && window.userProfile.nom) || 'Visiteur',
+      email: (window.userProfile && window.userProfile.email) || '',
+      date: new Date().toISOString()
+    });
+    localStorage.setItem('dabanet_inscriptions', JSON.stringify(insc));
+  } catch(e) {}
   alert(L('✅ تم تسجيلك في ورشة "' + w.t.ar + '"\n🗓️ ' + w.d.ar + '\n📍 ' + w.lieu.ar + '\n\nستصلك رسالة تأكيد عبر البريد الإلكتروني.',
           '✅ Inscription confirmée à l\'atelier "' + w.t.fr + '"\n🗓️ ' + w.d.fr + '\n📍 ' + w.lieu.fr + '\n\nUn email de confirmation vous sera envoyé.'));
 };
@@ -2223,6 +2266,23 @@ window.submitRdv = function() {
   var type = document.getElementById('rdv-type').value;
   var msg  = document.getElementById('rdv-msg');
   if (!date) { msg.textContent = L('⚠️ اختر تاريخاً للموعد','⚠️ Choisissez une date'); msg.style.color = '#dc2626'; return; }
+
+  // Save RDV request for the back office (conseiller)
+  try {
+    var rdvs = JSON.parse(localStorage.getItem('dabanet_rdvs') || '[]');
+    rdvs.push({
+      id: Date.now(),
+      nom: (window.userProfile && window.userProfile.nom) || L('زائر','Visiteur'),
+      email: (window.userProfile && window.userProfile.email) || '',
+      filiere: (window.userProfile && window.userProfile.filiere) || '',
+      date: date, type: type,
+      sujet: document.getElementById('rdv-sujet').value.trim(),
+      status: 'pending',
+      createdAt: new Date().toISOString()
+    });
+    localStorage.setItem('dabanet_rdvs', JSON.stringify(rdvs));
+  } catch(e) {}
+
   msg.textContent = L('✅ تم إرسال طلب موعدك (' + type + ' بتاريخ ' + date + '). سيتصل بك مستشار خلال 48 ساعة.',
                       '✅ Demande envoyée (' + type + ' le ' + date + '). Un conseiller vous contactera sous 48h.');
   msg.style.color = '#166534';
@@ -2247,6 +2307,18 @@ window.submitRegistration = function() {
     return;
   }
   window.userProfile = p;
+
+  // Save graduate profile for the back office (université + conseiller)
+  try {
+    var profils = JSON.parse(localStorage.getItem('dabanet_profils') || '[]');
+    var existing = profils.findIndex(function(x){ return x.nom === p.nom && x.email === p.email; });
+    var record = Object.assign({}, p, {
+      score: computeScore(p),
+      updatedAt: new Date().toISOString()
+    });
+    if (existing >= 0) { profils[existing] = record; } else { record.createdAt = new Date().toISOString(); profils.push(record); }
+    localStorage.setItem('dabanet_profils', JSON.stringify(profils));
+  } catch(e) {}
 
   // Close modal
   document.getElementById('registerModal').style.display = 'none';
