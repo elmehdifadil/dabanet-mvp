@@ -2072,6 +2072,35 @@ window.userProfile = {};
 // L(ar, fr) → returns text for the current language
 function L(ar, fr) { return (window.currentLang === 'fr') ? fr : ar; }
 
+// ══════════ Shared database (Vercel Blob via /api/data, localStorage fallback) ══════════
+window.DB = { rdvs:null, profils:null, news:null, ateliers:null, inscriptions:null };
+function dbGet(key) {
+  if (window.DB[key]) return window.DB[key];
+  try { return JSON.parse(localStorage.getItem('dabanet_' + key) || '[]'); } catch(e) { return []; }
+}
+function dbSet(key, value) {
+  window.DB[key] = value;
+  try { localStorage.setItem('dabanet_' + key, JSON.stringify(value)); } catch(e) {}
+  // Fire-and-forget sync to the shared server database
+  fetch('/api/data', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ key: key, value: value })
+  }).catch(function(){});
+}
+function dbSync(onDone) {
+  fetch('/api/data').then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+    if (d) {
+      ['rdvs','profils','news','ateliers','inscriptions'].forEach(function(k){
+        if (Array.isArray(d[k])) {
+          window.DB[k] = d[k];
+          try { localStorage.setItem('dabanet_' + k, JSON.stringify(d[k])); } catch(e) {}
+        }
+      });
+    }
+    if (onDone) onDone();
+  }).catch(function(){ if (onDone) onDone(); });
+}
+
 var NEWS = [
   { color:'#7E1F78',
     tag:{ar:'معرض تشغيل',fr:'Salon emploi'}, date:{ar:'15 يوليوز 2026',fr:'15 juillet 2026'},
@@ -2102,7 +2131,7 @@ var NEWS = [
 // News published from the back office (plain strings, shown in both languages)
 function getAdminNews() {
   try {
-    return JSON.parse(localStorage.getItem('dabanet_news') || '[]').map(function(n){
+    return dbGet('news').map(function(n){
       return {
         color: n.color || '#7E1F78',
         tag:   { ar: n.tag,   fr: n.tag },
@@ -2174,7 +2203,7 @@ function buildSuggestions(p) {
 // Ateliers published from the back office (plain strings for both languages)
 function getAdminAteliers() {
   try {
-    return JSON.parse(localStorage.getItem('dabanet_ateliers') || '[]').map(function(a){
+    return dbGet('ateliers').map(function(a){
       return {
         t:      { ar: a.t,      fr: a.t },
         d:      { ar: a.d,      fr: a.d },
@@ -2248,14 +2277,14 @@ window.registerAtelier = function(i, btn) {
   var w = getAllAteliers()[i];
   // Track workshop registration for the back office
   try {
-    var insc = JSON.parse(localStorage.getItem('dabanet_inscriptions') || '[]');
+    var insc = dbGet('inscriptions');
     insc.push({
       atelier: w.t.fr,
       nom: (window.userProfile && window.userProfile.nom) || 'Visiteur',
       email: (window.userProfile && window.userProfile.email) || '',
       date: new Date().toISOString()
     });
-    localStorage.setItem('dabanet_inscriptions', JSON.stringify(insc));
+    dbSet('inscriptions', insc);
   } catch(e) {}
   alert(L('✅ تم تسجيلك في ورشة "' + w.t.ar + '"\n🗓️ ' + w.d.ar + '\n📍 ' + w.lieu.ar + '\n\nستصلك رسالة تأكيد عبر البريد الإلكتروني.',
           '✅ Inscription confirmée à l\'atelier "' + w.t.fr + '"\n🗓️ ' + w.d.fr + '\n📍 ' + w.lieu.fr + '\n\nUn email de confirmation vous sera envoyé.'));
@@ -2269,7 +2298,7 @@ window.submitRdv = function() {
 
   // Save RDV request for the back office (conseiller)
   try {
-    var rdvs = JSON.parse(localStorage.getItem('dabanet_rdvs') || '[]');
+    var rdvs = dbGet('rdvs');
     rdvs.push({
       id: Date.now(),
       nom: (window.userProfile && window.userProfile.nom) || L('زائر','Visiteur'),
@@ -2280,7 +2309,7 @@ window.submitRdv = function() {
       status: 'pending',
       createdAt: new Date().toISOString()
     });
-    localStorage.setItem('dabanet_rdvs', JSON.stringify(rdvs));
+    dbSet('rdvs', rdvs);
   } catch(e) {}
 
   msg.textContent = L('✅ تم إرسال طلب موعدك (' + type + ' بتاريخ ' + date + '). سيتصل بك مستشار خلال 48 ساعة.',
@@ -2310,14 +2339,14 @@ window.submitRegistration = function() {
 
   // Save graduate profile for the back office (université + conseiller)
   try {
-    var profils = JSON.parse(localStorage.getItem('dabanet_profils') || '[]');
+    var profils = dbGet('profils');
     var existing = profils.findIndex(function(x){ return x.nom === p.nom && x.email === p.email; });
     var record = Object.assign({}, p, {
       score: computeScore(p),
       updatedAt: new Date().toISOString()
     });
     if (existing >= 0) { profils[existing] = record; } else { record.createdAt = new Date().toISOString(); profils.push(record); }
-    localStorage.setItem('dabanet_profils', JSON.stringify(profils));
+    dbSet('profils', profils);
   } catch(e) {}
 
   // Close modal
@@ -2408,8 +2437,12 @@ window.applyEspaceLang = function() {
   if (window.userProfile && window.userProfile.nom) { populateEspace(window.userProfile); }
 };
 
-// Init news on load
+// Init news on load (local first, then refresh with shared server data)
 renderNews();
+dbSync(function(){
+  renderNews();
+  if (window.userProfile && window.userProfile.nom) { populateEspace(window.userProfile); }
+});
 </script>
 </body>
 </html>

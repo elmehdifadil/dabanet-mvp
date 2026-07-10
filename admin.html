@@ -221,9 +221,36 @@
 </div>
 
 <script>
-/* ══════════ Storage helpers ══════════ */
-function store(k){ try { return JSON.parse(localStorage.getItem(k) || '[]'); } catch(e){ return []; } }
-function save(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
+/* ══════════ Storage helpers (Vercel Blob shared DB + localStorage fallback) ══════════ */
+window.DB = { rdvs:null, profils:null, news:null, ateliers:null, inscriptions:null };
+function shortKey(k){ return k.replace(/^dabanet_/, ''); }
+function store(k){
+  var key = shortKey(k);
+  if (window.DB[key]) return window.DB[key];
+  try { return JSON.parse(localStorage.getItem('dabanet_' + key) || '[]'); } catch(e){ return []; }
+}
+function save(k,v){
+  var key = shortKey(k);
+  window.DB[key] = v;
+  try { localStorage.setItem('dabanet_' + key, JSON.stringify(v)); } catch(e){}
+  fetch('/api/data', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ key: key, value: v })
+  }).catch(function(){});
+}
+function dbSync(onDone){
+  fetch('/api/data').then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+    if (d) {
+      ['rdvs','profils','news','ateliers','inscriptions'].forEach(function(k){
+        if (Array.isArray(d[k])) {
+          window.DB[k] = d[k];
+          try { localStorage.setItem('dabanet_' + k, JSON.stringify(d[k])); } catch(e){}
+        }
+      });
+    }
+    if (onDone) onDone();
+  }).catch(function(){ if (onDone) onDone(); });
+}
 function esc(s){ var d=document.createElement('div'); d.textContent=String(s==null?'':s); return d.innerHTML; }
 
 /* ══════════ Auth (demo) ══════════ */
@@ -432,8 +459,13 @@ function renderUniv(){
   }
 }
 
-/* Auto-login if session exists */
+/* Auto-login if session exists; load shared data first, refresh views after sync */
 showDash();
+dbSync(function(){
+  var r = sessionStorage.getItem('dabanet_admin_role');
+  if (r === 'conseiller') renderConseiller();
+  else if (r === 'universite') renderUniv();
+});
 </script>
 </body>
 </html>

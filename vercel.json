@@ -4,11 +4,13 @@
     { "src": "index.html", "use": "@vercel/static" },
     { "src": "admin.html", "use": "@vercel/static" },
     { "src": "api/chat.mjs", "use": "@vercel/node" },
-    { "src": "api/notify.mjs", "use": "@vercel/node" }
+    { "src": "api/notify.mjs", "use": "@vercel/node" },
+    { "src": "api/data.mjs", "use": "@vercel/node" }
   ],
   "routes": [
     { "src": "/api/chat", "dest": "/api/chat.mjs" },
     { "src": "/api/notify", "dest": "/api/notify.mjs" },
+    { "src": "/api/data", "dest": "/api/data.mjs" },
     { "src": "/admin", "dest": "/admin.html" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
