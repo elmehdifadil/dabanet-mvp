@@ -90,23 +90,15 @@
     <h1>DabaNet <span style="color:var(--gold-600);">Back Office</span></h1>
     <p class="sub">Espace réservé aux conseillers et aux universités partenaires</p>
 
-    <div class="role-grid">
-      <div class="role-btn active" id="roleConseiller" onclick="pickRole('conseiller')">
-        <div class="ic">🧑‍💼</div><div class="lb">Conseiller emploi</div>
-      </div>
-      <div class="role-btn" id="roleUniv" onclick="pickRole('universite')">
-        <div class="ic">🎓</div><div class="lb">Université</div>
-      </div>
-    </div>
-
-    <input id="loginCode" type="password" placeholder="Code d'accès" onkeydown="if(event.key==='Enter')doLogin()">
+    <input id="loginUser" type="text" placeholder="Nom d'utilisateur" autocomplete="username" onkeydown="if(event.key==='Enter')document.getElementById('loginPass').focus()">
+    <input id="loginPass" type="password" placeholder="Mot de passe" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
     <button class="btn-login" onclick="doLogin()">Se connecter</button>
     <div class="login-err" id="loginErr"></div>
 
     <div class="demo-hint">
-      <b>Codes de démonstration :</b><br>
-      🧑‍💼 Conseiller : <code>conseiller2026</code><br>
-      🎓 Université : <code>univ2026</code>
+      <b>Comptes de démonstration :</b><br>
+      🧑‍💼 Conseiller : <code>conseiller</code> / <code>anapec2026</code><br>
+      🎓 Université : <code>universite</code> / <code>univ2026</code>
     </div>
   </div>
 </div>
@@ -253,22 +245,25 @@ function dbSync(onDone){
 }
 function esc(s){ var d=document.createElement('div'); d.textContent=String(s==null?'':s); return d.innerHTML; }
 
-/* ══════════ Auth (demo) ══════════ */
-var CODES = { conseiller:'conseiller2026', universite:'univ2026' };
-var role = 'conseiller';
+/* ══════════ Auth (demo accounts: username + password) ══════════ */
+var ACCOUNTS = {
+  'conseiller':  { pass: 'anapec2026', role: 'conseiller' },
+  'universite':  { pass: 'univ2026',   role: 'universite' }
+};
 
-function pickRole(r){
-  role = r;
-  document.getElementById('roleConseiller').classList.toggle('active', r==='conseiller');
-  document.getElementById('roleUniv').classList.toggle('active', r==='universite');
-}
 function doLogin(){
-  var code = document.getElementById('loginCode').value.trim();
-  if (code !== CODES[role]) {
-    document.getElementById('loginErr').textContent = '❌ Code incorrect pour ce rôle.';
+  var user = document.getElementById('loginUser').value.trim().toLowerCase();
+  var pass = document.getElementById('loginPass').value;
+  var acc = ACCOUNTS[user];
+  if (!user || !pass) {
+    document.getElementById('loginErr').textContent = '⚠️ Entrez le nom d\'utilisateur et le mot de passe.';
     return;
   }
-  sessionStorage.setItem('dabanet_admin_role', role);
+  if (!acc || acc.pass !== pass) {
+    document.getElementById('loginErr').textContent = '❌ Identifiants incorrects.';
+    return;
+  }
+  sessionStorage.setItem('dabanet_admin_role', acc.role);
   showDash();
 }
 function logout(){

@@ -1839,50 +1839,154 @@
 
 <!-- ===== MODAL INSCRIPTION ===== -->
 <div id="registerModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;align-items:center;justify-content:center;">
-  <div style="background:#fff;border-radius:18px;width:min(540px,95vw);max-height:90vh;overflow-y:auto;padding:28px 30px;position:relative;box-shadow:0 24px 60px rgba(58,15,69,0.25);">
+  <div style="background:#fff;border-radius:18px;width:min(560px,95vw);max-height:92vh;overflow-y:auto;padding:26px 30px;position:relative;box-shadow:0 24px 60px rgba(58,15,69,0.25);">
     <button onclick="document.getElementById('registerModal').style.display='none'" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:#7C6B82;">✕</button>
-    <div style="text-align:center;margin-bottom:20px;">
-      <div style="font-size:2rem;margin-bottom:6px;">🎯</div>
-      <h3 style="font-family:'Cairo',sans-serif;font-size:1.2rem;color:#3A0F45;margin:0 0 4px;" data-ar="أنشئ ملفك المهني" data-fr="Créez votre profil professionnel">أنشئ ملفك المهني</h3>
-      <p style="color:#7C6B82;font-size:0.82rem;margin:0;" data-ar="يقوم الذكاء الاصطناعي بتشخيص ملفك واقتراح خطة عمل شخصية" data-fr="L'IA analyse votre profil et propose un plan d'action personnalisé">يقوم الذكاء الاصطناعي بتشخيص ملفك واقتراح خطة عمل شخصية</p>
+
+    <!-- Tabs Connexion / Inscription -->
+    <div style="display:flex;gap:8px;margin-bottom:22px;background:#FAF3FB;border-radius:12px;padding:5px;">
+      <button id="tabLogin" onclick="authTab('login')" style="flex:1;padding:10px;border:none;border-radius:9px;font-family:'Cairo',sans-serif;font-weight:800;font-size:0.9rem;cursor:pointer;background:transparent;color:#7C6B82;" data-ar="تسجيل الدخول" data-fr="Connexion">تسجيل الدخول</button>
+      <button id="tabRegister" onclick="authTab('register')" style="flex:1;padding:10px;border:none;border-radius:9px;font-family:'Cairo',sans-serif;font-weight:800;font-size:0.9rem;cursor:pointer;background:#7E1F78;color:#fff;" data-ar="إنشاء حساب" data-fr="Inscription">إنشاء حساب</button>
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;">
-      <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="الاسم الكامل *" data-fr="Nom complet *">الاسم الكامل *</label>
-        <input id="reg-nom" type="text" data-pha="مثال: أحمد بنعلي" data-phf="Ex : Ahmed Benali" placeholder="مثال: أحمد بنعلي" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
-      <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="السن *" data-fr="Âge *">السن *</label>
-        <input id="reg-age" type="number" min="16" max="60" placeholder="25" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
-      <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="المدينة *" data-fr="Ville *">المدينة *</label>
-        <input id="reg-ville" type="text" data-pha="الرباط، كازابلانكا..." data-phf="Rabat, Casablanca..." placeholder="الرباط، كازابلانكا..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
-      <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="البريد الإلكتروني" data-fr="Email">البريد الإلكتروني</label>
-        <input id="reg-email" type="email" placeholder="exemple@gmail.com" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
-      <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="المستوى الدراسي *" data-fr="Niveau d'études *">المستوى الدراسي *</label>
-        <select id="reg-niveau" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;background:#fff;">
-          <option value="" data-ar="اختر..." data-fr="Choisir...">اختر...</option>
-          <option>Bac</option><option>Bac+2 / DEUG</option><option>Bac+3 / Licence</option>
-          <option>Bac+5 / Master</option><option>Doctorat</option><option data-ar="Formation professionnelle" data-fr="Formation professionnelle">Formation professionnelle</option>
-        </select></div>
-      <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="التخصص / الشعبة *" data-fr="Spécialité / Filière *">التخصص / الشعبة *</label>
-        <input id="reg-filiere" type="text" data-pha="إعلاميات، محاسبة، هندسة..." data-phf="Informatique, comptabilité, ingénierie..." placeholder="إعلاميات، محاسبة، هندسة..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
-      <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="الخبرة المهنية" data-fr="Expérience professionnelle">الخبرة المهنية</label>
-        <select id="reg-experience" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;background:#fff;">
-          <option value="" data-ar="اختر..." data-fr="Choisir...">اختر...</option>
-          <option data-ar="بدون خبرة" data-fr="Sans expérience">بدون خبرة</option><option data-ar="تدريب فقط (stage)" data-fr="Stage uniquement">تدريب فقط (stage)</option>
-          <option data-ar="أقل من سنة" data-fr="Moins d'un an">أقل من سنة</option><option data-ar="1-3 سنوات" data-fr="1-3 ans">1-3 سنوات</option>
-          <option data-ar="3-5 سنوات" data-fr="3-5 ans">3-5 سنوات</option><option data-ar="أكثر من 5 سنوات" data-fr="Plus de 5 ans">أكثر من 5 سنوات</option>
-        </select></div>
-      <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="اللغات" data-fr="Langues">اللغات</label>
-        <input id="reg-langues" type="text" data-pha="العربية، الفرنسية، الإنجليزية..." data-phf="Arabe, français, anglais..." placeholder="العربية، الفرنسية، الإنجليزية..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
-      <div style="grid-column:span 2;"><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="المهارات الأساسية" data-fr="Compétences principales">المهارات الأساسية</label>
-        <input id="reg-competences" type="text" data-pha="برمجة، Excel، تواصل، تسيير مشاريع..." data-phf="Programmation, Excel, communication, gestion..." placeholder="برمجة، Excel، تواصل، تسيير مشاريع..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
-      <div style="grid-column:span 2;"><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="القطاع المستهدف والهدف المهني" data-fr="Secteur visé et objectif professionnel">القطاع المستهدف والهدف المهني</label>
-        <textarea id="reg-objectif" rows="2" data-pha="مثال: أبحث عن عمل في مجال تطوير الويب بكازابلانكا..." data-phf="Ex : Je recherche un emploi en développement web à Casablanca..." placeholder="مثال: أبحث عن عمل في مجال تطوير الويب بكازابلانكا..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;resize:none;"></textarea></div>
+    <!-- ═══ LOGIN VIEW ═══ -->
+    <div id="authLogin" style="display:none;">
+      <div style="text-align:center;margin-bottom:18px;">
+        <div style="font-size:2rem;margin-bottom:6px;">👋</div>
+        <h3 style="font-family:'Cairo',sans-serif;font-size:1.15rem;color:#3A0F45;margin:0 0 4px;" data-ar="مرحباً بعودتك" data-fr="Bon retour parmi nous">مرحباً بعودتك</h3>
+        <p style="color:#7C6B82;font-size:0.82rem;margin:0;" data-ar="سجّل الدخول للوصول إلى فضائك الشخصي" data-fr="Connectez-vous pour accéder à votre espace">سجّل الدخول للوصول إلى فضائك الشخصي</p>
+      </div>
+      <label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="البريد الإلكتروني" data-fr="Email">البريد الإلكتروني</label>
+      <input id="login-email" type="email" placeholder="exemple@gmail.com" style="width:100%;padding:11px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.9rem;box-sizing:border-box;outline:none;margin-bottom:14px;">
+      <label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="كلمة المرور" data-fr="Mot de passe">كلمة المرور</label>
+      <input id="login-password" type="password" placeholder="••••••••" style="width:100%;padding:11px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.9rem;box-sizing:border-box;outline:none;" onkeydown="if(event.key==='Enter')loginUser()">
+      <div id="login-err" style="color:#dc2626;font-size:0.8rem;min-height:18px;margin-top:8px;text-align:center;"></div>
+      <button onclick="loginUser()" style="width:100%;margin-top:8px;padding:14px;background:linear-gradient(135deg,#7E1F78,#4F1359);color:#fff;border:none;border-radius:12px;font-family:'Cairo',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;" data-ar="دخول" data-fr="Se connecter">دخول</button>
     </div>
 
-    <button id="regSubmitBtn" onclick="submitRegistration()" style="width:100%;margin-top:18px;padding:14px;background:linear-gradient(135deg,#7E1F78,#4F1359);color:#fff;border:none;border-radius:12px;font-family:'Cairo',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;letter-spacing:0.5px;" data-ar="🤖 احصل على تشخيص ملفك الآن" data-fr="🤖 Obtenir mon diagnostic maintenant">
-      🤖 احصل على تشخيص ملفك الآن
-    </button>
-    <p style="text-align:center;font-size:0.75rem;color:#7C6B82;margin-top:10px;" data-ar="يتم تحليل ملفك بالذكاء الاصطناعي في ثوانٍ • مجاني تماماً" data-fr="Analyse IA de votre profil en quelques secondes • 100% gratuit">يتم تحليل ملفك بالذكاء الاصطناعي في ثوانٍ • مجاني تماماً</p>
+    <!-- ═══ REGISTER VIEW ═══ -->
+    <div id="authRegister">
+      <div style="text-align:center;margin-bottom:18px;">
+        <div style="font-size:2rem;margin-bottom:6px;">🎯</div>
+        <h3 style="font-family:'Cairo',sans-serif;font-size:1.15rem;color:#3A0F45;margin:0 0 4px;" data-ar="أنشئ حسابك المهني" data-fr="Créez votre compte professionnel">أنشئ حسابك المهني</h3>
+        <p style="color:#7C6B82;font-size:0.82rem;margin:0;" data-ar="يقوم الذكاء الاصطناعي بتشخيص ملفك واقتراح خطة عمل شخصية" data-fr="L'IA analyse votre profil et propose un plan d'action personnalisé">يقوم الذكاء الاصطناعي بتشخيص ملفك واقتراح خطة عمل شخصية</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 16px;">
+        <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="الاسم العائلي *" data-fr="Nom *">الاسم العائلي *</label>
+          <input id="reg-nomfamille" type="text" data-pha="مثال: بنعلي" data-phf="Ex : Benali" placeholder="مثال: بنعلي" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
+        <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="الاسم الشخصي *" data-fr="Prénom *">الاسم الشخصي *</label>
+          <input id="reg-prenom" type="text" data-pha="مثال: أحمد" data-phf="Ex : Ahmed" placeholder="مثال: أحمد" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
+        <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="تاريخ الازدياد *" data-fr="Date de naissance *">تاريخ الازدياد *</label>
+          <input id="reg-naissance" type="date" min="1960-01-01" max="2010-12-31" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
+        <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="المدينة *" data-fr="Ville *">المدينة *</label>
+          <input id="reg-ville" type="text" list="villesList" data-pha="الرباط، كازابلانكا..." data-phf="Rabat, Casablanca..." placeholder="الرباط، كازابلانكا..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;">
+          <datalist id="villesList">
+            <option>Casablanca</option><option>Rabat</option><option>Marrakech</option><option>Fès</option>
+            <option>Tanger</option><option>Agadir</option><option>Meknès</option><option>Oujda</option>
+            <option>Kénitra</option><option>Tétouan</option><option>Salé</option><option>Laâyoune</option>
+            <option>El Jadida</option><option>Béni Mellal</option><option>Nador</option><option>Safi</option>
+          </datalist></div>
+        <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="البريد الإلكتروني *" data-fr="Email *">البريد الإلكتروني *</label>
+          <input id="reg-email" type="email" placeholder="exemple@gmail.com" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
+        <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="كلمة المرور *" data-fr="Mot de passe *">كلمة المرور *</label>
+          <input id="reg-password" type="password" placeholder="••••••••" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
+        <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="المستوى الدراسي *" data-fr="Niveau d'études *">المستوى الدراسي *</label>
+          <select id="reg-niveau" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;background:#fff;">
+            <option value="" data-ar="اختر..." data-fr="Choisir...">اختر...</option>
+            <option>Bac</option>
+            <option>Bac+2 — DEUG / DUT / BTS / DTS</option>
+            <option>Bac+3 — Licence / Licence Pro / Bachelor</option>
+            <option>Bac+4 — Maîtrise</option>
+            <option>Bac+5 — Master / Master Spécialisé</option>
+            <option>Bac+5 — Diplôme d'Ingénieur d'État</option>
+            <option>Bac+6+ — Doctorat / PhD</option>
+            <option>Diplôme OFPPT — Technicien</option>
+            <option>Diplôme OFPPT — Technicien Spécialisé</option>
+            <option>Diplôme OFPPT — Qualification professionnelle</option>
+            <option data-ar="تكوين مهني آخر" data-fr="Autre formation professionnelle">تكوين مهني آخر</option>
+            <option data-ar="بدون شهادة" data-fr="Sans diplôme">بدون شهادة</option>
+          </select></div>
+        <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="الشهادة / التخصص * 🔍" data-fr="Diplôme / Spécialité * 🔍">الشهادة / التخصص * 🔍</label>
+          <input id="reg-filiere" type="text" list="diplomesList" data-pha="ابحث عن تخصصك..." data-phf="Recherchez votre diplôme..." placeholder="ابحث عن تخصصك..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;">
+          <datalist id="diplomesList">
+            <option>Informatique — Développement Web</option>
+            <option>Informatique — Développement Mobile</option>
+            <option>Informatique — Réseaux et Systèmes</option>
+            <option>Informatique — Data Science / Big Data</option>
+            <option>Informatique — Cybersécurité</option>
+            <option>Informatique — Intelligence Artificielle</option>
+            <option>Génie Logiciel</option>
+            <option>Génie Civil</option>
+            <option>Génie Électrique</option>
+            <option>Génie Mécanique</option>
+            <option>Génie Industriel</option>
+            <option>Électromécanique</option>
+            <option>Économie et Gestion</option>
+            <option>Comptabilité et Finance</option>
+            <option>Finance et Banque</option>
+            <option>Audit et Contrôle de Gestion</option>
+            <option>Marketing et Communication</option>
+            <option>Marketing Digital</option>
+            <option>Commerce International</option>
+            <option>Gestion des Ressources Humaines</option>
+            <option>Logistique et Transport</option>
+            <option>Droit Privé</option>
+            <option>Droit Public</option>
+            <option>Droit des Affaires</option>
+            <option>Sciences Politiques</option>
+            <option>Médecine Générale</option>
+            <option>Pharmacie</option>
+            <option>Soins Infirmiers</option>
+            <option>Kinésithérapie</option>
+            <option>Techniques de Laboratoire</option>
+            <option>Biologie</option>
+            <option>Chimie</option>
+            <option>Physique</option>
+            <option>Mathématiques</option>
+            <option>Agronomie / Agriculture</option>
+            <option>Sciences de l'Environnement</option>
+            <option>Énergies Renouvelables</option>
+            <option>Architecture</option>
+            <option>Urbanisme</option>
+            <option>Tourisme et Hôtellerie</option>
+            <option>Langues et Littérature — Arabe</option>
+            <option>Langues et Littérature — Français</option>
+            <option>Langues et Littérature — Anglais</option>
+            <option>Traduction</option>
+            <option>Journalisme et Communication</option>
+            <option>Sciences de l'Éducation</option>
+            <option>Psychologie</option>
+            <option>Sociologie</option>
+            <option>Histoire et Géographie</option>
+            <option>Design Graphique</option>
+            <option>Audiovisuel et Cinéma</option>
+            <option>Électricité de Bâtiment</option>
+            <option>Plomberie / Froid et Climatisation</option>
+            <option>Mécanique Automobile</option>
+            <option>Couture et Stylisme</option>
+            <option>Cuisine et Pâtisserie</option>
+            <option>Coiffure et Esthétique</option>
+          </datalist></div>
+        <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="الخبرة المهنية" data-fr="Expérience professionnelle">الخبرة المهنية</label>
+          <select id="reg-experience" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;background:#fff;">
+            <option value="" data-ar="اختر..." data-fr="Choisir...">اختر...</option>
+            <option data-ar="بدون خبرة" data-fr="Sans expérience">بدون خبرة</option><option data-ar="تدريب فقط (stage)" data-fr="Stage uniquement">تدريب فقط (stage)</option>
+            <option data-ar="أقل من سنة" data-fr="Moins d'un an">أقل من سنة</option><option data-ar="1-3 سنوات" data-fr="1-3 ans">1-3 سنوات</option>
+            <option data-ar="3-5 سنوات" data-fr="3-5 ans">3-5 سنوات</option><option data-ar="أكثر من 5 سنوات" data-fr="Plus de 5 ans">أكثر من 5 سنوات</option>
+          </select></div>
+        <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="اللغات" data-fr="Langues">اللغات</label>
+          <input id="reg-langues" type="text" data-pha="العربية، الفرنسية، الإنجليزية..." data-phf="Arabe, français, anglais..." placeholder="العربية، الفرنسية، الإنجليزية..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
+        <div style="grid-column:span 2;"><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="المهارات الأساسية" data-fr="Compétences principales">المهارات الأساسية</label>
+          <input id="reg-competences" type="text" data-pha="برمجة، Excel، تواصل، تسيير مشاريع..." data-phf="Programmation, Excel, communication, gestion..." placeholder="برمجة، Excel، تواصل، تسيير مشاريع..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
+        <div style="grid-column:span 2;"><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="القطاع المستهدف والهدف المهني" data-fr="Secteur visé et objectif professionnel">القطاع المستهدف والهدف المهني</label>
+          <textarea id="reg-objectif" rows="2" data-pha="مثال: أبحث عن عمل في مجال تطوير الويب بكازابلانكا..." data-phf="Ex : Je recherche un emploi en développement web à Casablanca..." placeholder="مثال: أبحث عن عمل في مجال تطوير الويب بكازابلانكا..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;resize:none;"></textarea></div>
+      </div>
+
+      <button id="regSubmitBtn" onclick="submitRegistration()" style="width:100%;margin-top:18px;padding:14px;background:linear-gradient(135deg,#7E1F78,#4F1359);color:#fff;border:none;border-radius:12px;font-family:'Cairo',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;letter-spacing:0.5px;" data-ar="🤖 أنشئ حسابي واحصل على التشخيص" data-fr="🤖 Créer mon compte et obtenir le diagnostic">
+        🤖 أنشئ حسابي واحصل على التشخيص
+      </button>
+      <p style="text-align:center;font-size:0.75rem;color:#7C6B82;margin-top:10px;" data-ar="يتم تحليل ملفك بالذكاء الاصطناعي في ثوانٍ • مجاني تماماً" data-fr="Analyse IA de votre profil en quelques secondes • 100% gratuit">يتم تحليل ملفك بالذكاء الاصطناعي في ثوانٍ • مجاني تماماً</p>
+    </div>
   </div>
 </div>
 
@@ -2012,11 +2116,19 @@
     input.focus();
   });
 
-  // ── Open modal on all "Créer profil / Login" buttons ──
-  document.querySelectorAll('[data-i18n="heroCta"], [data-i18n="navCta"], [data-i18n="navAuth"]').forEach(function(el) {
+  // ── Open modal: "Connexion" → login tab, "Créer profil" → register tab ──
+  document.querySelectorAll('[data-i18n="heroCta"], [data-i18n="navCta"]').forEach(function(el) {
     el.addEventListener('click', function(e) {
       e.preventDefault();
       document.getElementById('registerModal').style.display = 'flex';
+      if (window.authTab) authTab('register');
+    });
+  });
+  document.querySelectorAll('[data-i18n="navAuth"]').forEach(function(el) {
+    el.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('registerModal').style.display = 'flex';
+      if (window.authTab) authTab('login');
     });
   });
 
@@ -2317,13 +2429,81 @@ window.submitRdv = function() {
   msg.style.color = '#166534';
 };
 
+// ══════════ Auth tabs (Connexion / Inscription) ══════════
+window.authTab = function(which) {
+  var login = document.getElementById('authLogin');
+  var reg   = document.getElementById('authRegister');
+  var tabL  = document.getElementById('tabLogin');
+  var tabR  = document.getElementById('tabRegister');
+  var on  = 'background:#7E1F78;color:#fff;';
+  var off = 'background:transparent;color:#7C6B82;';
+  var base = 'flex:1;padding:10px;border:none;border-radius:9px;font-family:\'Cairo\',sans-serif;font-weight:800;font-size:0.9rem;cursor:pointer;';
+  if (which === 'login') {
+    login.style.display = 'block'; reg.style.display = 'none';
+    tabL.style.cssText = base + on; tabR.style.cssText = base + off;
+  } else {
+    login.style.display = 'none'; reg.style.display = 'block';
+    tabL.style.cssText = base + off; tabR.style.cssText = base + on;
+  }
+};
+
+// Simple hash for the prototype (NOT cryptographic — demo only)
+function simpleHash(s) {
+  var h = 5381;
+  for (var i = 0; i < s.length; i++) { h = ((h << 5) + h + s.charCodeAt(i)) >>> 0; }
+  return 'h' + h.toString(36);
+}
+
+function ageFromBirthdate(iso) {
+  if (!iso) return '';
+  var b = new Date(iso), now = new Date();
+  var a = now.getFullYear() - b.getFullYear();
+  if (now.getMonth() < b.getMonth() || (now.getMonth() === b.getMonth() && now.getDate() < b.getDate())) a--;
+  return (a > 0 && a < 100) ? String(a) : '';
+}
+
+// ══════════ Login ══════════
+window.loginUser = function() {
+  var email = document.getElementById('login-email').value.trim().toLowerCase();
+  var pass  = document.getElementById('login-password').value;
+  var err   = document.getElementById('login-err');
+  if (!email || !pass) { err.textContent = L('⚠️ أدخل البريد وكلمة المرور','⚠️ Entrez email et mot de passe'); return; }
+  var doLogin = function() {
+    var profils = dbGet('profils');
+    var found = profils.find(function(x){
+      return (x.email || '').toLowerCase() === email && x.passhash === simpleHash(pass);
+    });
+    if (!found) {
+      err.textContent = L('❌ البريد أو كلمة المرور غير صحيحة','❌ Email ou mot de passe incorrect');
+      return;
+    }
+    window.userProfile = found;
+    document.getElementById('registerModal').style.display = 'none';
+    populateEspace(found);
+    var esp = document.getElementById('monEspace');
+    esp.style.display = 'block';
+    document.getElementById('navEspace').style.display = '';
+    esp.scrollIntoView({ behavior: 'smooth' });
+  };
+  // Refresh shared data first so login works from any device
+  err.textContent = L('⏳ جاري التحقق...','⏳ Vérification...');
+  dbSync(function(){ err.textContent = ''; doLogin(); });
+};
+
 // ══════════ Registration → Mon Espace ══════════
 window.submitRegistration = function() {
+  var prenom     = document.getElementById('reg-prenom').value.trim();
+  var nomfamille = document.getElementById('reg-nomfamille').value.trim();
+  var naissance  = document.getElementById('reg-naissance').value;
+  var password   = document.getElementById('reg-password').value;
   var p = {
-    nom:        document.getElementById('reg-nom').value.trim(),
-    age:        document.getElementById('reg-age').value.trim(),
+    prenom:     prenom,
+    nomfamille: nomfamille,
+    nom:        (prenom + ' ' + nomfamille).trim(),
+    naissance:  naissance,
+    age:        ageFromBirthdate(naissance),
     ville:      document.getElementById('reg-ville').value.trim(),
-    email:      document.getElementById('reg-email').value.trim(),
+    email:      document.getElementById('reg-email').value.trim().toLowerCase(),
     niveau:     document.getElementById('reg-niveau').value,
     filiere:    document.getElementById('reg-filiere').value.trim(),
     experience: document.getElementById('reg-experience').value,
@@ -2331,16 +2511,21 @@ window.submitRegistration = function() {
     competences:document.getElementById('reg-competences').value.trim(),
     objectif:   document.getElementById('reg-objectif').value.trim()
   };
-  if (!p.nom || !p.age || !p.ville || !p.niveau || !p.filiere) {
+  if (!prenom || !nomfamille || !naissance || !p.ville || !p.email || !password || !p.niveau || !p.filiere) {
     alert(L('⚠️ يرجى ملء الحقول الإجبارية (*)','⚠️ Veuillez remplir les champs obligatoires (*)'));
     return;
   }
+  if (password.length < 4) {
+    alert(L('⚠️ كلمة المرور قصيرة جداً (4 أحرف على الأقل)','⚠️ Mot de passe trop court (4 caractères minimum)'));
+    return;
+  }
+  p.passhash = simpleHash(password);
   window.userProfile = p;
 
   // Save graduate profile for the back office (université + conseiller)
   try {
     var profils = dbGet('profils');
-    var existing = profils.findIndex(function(x){ return x.nom === p.nom && x.email === p.email; });
+    var existing = profils.findIndex(function(x){ return (x.email || '').toLowerCase() === p.email; });
     var record = Object.assign({}, p, {
       score: computeScore(p),
       updatedAt: new Date().toISOString()
