@@ -1888,6 +1888,9 @@
           </datalist></div>
         <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="البريد الإلكتروني *" data-fr="Email *">البريد الإلكتروني *</label>
           <input id="reg-email" type="email" placeholder="exemple@gmail.com" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
+        <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="رقم WhatsApp 📱" data-fr="Téléphone WhatsApp 📱">رقم WhatsApp 📱</label>
+          <input id="reg-tel" type="tel" placeholder="06XXXXXXXX" dir="ltr" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;">
+          <span style="font-size:0.68rem;color:#7C6B82;" data-ar="لتلقي إشعارات المواعيد والعروض" data-fr="Pour recevoir les notifications RDV et offres">لتلقي إشعارات المواعيد والعروض</span></div>
         <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="كلمة المرور *" data-fr="Mot de passe *">كلمة المرور *</label>
           <input id="reg-password" type="password" placeholder="••••••••" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
         <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="المستوى الدراسي *" data-fr="Niveau d'études *">المستوى الدراسي *</label>
@@ -2415,6 +2418,7 @@ window.submitRdv = function() {
       id: Date.now(),
       nom: (window.userProfile && window.userProfile.nom) || L('زائر','Visiteur'),
       email: (window.userProfile && window.userProfile.email) || '',
+      tel: (window.userProfile && window.userProfile.tel) || '',
       filiere: (window.userProfile && window.userProfile.filiere) || '',
       date: date, type: type,
       sujet: document.getElementById('rdv-sujet').value.trim(),
@@ -2504,6 +2508,7 @@ window.submitRegistration = function() {
     age:        ageFromBirthdate(naissance),
     ville:      document.getElementById('reg-ville').value.trim(),
     email:      document.getElementById('reg-email').value.trim().toLowerCase(),
+    tel:        document.getElementById('reg-tel').value.trim(),
     niveau:     document.getElementById('reg-niveau').value,
     filiere:    document.getElementById('reg-filiere').value.trim(),
     experience: document.getElementById('reg-experience').value,
@@ -2543,6 +2548,14 @@ window.submitRegistration = function() {
   esp.style.display = 'block';
   document.getElementById('navEspace').style.display = '';
   esp.scrollIntoView({ behavior: 'smooth' });
+
+  // Automatic WhatsApp welcome notification (fire-and-forget)
+  if (p.tel) {
+    fetch('/api/notify', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: p.tel, type: 'welcome_registration', data: { nom: p.nom } })
+    }).catch(function(){});
+  }
 };
 
 // ══════════ AI Diagnosis in chat ══════════

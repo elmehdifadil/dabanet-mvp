@@ -245,6 +245,29 @@ function dbSync(onDone){
 }
 function esc(s){ var d=document.createElement('div'); d.textContent=String(s==null?'':s); return d.innerHTML; }
 
+/* ══════════ Automatic WhatsApp notifications ══════════ */
+function notifyWA(phoneOrPhones, type, data){
+  var payload = Array.isArray(phoneOrPhones)
+    ? { phones: phoneOrPhones, type: type, data: data }
+    : { phone: phoneOrPhones, type: type, data: data };
+  return fetch('/api/notify', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then(function(r){ return r.json(); }).catch(function(){ return { success:false }; });
+}
+// Phone of a laureate: from the RDV record, else from their profile (matched by email)
+function phoneFor(rdv){
+  if (rdv.tel) return rdv.tel;
+  var prof = store('dabanet_profils').find(function(p){
+    return p.email && rdv.email && p.email.toLowerCase() === rdv.email.toLowerCase();
+  });
+  return prof && prof.tel ? prof.tel : null;
+}
+// All laureates who gave a WhatsApp number
+function allPhones(){
+  return store('dabanet_profils').map(function(p){ return p.tel; }).filter(Boolean);
+}
+
 /* ══════════ Auth (demo accounts: username + password) ══════════ */
 var ACCOUNTS = {
   'conseiller':  { pass: 'anapec2026', role: 'conseiller' },
@@ -331,7 +354,20 @@ function renderRdvTable(){
 function setRdv(id, status){
   var rdvs = store('dabanet_rdvs');
   var r = rdvs.find(function(x){ return x.id===id; });
-  if (r) { r.status = status; save('dabanet_rdvs', rdvs); }
+  if (r) {
+    r.status = status;
+    save('dabanet_rdvs', rdvs);
+    // Automatic WhatsApp notification to the laureate
+    var tel = phoneFor(r);
+    if (tel && (status === 'accepted' || status === 'refused')) {
+      notifyWA(tel, status === 'accepted' ? 'rdv_accepted' : 'rdv_refused',
+        { nom: r.nom, date: r.date, typeRdv: r.type }
+      ).then(function(res){
+        if (res.success) alert('📱 Notification WhatsApp envoyée à ' + r.nom);
+        else if (res.skipped) console.log('WhatsApp non configuré — notification ignorée');
+      });
+    }
+  }
   renderConseiller();
 }
 
@@ -347,7 +383,16 @@ function addAtelier(){
   document.getElementById('at-titre').value=''; document.getElementById('at-date').value='';
   document.getElementById('at-lieu').value=''; document.getElementById('at-places').value='';
   renderConseiller();
-  alert('✅ Atelier publié ! Il est maintenant visible sur le site.');
+  // Automatic WhatsApp broadcast to all laureates
+  var phones = allPhones();
+  if (phones.length) {
+    notifyWA(phones, 'atelier_new', { t:t, d:d, lieu:lieu, places:places }).then(function(res){
+      if (res.success) alert('✅ Atelier publié + 📱 notification WhatsApp envoyée à ' + res.sent + ' lauréat(s).');
+      else alert('✅ Atelier publié ! (WhatsApp : ' + (res.reason || 'non envoyé') + ')');
+    });
+  } else {
+    alert('✅ Atelier publié ! Il est maintenant visible sur le site.');
+  }
 }
 function delAtelier(id){
   save('dabanet_ateliers', store('dabanet_ateliers').filter(function(a){ return a.id!==id; }));
@@ -378,7 +423,16 @@ function addNews(){
   document.getElementById('nw-titre').value=''; document.getElementById('nw-desc').value='';
   document.getElementById('nw-date').value=''; document.getElementById('nw-link').value='';
   renderConseiller();
-  alert('✅ Actualité publiée ! Elle apparaît en tête de la page d\'accueil.');
+  // Automatic WhatsApp broadcast to all laureates
+  var phones = allPhones();
+  if (phones.length) {
+    notifyWA(phones, 'news_new', { title:t, desc:desc }).then(function(res){
+      if (res.success) alert('✅ Actualité publiée + 📱 notification WhatsApp envoyée à ' + res.sent + ' lauréat(s).');
+      else alert('✅ Actualité publiée ! (WhatsApp : ' + (res.reason || 'non envoyé') + ')');
+    });
+  } else {
+    alert('✅ Actualité publiée ! Elle apparaît en tête de la page d\'accueil.');
+  }
 }
 function delNews(id){
   save('dabanet_news', store('dabanet_news').filter(function(n){ return n.id!==id; }));

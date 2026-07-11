@@ -1,4 +1,54 @@
 const WA_API = "https://graph.facebook.com/v20.0";
+const SITE = "https://paluca.vercel.app";
+
+// Builds the WhatsApp message body for each automatic notification type
+function buildMessage(type, data = {}) {
+  switch (type) {
+    case "welcome_registration":
+      return `✅ *PALUCA — Bienvenue ${data.nom || ""}* 🎓\n\nVotre compte a été créé avec succès sur PALUCA (Plateforme d'Accompagnement des Lauréats Universitaires Cadi Ayyad).\n\nVous recevrez ici :\n📅 Confirmations de vos rendez-vous conseiller\n💼 Offres d'emploi adaptées à votre profil\n🎓 Nouveaux ateliers et formations\n\n👉 Votre espace : ${SITE}`;
+
+    case "rdv_accepted":
+      return `📅 *PALUCA — Rendez-vous confirmé* ✅\n\nBonjour ${data.nom || ""},\nVotre rendez-vous avec un conseiller emploi a été *accepté* :\n\n🗓 Date : ${data.date || "—"}\n📞 Type : ${data.typeRdv || "—"}\n\nLe conseiller vous contactera à l'heure convenue. Bonne chance ! 🍀`;
+
+    case "rdv_refused":
+      return `📅 *PALUCA — Rendez-vous* ⚠️\n\nBonjour ${data.nom || ""},\nVotre demande de rendez-vous du ${data.date || "—"} n'a pas pu être retenue.\n\n👉 Vous pouvez proposer une nouvelle date depuis votre espace : ${SITE}`;
+
+    case "atelier_new":
+      return `🎓 *PALUCA — Nouvel atelier disponible*\n\n${data.t || "Atelier"}\n🗓 ${data.d || ""}\n📍 ${data.lieu || ""}\n🔥 ${data.places || "Places limitées"}\n\n👉 Inscrivez-vous vite depuis votre espace : ${SITE}`;
+
+    case "news_new":
+      return `📰 *PALUCA — Actualité*\n\n*${data.title || ""}*\n\n${data.desc || ""}\n\n👉 Plus de détails : ${SITE}`;
+
+    case "job_alert":
+      return `🎯 *PALUCA — Nouvelle offre pour vous*\n\n${data.title || "Offre ANAPEC"}\n📍 ${data.region || "Maroc"}\n📋 ${data.contrat || "CDI/CDD"}\n\n👉 Consultez les offres : https://www.anapec.org/sigec-app-rv/front/chercheurs/recherche_offre`;
+
+    default:
+      return `✅ *PALUCA — Notification*\n\nBonjour ! Vous êtes inscrit aux alertes PALUCA.\n👉 ${SITE}`;
+  }
+}
+
+function normalizePhone(phone) {
+  let p = String(phone).replace(/[\s\-\(\)\.]/g, "");
+  if (p.startsWith("+")) p = p.slice(1);
+  if (p.startsWith("0")) p = "212" + p.slice(1);   // 06XXXXXXXX → 2126XXXXXXXX
+  if (!p.startsWith("212") && p.length === 9) p = "212" + p; // 6XXXXXXXX
+  return p;
+}
+
+async function sendOne(phoneId, token, phone, body) {
+  const res = await fetch(`${WA_API}/${phoneId}/messages`, {
+    method: "POST",
+    headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      messaging_product: "whatsapp",
+      to: normalizePhone(phone),
+      type: "text",
+      text: { body },
+    }),
+  });
+  const result = await res.json();
+  return { ok: res.ok, phone, id: result.messages?.[0]?.id, error: result.error?.message };
+}
 
 export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -6,77 +56,27 @@ export default async function handler(req, res) {
   if (req.method === "OPTIONS") { res.status(204).end(); return; }
   if (req.method !== "POST") { res.status(405).json({ error: "Method not allowed" }); return; }
 
-  const { phone, type, data } = req.body;
   const token = process.env.WA_TOKEN;
   const phoneId = process.env.WA_PHONE_ID;
-
   if (!token || !phoneId) {
-    res.status(500).json({ error: "WhatsApp API not configured" });
-    return;
-  }
-  if (!phone) {
-    res.status(400).json({ error: "phone number required" });
+    // Graceful degradation: the site keeps working until Meta keys are configured
+    res.status(200).json({ success: false, skipped: true, reason: "WhatsApp API not configured (WA_TOKEN / WA_PHONE_ID missing)" });
     return;
   }
 
-  // Normalize phone: remove spaces/dashes, ensure country code
-  const cleanPhone = phone.replace(/[\s\-\(\)]/g, "").replace(/^0/, "212");
+  const { phone, phones, type, data } = req.body || {};
+  const targets = Array.isArray(phones) ? phones : (phone ? [phone] : []);
+  if (targets.length === 0) { res.status(400).json({ error: "phone or phones[] required" }); return; }
 
-  let message;
-
-  if (type === "job_alert") {
-    // Custom text message (only works if user sent us a message in last 24h)
-    // OR use a pre-approved template
-    message = {
-      messaging_product: "whatsapp",
-      to: cleanPhone,
-      type: "text",
-      text: {
-        body: `🎯 *PALUCA — Nouvelle offre pour vous*\n\n${data?.title || "Offre ANAPEC"}\n📍 ${data?.region || "Maroc"}\n📋 ${data?.contrat || "CDI/CDD"}\n\n👉 Consultez les offres : https://www.anapec.org/sigec-app-rv/front/chercheurs/recherche_offre\n\n_Répondez à ce message pour continuer avec notre assistant._`
-      }
-    };
-  } else if (type === "welcome") {
-    // Use the pre-approved hello_world template for first contact
-    message = {
-      messaging_product: "whatsapp",
-      to: cleanPhone,
-      type: "template",
-      template: {
-        name: "hello_world",
-        language: { code: "en_US" }
-      }
-    };
-  } else {
-    // Default: job subscription confirmation
-    message = {
-      messaging_product: "whatsapp",
-      to: cleanPhone,
-      type: "text",
-      text: {
-        body: `✅ *PALUCA — Inscription confirmée*\n\nBonjour ! Vous êtes maintenant inscrit aux alertes emploi PALUCA.\n\nVous recevrez des notifications quand de nouvelles offres ANAPEC correspondant à votre profil seront disponibles.\n\n_Répondez à ce message pour parler à notre assistant IA._`
-      }
-    };
-  }
+  const body = buildMessage(type, data);
 
   try {
-    const response = await fetch(`${WA_API}/${phoneId}/messages`, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(message)
-    });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      console.error("WhatsApp API error:", result);
-      res.status(response.status).json({ error: result.error?.message || "WhatsApp API error" });
-      return;
-    }
-
-    res.status(200).json({ success: true, messageId: result.messages?.[0]?.id });
+    // Broadcast capped at 20 recipients per call to stay within limits
+    const results = await Promise.all(
+      targets.slice(0, 20).filter(Boolean).map((p) => sendOne(phoneId, token, p, body))
+    );
+    const sent = results.filter((r) => r.ok).length;
+    res.status(200).json({ success: sent > 0, sent, total: results.length, results });
   } catch (err) {
     console.error("Notify error:", err);
     res.status(500).json({ error: err.message });
