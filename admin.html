@@ -118,9 +118,41 @@
 
     <div class="tabs">
       <div class="tab active" data-panel="pRdv" onclick="switchTab(this)">📅 Rendez-vous</div>
+      <div class="tab" data-panel="pCreneaux" onclick="switchTab(this)">🗓 Créneaux</div>
+      <div class="tab" data-panel="pValidation" onclick="switchTab(this)">✅ Nouveaux inscrits</div>
       <div class="tab" data-panel="pAteliers" onclick="switchTab(this)">🎓 Ateliers</div>
       <div class="tab" data-panel="pNews" onclick="switchTab(this)">📰 Actualités</div>
       <div class="tab" data-panel="pInscriptions" onclick="switchTab(this)">📋 Inscriptions ateliers</div>
+    </div>
+
+    <!-- Créneaux disponibles -->
+    <div class="panel" id="pCreneaux">
+      <div class="card">
+        <h3>➕ Ajouter un créneau de disponibilité</h3>
+        <p style="color:var(--muted);font-size:0.82rem;margin:0 0 14px;">Les candidats verront ces créneaux dans leur espace et pourront réserver directement.</p>
+        <div class="form-grid">
+          <div><label>Date *</label><input id="cr-date" type="date"></div>
+          <div><label>Heure *</label><input id="cr-heure" type="time" value="10:00"></div>
+          <div class="full"><label>Type d'entretien</label>
+            <select id="cr-type">
+              <option>Par téléphone</option><option>En agence (ANAPEC)</option><option>Par visioconférence</option>
+            </select></div>
+        </div>
+        <button class="btn-add" onclick="addCreneau()">Publier le créneau</button>
+      </div>
+      <div class="card">
+        <h3>🗓 Calendrier des créneaux</h3>
+        <div id="creneauxTable"></div>
+      </div>
+    </div>
+
+    <!-- Validation des nouveaux inscrits -->
+    <div class="panel" id="pValidation">
+      <div class="card">
+        <h3>✅ Validation des nouveaux inscrits</h3>
+        <p style="color:var(--muted);font-size:0.82rem;margin:0 0 14px;">Vérifiez les informations des lauréats avant de valider leur compte. Un compte validé reçoit une confirmation WhatsApp.</p>
+        <div id="validationTable"></div>
+      </div>
     </div>
 
     <!-- RDV -->
@@ -233,7 +265,7 @@ function save(k,v){
 function dbSync(onDone){
   fetch('/api/data').then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
     if (d) {
-      ['rdvs','profils','news','ateliers','inscriptions'].forEach(function(k){
+      ['rdvs','profils','news','ateliers','inscriptions','creneaux'].forEach(function(k){
         if (Array.isArray(d[k])) {
           window.DB[k] = d[k];
           try { localStorage.setItem('dabanet_' + k, JSON.stringify(d[k])); } catch(e){}
@@ -320,17 +352,110 @@ function renderConseiller(){
   var ateliers = store('dabanet_ateliers');
   var news = store('dabanet_news');
   var insc = store('dabanet_inscriptions');
+  var profils = store('dabanet_profils');
+  var creneaux = store('dabanet_creneaux');
   var pending = rdvs.filter(function(r){ return r.status==='pending'; }).length;
+  var aValider = profils.filter(function(p){ return !p.verifie; }).length;
+  var libres = creneaux.filter(function(c){ return c.status==='libre'; }).length;
 
   document.getElementById('cStats').innerHTML =
-    stat(pending, 'RDV en attente') + stat(rdvs.length, 'RDV au total') +
-    stat(ateliers.length, 'Ateliers publiés') + stat(news.length, 'Actualités publiées') +
-    stat(insc.length, 'Inscriptions ateliers');
+    stat(pending, 'RDV en attente') + stat(aValider, 'Inscrits à valider') +
+    stat(libres, 'Créneaux libres') + stat(ateliers.length, 'Ateliers publiés') +
+    stat(news.length, 'Actualités publiées') + stat(insc.length, 'Inscriptions ateliers');
 
   renderRdvTable();
+  renderCreneauxTable();
+  renderValidationTable();
   renderAtelierTable();
   renderNewsTable();
   renderInscTable('inscTable');
+}
+
+/* ── Créneaux (calendrier de disponibilités) ── */
+function addCreneau(){
+  var date = document.getElementById('cr-date').value;
+  var heure = document.getElementById('cr-heure').value;
+  var type = document.getElementById('cr-type').value;
+  if (!date || !heure) { alert('⚠️ Choisissez une date et une heure.'); return; }
+  var creneaux = store('dabanet_creneaux');
+  creneaux.push({ id: Date.now(), date: date, heure: heure, type: type, status: 'libre', reservePar: '' });
+  creneaux.sort(function(a,b){ return (a.date+a.heure) < (b.date+b.heure) ? -1 : 1; });
+  save('dabanet_creneaux', creneaux);
+  document.getElementById('cr-date').value='';
+  renderConseiller();
+  alert('✅ Créneau publié ! Les candidats peuvent maintenant le réserver.');
+}
+function delCreneau(id){
+  save('dabanet_creneaux', store('dabanet_creneaux').filter(function(c){ return c.id!==id; }));
+  renderConseiller();
+}
+function renderCreneauxTable(){
+  var creneaux = store('dabanet_creneaux');
+  var el = document.getElementById('creneauxTable');
+  if (!creneaux.length) { el.innerHTML = '<div class="empty">Aucun créneau publié. Ajoutez vos disponibilités ci-dessus.</div>'; return; }
+  // Group by date
+  var byDate = {};
+  creneaux.forEach(function(c){ (byDate[c.date] = byDate[c.date] || []).push(c); });
+  el.innerHTML = Object.keys(byDate).sort().map(function(d){
+    var jour = new Date(d + 'T00:00:00');
+    var jours = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+    var label = jours[jour.getDay()] + ' ' + jour.toLocaleDateString('fr-MA');
+    return '<div style="margin-bottom:14px;">' +
+      '<div style="font-weight:800;color:var(--purple-900);font-size:0.88rem;margin-bottom:8px;">📆 ' + label + '</div>' +
+      '<div style="display:flex;flex-wrap:wrap;gap:8px;">' +
+      byDate[d].map(function(c){
+        var libre = c.status === 'libre';
+        return '<div style="border:1.5px solid ' + (libre ? '#bbf7d0' : '#fecaca') + ';background:' + (libre ? '#f0fdf4' : '#fef2f2') + ';border-radius:10px;padding:8px 12px;font-size:0.8rem;">' +
+          '<b>' + esc(c.heure) + '</b> · ' + esc(c.type) +
+          (libre ? ' <span class="badge accepted">Libre</span>'
+                 : ' <span class="badge refused">Réservé' + (c.reservePar ? ' — ' + esc(c.reservePar) : '') + '</span>') +
+          ' <button class="act del" style="margin-left:6px;padding:2px 8px;" onclick="delCreneau(' + c.id + ')">🗑</button>' +
+          '</div>';
+      }).join('') +
+      '</div></div>';
+  }).join('');
+}
+
+/* ── Validation des nouveaux inscrits ── */
+function validerInscrit(email){
+  var profils = store('dabanet_profils');
+  var p = profils.find(function(x){ return x.email === email; });
+  if (!p) return;
+  p.verifie = true;
+  p.verifieLe = new Date().toISOString();
+  save('dabanet_profils', profils);
+  if (p.tel) {
+    notifyWA(p.tel, 'welcome_registration', { nom: p.nom }).then(function(res){
+      if (res.success) alert('✅ Compte validé + 📱 confirmation WhatsApp envoyée à ' + p.nom);
+      else alert('✅ Compte de ' + p.nom + ' validé.');
+      renderConseiller();
+    });
+  } else {
+    alert('✅ Compte de ' + p.nom + ' validé.');
+    renderConseiller();
+  }
+}
+function rejeterInscrit(email){
+  if (!confirm('Supprimer définitivement ce profil ?')) return;
+  save('dabanet_profils', store('dabanet_profils').filter(function(x){ return x.email !== email; }));
+  renderConseiller();
+}
+function renderValidationTable(){
+  var profils = store('dabanet_profils');
+  var el = document.getElementById('validationTable');
+  if (!profils.length) { el.innerHTML = '<div class="empty">Aucun inscrit pour le moment.</div>'; return; }
+  el.innerHTML = '<table><tr><th>Lauréat</th><th>Naissance</th><th>Ville</th><th>Diplôme</th><th>Tél WhatsApp</th><th>Statut</th><th>Actions</th></tr>' +
+    profils.slice().reverse().map(function(p){
+      var badge = p.verifie ? '<span class="badge accepted">✓ Validé</span>' : '<span class="badge pending">En attente</span>';
+      var actions = p.verifie
+        ? '<span style="color:var(--muted);font-size:0.75rem;">Validé le ' + (p.verifieLe ? new Date(p.verifieLe).toLocaleDateString('fr-MA') : '—') + '</span>'
+        : '<button class="act ok" onclick="validerInscrit(\'' + esc(p.email) + '\')">✓ Valider</button>' +
+          '<button class="act no" onclick="rejeterInscrit(\'' + esc(p.email) + '\')">✕ Rejeter</button>';
+      return '<tr><td><b>' + esc(p.nom) + '</b><br><span style="color:var(--muted);font-size:0.76rem;">' + esc(p.email||'') + '</span></td>' +
+        '<td>' + esc(p.naissance||'—') + '</td><td>' + esc(p.ville) + '</td>' +
+        '<td>' + esc(p.niveau||'') + '<br><span style="color:var(--muted);font-size:0.76rem;">' + esc(p.filiere||'') + '</span></td>' +
+        '<td>' + esc(p.tel||'—') + '</td><td>' + badge + '</td><td>' + actions + '</td></tr>';
+    }).join('') + '</table>';
 }
 function stat(n,l){ return '<div class="stat"><div class="n">'+n+'</div><div class="l">'+l+'</div></div>'; }
 

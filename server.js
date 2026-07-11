@@ -103,6 +103,7 @@ async function handleChat(req, res) {
 function handleStatic(req, res) {
   let filePath = req.url === '/' ? '/index.html' : req.url.split('?')[0];
   if (filePath === '/admin') filePath = '/admin.html';
+  if (filePath === '/espace') filePath = '/espace.html';
   filePath = path.join(__dirname, filePath);
   fs.readFile(filePath, (err, data) => {
     if (err) {

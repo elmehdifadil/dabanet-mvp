@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PALUCA — فضائي / Mon Espace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --purple-900:#3A0F45; --purple-800:#4F1359; --purple-700:#7E1F78; --purple-600:#9C2484;
+    --purple-200:#EFD9F0; --purple-100:#FAF3FB;
+    --gold-700:#B36C00; --gold-600:#D88400;
+    --green:#166534; --muted:#7C6B82; --border:#E8DEEC;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:'Tajawal',sans-serif; background:linear-gradient(180deg,#FAF3FB,#fff 300px); color:#2A1733; }
+  h1,h2,h3,h4{ font-family:'Cairo',sans-serif; }
+  .topbar{ background:var(--purple-900); color:#fff; padding:13px 22px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+  .topbar .brand{ font-family:'Cairo',sans-serif; font-weight:800; font-size:1.15rem; }
+  .topbar .brand small{ display:block; font-size:0.62rem; font-weight:500; color:#C7A8CB; }
+  .topbar .actions{ display:flex; gap:10px; }
+  .topbar button, .topbar a{ background:rgba(255,255,255,0.12); color:#fff; border:none; border-radius:8px; padding:8px 14px; font-size:0.82rem; cursor:pointer; text-decoration:none; font-family:inherit; }
+  .container{ max-width:1050px; margin:0 auto; padding:24px 18px 60px; }
+  .card{ background:#fff; border:1px solid var(--border); border-radius:18px; padding:22px 24px; box-shadow:0 6px 20px rgba(58,15,69,0.07); margin-bottom:22px; }
+  .grid-cards{ display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:16px; }
+  .mini-card{ background:#fff; border:1px solid var(--border); border-radius:14px; padding:16px 18px; box-shadow:0 4px 14px rgba(58,15,69,0.06); }
+  .mini-card h5{ font-family:'Cairo',sans-serif; font-weight:800; color:var(--purple-900); font-size:0.92rem; margin:0 0 8px; }
+  .mini-card p{ color:var(--muted); font-size:0.8rem; margin:0 0 4px; }
+  .btn-p{ display:inline-block; background:var(--purple-600); color:#fff; text-decoration:none; font-size:0.78rem; font-weight:700; padding:8px 14px; border-radius:8px; border:none; cursor:pointer; font-family:inherit; }
+  .btn-g{ background:var(--green); }
+  h3.sec{ color:var(--purple-900); font-size:1.05rem; margin:26px 0 14px; }
+  .slot{ border:1.5px solid var(--border); border-radius:10px; padding:9px 14px; font-size:0.84rem; cursor:pointer; background:#fff; transition:all .15s; }
+  .slot.sel{ border-color:var(--purple-600); background:var(--purple-100); font-weight:700; }
+  input, select, textarea{ width:100%; padding:10px 12px; border:1.5px solid var(--border); border-radius:10px; font-size:0.88rem; box-sizing:border-box; outline:none; font-family:inherit; background:#fff; }
+  label{ font-size:0.8rem; color:var(--purple-800); font-weight:700; display:block; margin-bottom:4px; }
+  /* Chat */
+  .chat-fab{ position:fixed; bottom:22px; left:22px; width:58px; height:58px; border-radius:50%; background:#25D366; border:none; cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center; z-index:999; }
+  .chat-fab svg{ width:30px; height:30px; fill:#fff; }
+  .chat-box{ position:fixed; bottom:22px; left:22px; width:min(370px,92vw); height:min(520px,80vh); background:#fff; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,0.3); display:none; flex-direction:column; overflow:hidden; z-index:1000; }
+  .chat-head{ background:#075E54; color:#fff; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; }
+  .chat-head b{ font-family:'Cairo',sans-serif; font-size:0.92rem; }
+  .chat-head button{ background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer; }
+  .chat-msgs{ flex:1; overflow-y:auto; padding:14px; background:#ECE5DD; display:flex; flex-direction:column; gap:8px; }
+  .msg{ max-width:82%; padding:9px 12px; border-radius:12px; font-size:0.84rem; line-height:1.55; white-space:pre-wrap; }
+  .msg.bot{ background:#fff; align-self:flex-start; border-bottom-right-radius:3px; }
+  .msg.user{ background:#DCF8C6; align-self:flex-end; border-bottom-left-radius:3px; }
+  .chat-input{ display:flex; gap:8px; padding:10px; background:#F0F0F0; }
+  .chat-input textarea{ flex:1; resize:none; border-radius:20px; padding:9px 14px; max-height:80px; }
+  .chat-input button{ background:#25D366; border:none; border-radius:50%; width:42px; height:42px; cursor:pointer; color:#fff; font-size:1.1rem; flex-shrink:0; }
+  @media(max-width:640px){ .container{ padding:16px 12px 60px; } }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">PALUCA<small>منصة مواكبة خريجي جامعة القاضي عياض</small></div>
+  <div class="actions">
+    <a href="/">🏠 الرئيسية / Accueil</a>
+    <button onclick="logoutEspace()">خروج / Déconnexion</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Verification banner -->
+  <div id="verifBanner" style="display:none;background:#FEF3C7;border:1.5px solid #FDE68A;border-radius:12px;padding:12px 18px;margin-bottom:18px;font-size:0.85rem;color:#92400E;">
+    ⏳ حسابك في انتظار التحقق من طرف المستشار — Votre compte est en attente de validation par le conseiller.
+  </div>
+  <div id="verifOk" style="display:none;background:#DCFCE7;border:1.5px solid #bbf7d0;border-radius:12px;padding:12px 18px;margin-bottom:18px;font-size:0.85rem;color:#166534;">
+    ✅ حسابك مُوثّق — Compte vérifié par le conseiller.
+  </div>
+
+  <!-- Profile header -->
+  <div class="card" style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;">
+    <div id="esp-avatar" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#7E1F78,#4F1359);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Cairo',sans-serif;font-weight:800;font-size:1.3rem;flex-shrink:0;">؟</div>
+    <div style="flex:1;min-width:180px;">
+      <h3 id="esp-nom" style="color:var(--purple-900);margin:0 0 4px;font-size:1.15rem;">—</h3>
+      <p id="esp-meta" style="color:var(--muted);margin:0;font-size:0.85rem;">—</p>
+    </div>
+    <!-- Score -->
+    <div style="text-align:center;">
+      <div style="position:relative;width:92px;height:92px;">
+        <svg width="92" height="92" viewBox="0 0 92 92" style="transform:rotate(-90deg);">
+          <circle cx="46" cy="46" r="39" fill="none" stroke="#E8DEEC" stroke-width="10"/>
+          <circle id="esp-gauge" cx="46" cy="46" r="39" fill="none" stroke="#9C2484" stroke-width="10" stroke-linecap="round" stroke-dasharray="245.04" stroke-dashoffset="245.04" style="transition:stroke-dashoffset 1s ease;"/>
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <b id="esp-score" style="font-family:'Cairo',sans-serif;font-size:1.35rem;color:var(--purple-900);">0</b>
+          <span style="font-size:0.6rem;color:var(--muted);">/100</span>
+        </div>
+      </div>
+      <div style="font-size:0.7rem;color:var(--muted);margin-top:2px;">اكتمال الملف / Profil</div>
+    </div>
+  </div>
+
+  <!-- Offres -->
+  <h3 class="sec">💼 عروض عمل مقترحة لك — Offres suggérées</h3>
+  <div id="esp-offresList" class="grid-cards"></div>
+
+  <!-- Formations -->
+  <h3 class="sec">📚 تكوينات موصى بها — Formations recommandées</h3>
+  <div id="esp-formationsList" class="grid-cards"></div>
+
+  <!-- Ateliers -->
+  <h3 class="sec">🎓 ورشات متاحة — Ateliers ouverts</h3>
+  <div id="esp-ateliersList" class="grid-cards"></div>
+
+  <!-- RDV avec créneaux -->
+  <h3 class="sec">📅 موعد مع مستشار التشغيل — RDV conseiller</h3>
+  <div class="card" id="rdvForm">
+    <p style="color:var(--muted);font-size:0.83rem;margin:0 0 16px;">اختر أحد المواعيد المتاحة التي نشرها المستشار — Choisissez un créneau publié par le conseiller.</p>
+
+    <div id="slotsWrap">
+      <label>المواعيد المتاحة / Créneaux disponibles</label>
+      <div id="slotsList" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;"></div>
+    </div>
+
+    <div id="noSlots" style="display:none;background:var(--purple-100);border-radius:10px;padding:12px 16px;font-size:0.82rem;color:var(--muted);margin-bottom:14px;">
+      لا توجد مواعيد منشورة حالياً — اقترح تاريخاً واختر النوع:
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;">
+        <div><label>التاريخ / Date</label><input id="rdv-date" type="date"></div>
+        <div><label>النوع / Type</label>
+          <select id="rdv-type"><option>Par téléphone</option><option>En agence (ANAPEC)</option><option>Par visioconférence</option></select></div>
+      </div>
+    </div>
+
+    <label>موضوع اللقاء / Objet</label>
+    <textarea id="rdv-sujet" rows="2" placeholder="مثال: أحتاج مساعدة في توجيه بحثي عن عمل..."></textarea>
+    <button class="btn-p" style="width:100%;margin-top:14px;padding:13px;font-family:'Cairo',sans-serif;font-size:0.95rem;background:linear-gradient(135deg,#D88400,#B36C00);" onclick="submitRdvEspace()">تأكيد طلب الموعد / Confirmer</button>
+    <p id="rdv-msg" style="text-align:center;font-size:0.82rem;margin-top:10px;"></p>
+    <div id="mesRdvs" style="margin-top:14px;"></div>
+  </div>
+
+</div>
+
+<!-- Chatbot -->
+<button class="chat-fab" id="chatFab" onclick="toggleChat(true)">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.554 4.103 1.523 5.824L0 24l6.335-1.508A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.006-1.371l-.359-.214-3.724.887.919-3.634-.234-.374A9.818 9.818 0 1 1 12 21.818z"/></svg>
+</button>
+<div class="chat-box" id="chatBox">
+  <div class="chat-head">
+    <b>PALUCA — مساعد ذكي 🤖</b>
+    <button onclick="toggleChat(false)">✕</button>
+  </div>
+  <div class="chat-msgs" id="chatMsgs">
+    <div class="msg bot">مرحباً 👋 أنا مساعد PALUCA. اضغط على "تشخيص ملفي" أو اطرح سؤالك.</div>
+  </div>
+  <div style="padding:8px 10px;background:#F0F0F0;border-bottom:1px solid #ddd;">
+    <button class="btn-p" style="width:100%;background:var(--purple-700);" onclick="runDiagnosis()">🤖 تشخيص ملفي بالذكاء الاصطناعي / Diagnostic IA</button>
+  </div>
+  <div class="chat-input">
+    <textarea id="chatInput" rows="1" placeholder="اكتب رسالتك…" dir="auto"></textarea>
+    <button onclick="sendChat()">◀</button>
+  </div>
+</div>
+
+<script>
+/* ══════════ Shared DB (Vercel Blob + localStorage fallback) ══════════ */
+window.DB = {};
+function dbGet(key){
+  if (window.DB[key]) return window.DB[key];
+  try { return JSON.parse(localStorage.getItem('dabanet_' + key) || '[]'); } catch(e){ return []; }
+}
+function dbSet(key, value){
+  window.DB[key] = value;
+  try { localStorage.setItem('dabanet_' + key, JSON.stringify(value)); } catch(e){}
+  fetch('/api/data', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ key:key, value:value }) }).catch(function(){});
+}
+function dbSync(cb){
+  fetch('/api/data').then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+    if (d) ['rdvs','profils','news','ateliers','inscriptions','creneaux'].forEach(function(k){
+      if (Array.isArray(d[k])) { window.DB[k] = d[k]; try{ localStorage.setItem('dabanet_'+k, JSON.stringify(d[k])); }catch(e){} }
+    });
+    if (cb) cb();
+  }).catch(function(){ if (cb) cb(); });
+}
+
+/* ══════════ Session ══════════ */
+var ME = null;
+function logoutEspace(){ localStorage.removeItem('dabanet_session'); location.href = '/'; }
+
+/* ══════════ Score & suggestions (same logic as homepage) ══════════ */
+function computeScore(p){
+  var w = { nom:8, age:8, ville:8, email:8, niveau:12, filiere:14, experience:12, langues:10, competences:12, objectif:8 };
+  var s = 0; Object.keys(w).forEach(function(f){ if (p[f] && String(p[f]).trim()) s += w[f]; });
+  return Math.min(100, s);
+}
+function buildSuggestions(p){
+  var f = (p.filiere || '').toLowerCase();
+  var sector = 'général';
+  if (/informat|développ|web|program|digital|réseau|data|logiciel|cyber|intelligence/.test(f)) sector = 'tech';
+  else if (/compt|finan|gestion|banque|économ|audit/.test(f)) sector = 'finance';
+  else if (/génie|ingénieur|électr|mécan|btp|civil|industriel/.test(f)) sector = 'ingenierie';
+  else if (/commerc|market|vente|communication/.test(f)) sector = 'commerce';
+  else if (/santé|infirm|médic|pharma|kiné|laboratoire/.test(f)) sector = 'sante';
+  var OFFERS = {
+    tech:[{t:'Développeur Web Full-Stack',c:'Casablanca · CDI',s:'8000-14000 DH'},{t:'Technicien Support IT',c:'Rabat · CDD',s:'5000-7000 DH'},{t:'Data Analyst Junior',c:'Casablanca · CDI',s:'7000-11000 DH'}],
+    finance:[{t:'Assistant Comptable',c:'Casablanca · CDI',s:'5000-8000 DH'},{t:'Chargé de clientèle bancaire',c:'Toutes régions · CDI',s:'6000-9000 DH'},{t:'Contrôleur de gestion junior',c:'Rabat · CDD',s:'7000-10000 DH'}],
+    ingenierie:[{t:'Ingénieur Génie Civil',c:'Marrakech · CDI',s:'9000-15000 DH'},{t:'Technicien Électromécanique',c:'Tanger · CDI',s:'6000-9000 DH'},{t:'Responsable HSE',c:'Casablanca · CDI',s:'8000-12000 DH'}],
+    commerce:[{t:'Commercial B2B',c:'Casablanca · CDI',s:'5000+commissions'},{t:'Community Manager',c:'Rabat · CDD',s:'5000-8000 DH'},{t:'Chef de rayon',c:'Toutes régions · CDI',s:'6000-9000 DH'}],
+    sante:[{t:'Infirmier polyvalent',c:'Toutes régions · CDD',s:'6000-9000 DH'},{t:'Technicien de laboratoire',c:'Casablanca · CDI',s:'5000-8000 DH'},{t:'Aide-soignant',c:'Toutes régions · CDD',s:'4000-6000 DH'}],
+    'général':[{t:'Agent administratif',c:'Toutes régions · CDD',s:'4000-6000 DH'},{t:'Chargé de saisie',c:'Casablanca · CDD',s:'4000-5500 DH'},{t:'Assistant polyvalent',c:'Rabat · CDI',s:'5000-7000 DH'}],
+  };
+  var FORM = {
+    tech:[{t:'Certification Full-Stack JavaScript',o:'OFPPT · 6 mois · Gratuit'},{t:'Data Science & Python',o:'En ligne · 3 mois'},{t:'Cybersécurité fondamentale',o:'OFPPT · 4 mois'}],
+    finance:[{t:'Comptabilité sur SAGE',o:'OFPPT · 3 mois · Gratuit'},{t:'Analyse financière avancée',o:'En ligne · 2 mois'},{t:'Fiscalité marocaine',o:'CNSS · 1 mois'}],
+    ingenierie:[{t:'AutoCAD & Revit',o:'OFPPT · 4 mois · Gratuit'},{t:'Gestion de projet PMP',o:'En ligne · 3 mois'},{t:'Normes qualité ISO',o:'IMANOR · 2 mois'}],
+    commerce:[{t:'Marketing Digital complet',o:'OFPPT · 4 mois · Gratuit'},{t:'Techniques de vente',o:'ANAPEC · 1 mois'},{t:'CRM & prospection',o:'En ligne · 2 mois'}],
+    sante:[{t:'Premiers secours certifiés',o:'Croix-Rouge · 1 mois'},{t:'Gestion des dossiers médicaux',o:'OFPPT · 2 mois'},{t:'Anglais médical',o:'En ligne · 3 mois'}],
+    'général':[{t:'Bureautique & Excel avancé',o:'OFPPT · 2 mois · Gratuit'},{t:'Communication professionnelle',o:'ANAPEC · 1 mois'},{t:'Langues (Français/Anglais)',o:'En ligne · 3 mois'}],
+  };
+  return { offers: OFFERS[sector], formations: FORM[sector] };
+}
+var ATELIERS_DEFAUT = [
+  {t:'ورشة إعداد السيرة الذاتية (CV)',d:'الأربعاء 22 يوليوز · 10:00',lieu:'وكالة ANAPEC الرباط',places:'8 أماكن متبقية'},
+  {t:'التحضير لمقابلة العمل',d:'الجمعة 24 يوليوز · 14:00',lieu:'عن بُعد (Zoom)',places:'15 مكان متبقي'},
+  {t:'البحث الفعّال عن عمل عبر الإنترنت',d:'الاثنين 27 يوليوز · 10:00',lieu:'وكالة ANAPEC الدار البيضاء',places:'5 أماكن متبقية'},
+  {t:'تطوير المهارات الشخصية (Soft Skills)',d:'الأربعاء 29 يوليوز · 15:00',lieu:'عن بُعد (Zoom)',places:'20 مكان متبقي'},
+];
+function getAllAteliers(){
+  var admin = dbGet('ateliers').map(function(a){ return { t:a.t, d:a.d, lieu:a.lieu, places:a.places }; });
+  return admin.concat(ATELIERS_DEFAUT);
+}
+
+/* ══════════ Render ══════════ */
+function esc(s){ var d=document.createElement('div'); d.textContent=String(s==null?'':s); return d.innerHTML; }
+
+function renderEspace(){
+  var p = ME;
+  var initials = (p.nom||'؟').trim().split(/\s+/).map(function(w){return w[0];}).slice(0,2).join('');
+  document.getElementById('esp-avatar').textContent = initials;
+  document.getElementById('esp-nom').textContent = p.nom;
+  document.getElementById('esp-meta').textContent = [p.niveau, p.filiere, p.ville].filter(Boolean).join(' · ');
+  var score = computeScore(p), circ = 245.04;
+  document.getElementById('esp-score').textContent = score;
+  document.getElementById('esp-gauge').style.strokeDashoffset = circ - (circ*score/100);
+
+  document.getElementById(p.verifie ? 'verifOk' : 'verifBanner').style.display = 'block';
+  document.getElementById(p.verifie ? 'verifBanner' : 'verifOk').style.display = 'none';
+
+  var sug = buildSuggestions(p);
+  document.getElementById('esp-offresList').innerHTML = sug.offers.map(function(o){
+    return '<div class="mini-card"><h5>'+esc(o.t)+'</h5><p>📍 '+esc(o.c)+'</p><p style="color:var(--green);font-weight:700;">💰 '+esc(o.s)+'</p>'+
+      '<a class="btn-p" target="_blank" href="https://www.anapec.org/sigec-app-rv/front/chercheurs/recherche_offre">التقديم عبر ANAPEC</a></div>';
+  }).join('');
+  document.getElementById('esp-formationsList').innerHTML = sug.formations.map(function(f){
+    return '<div class="mini-card"><h5>'+esc(f.t)+'</h5><p>🎓 '+esc(f.o)+'</p>'+
+      '<a class="btn-p btn-g" target="_blank" href="https://www.ofppt.ma">معلومات التسجيل</a></div>';
+  }).join('');
+  document.getElementById('esp-ateliersList').innerHTML = getAllAteliers().map(function(a,i){
+    return '<div class="mini-card"><h5>'+esc(a.t)+'</h5><p>🗓 '+esc(a.d)+'</p><p>📍 '+esc(a.lieu)+'</p><p style="color:var(--gold-700);font-weight:700;">🔥 '+esc(a.places)+'</p>'+
+      '<button class="btn-p btn-g" onclick="registerAtelier('+i+',this)">سجّل في الورشة / S\'inscrire</button></div>';
+  }).join('');
+
+  renderSlots();
+  renderMesRdvs();
+}
+
+window.registerAtelier = function(i, btn){
+  btn.textContent = '✓ تم التسجيل'; btn.style.background = '#9CA3AF'; btn.disabled = true;
+  var w = getAllAteliers()[i];
+  var insc = dbGet('inscriptions');
+  insc.push({ atelier: w.t, nom: ME.nom, email: ME.email, date: new Date().toISOString() });
+  dbSet('inscriptions', insc);
+  alert('✅ تم تسجيلك في: ' + w.t);
+};
+
+/* ══════════ Créneaux + RDV ══════════ */
+var selectedSlot = null;
+function renderSlots(){
+  var creneaux = dbGet('creneaux').filter(function(c){ return c.status === 'libre'; });
+  var list = document.getElementById('slotsList');
+  if (!creneaux.length) {
+    document.getElementById('slotsWrap').style.display = 'none';
+    document.getElementById('noSlots').style.display = 'block';
+    return;
+  }
+  document.getElementById('slotsWrap').style.display = 'block';
+  document.getElementById('noSlots').style.display = 'none';
+  list.innerHTML = creneaux.map(function(c){
+    var jours = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+    var d = new Date(c.date + 'T00:00:00');
+    return '<button type="button" class="slot" data-id="'+c.id+'" onclick="pickSlot(this,'+c.id+')">'+
+      jours[d.getDay()] + ' ' + esc(c.date) + ' · <b>' + esc(c.heure) + '</b><br><span style="font-size:0.72rem;color:var(--muted);">' + esc(c.type) + '</span></button>';
+  }).join('');
+}
+window.pickSlot = function(el, id){
+  selectedSlot = id;
+  document.querySelectorAll('.slot').forEach(function(s){ s.classList.remove('sel'); });
+  el.classList.add('sel');
+};
+window.submitRdvEspace = function(){
+  var msg = document.getElementById('rdv-msg');
+  var creneaux = dbGet('creneaux');
+  var rdvs = dbGet('rdvs');
+  var slot = creneaux.find(function(c){ return c.id === selectedSlot && c.status === 'libre'; });
+  var date, type;
+  if (slot) {
+    date = slot.date + ' ' + slot.heure; type = slot.type;
+    slot.status = 'reserve'; slot.reservePar = ME.nom;
+    dbSet('creneaux', creneaux);
+  } else {
+    var manual = document.getElementById('rdv-date');
+    if (document.getElementById('noSlots').style.display !== 'none' && manual.value) {
+      date = manual.value; type = document.getElementById('rdv-type').value;
+    } else {
+      msg.textContent = '⚠️ اختر موعداً من القائمة'; msg.style.color = '#dc2626'; return;
+    }
+  }
+  rdvs.push({
+    id: Date.now(), nom: ME.nom, email: ME.email, tel: ME.tel || '', filiere: ME.filiere || '',
+    date: date, type: type, sujet: document.getElementById('rdv-sujet').value.trim(),
+    status: 'pending', creneauId: slot ? slot.id : null, createdAt: new Date().toISOString()
+  });
+  dbSet('rdvs', rdvs);
+  selectedSlot = null;
+  msg.textContent = '✅ تم إرسال طلب الموعد. ستصلك رسالة WhatsApp عند تأكيده من طرف المستشار.';
+  msg.style.color = 'var(--green)';
+  renderSlots(); renderMesRdvs();
+};
+function renderMesRdvs(){
+  var mine = dbGet('rdvs').filter(function(r){ return r.email === ME.email; });
+  var el = document.getElementById('mesRdvs');
+  if (!mine.length) { el.innerHTML = ''; return; }
+  el.innerHTML = '<label>مواعيدي / Mes rendez-vous</label>' + mine.slice().reverse().map(function(r){
+    var badge = r.status==='accepted' ? '<span style="color:var(--green);font-weight:700;">✅ مؤكد</span>'
+              : r.status==='refused'  ? '<span style="color:#dc2626;font-weight:700;">❌ مرفوض</span>'
+              : '<span style="color:#B36C00;font-weight:700;">⏳ في الانتظار</span>';
+    return '<div style="border:1px solid var(--border);border-radius:10px;padding:9px 14px;margin-top:8px;font-size:0.82rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;">'+
+      '<span>🗓 '+esc(r.date)+' · '+esc(r.type)+'</span>'+badge+'</div>';
+  }).join('');
+}
+
+/* ══════════ Chatbot ══════════ */
+var chatHistory = [];
+function toggleChat(open){
+  document.getElementById('chatBox').style.display = open ? 'flex' : 'none';
+  document.getElementById('chatFab').style.display = open ? 'none' : 'flex';
+}
+function addMsg(text, cls){
+  var d = document.createElement('div');
+  d.className = 'msg ' + cls; d.textContent = text;
+  var box = document.getElementById('chatMsgs');
+  box.appendChild(d); box.scrollTop = box.scrollHeight;
+  return d;
+}
+async function callChat(prompt){
+  var typing = addMsg('...', 'bot');
+  try {
+    var r = await fetch('/api/chat', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ messages: chatHistory.concat([{role:'user',content:prompt}]), profile: ME })
+    });
+    var d = await r.json();
+    typing.remove();
+    var reply = d.reply || 'حدث خطأ. حاول مرة أخرى.';
+    addMsg(reply, 'bot');
+    chatHistory.push({role:'user',content:prompt});
+    chatHistory.push({role:'assistant',content:reply});
+  } catch(e){ typing.remove(); addMsg('❌ تعذّر الاتصال.', 'bot'); }
+}
+window.sendChat = function(){
+  var inp = document.getElementById('chatInput');
+  var t = inp.value.trim(); if (!t) return;
+  inp.value = '';
+  addMsg(t, 'user');
+  callChat(t);
+};
+document.getElementById('chatInput').addEventListener('keydown', function(e){
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+});
+window.runDiagnosis = function(){
+  var p = ME;
+  var prompt = 'Je suis ' + p.nom + (p.age ? ', ' + p.age + ' ans' : '') + ', à ' + (p.ville||'') +
+    '. Niveau ' + (p.niveau||'') + ' en ' + (p.filiere||'') +
+    (p.experience ? ', expérience : ' + p.experience : '') +
+    (p.competences ? ', compétences : ' + p.competences : '') +
+    '. Fais un diagnostic complet de mon profil (score, points forts, points faibles) et un plan d\'action concret avec les offres ANAPEC adaptées.';
+  addMsg('🤖 تشخيص ملفي...', 'user');
+  callChat(prompt);
+};
+
+/* ══════════ Init ══════════ */
+(function init(){
+  var email = localStorage.getItem('dabanet_session');
+  if (!email) { location.href = '/'; return; }
+  function findMe(){
+    return dbGet('profils').find(function(p){ return (p.email||'').toLowerCase() === email.toLowerCase(); });
+  }
+  ME = findMe();
+  if (ME) renderEspace();
+  dbSync(function(){
+    ME = findMe();
+    if (!ME) { location.href = '/'; return; }
+    renderEspace();
+  });
+})();
+</script>
+</body>
+</html>

@@ -490,7 +490,7 @@
       <nav class="nav-links" id="navLinks">
         <a href="#top" data-scroll data-i18n="navHome">الرئيسية</a>
         <a href="#actualites" data-scroll data-ar="الأخبار" data-fr="Actualités">الأخبار</a>
-        <a href="#monEspace" id="navEspace" data-scroll style="display:none;" data-ar="فضائي" data-fr="Mon espace">فضائي</a>
+        <a href="/espace" id="navEspace" style="display:none;" data-ar="فضائي" data-fr="Mon espace">فضائي</a>
         <a href="#footer-contact" data-scroll data-i18n="navContact">اتصل بنا</a>
         <a href="#" class="cta-auth" data-i18n="navAuth">تسجيل الدخول</a>
         <a href="#" class="cta-small" data-i18n="navCta">إنشاء ملفي الشخصي</a>
@@ -2205,7 +2205,7 @@ function dbSet(key, value) {
 function dbSync(onDone) {
   fetch('/api/data').then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
     if (d) {
-      ['rdvs','profils','news','ateliers','inscriptions'].forEach(function(k){
+      ['rdvs','profils','news','ateliers','inscriptions','creneaux'].forEach(function(k){
         if (Array.isArray(d[k])) {
           window.DB[k] = d[k];
           try { localStorage.setItem('dabanet_' + k, JSON.stringify(d[k])); } catch(e) {}
@@ -2481,13 +2481,8 @@ window.loginUser = function() {
       err.textContent = L('❌ البريد أو كلمة المرور غير صحيحة','❌ Email ou mot de passe incorrect');
       return;
     }
-    window.userProfile = found;
-    document.getElementById('registerModal').style.display = 'none';
-    populateEspace(found);
-    var esp = document.getElementById('monEspace');
-    esp.style.display = 'block';
-    document.getElementById('navEspace').style.display = '';
-    esp.scrollIntoView({ behavior: 'smooth' });
+    localStorage.setItem('dabanet_session', found.email);
+    location.href = '/espace';
   };
   // Refresh shared data first so login works from any device
   err.textContent = L('⏳ جاري التحقق...','⏳ Vérification...');
@@ -2542,13 +2537,6 @@ window.submitRegistration = function() {
   // Close modal
   document.getElementById('registerModal').style.display = 'none';
 
-  // Populate + reveal Mon Espace
-  populateEspace(p);
-  var esp = document.getElementById('monEspace');
-  esp.style.display = 'block';
-  document.getElementById('navEspace').style.display = '';
-  esp.scrollIntoView({ behavior: 'smooth' });
-
   // Automatic WhatsApp welcome notification (fire-and-forget)
   if (p.tel) {
     fetch('/api/notify', {
@@ -2556,6 +2544,10 @@ window.submitRegistration = function() {
       body: JSON.stringify({ phone: p.tel, type: 'welcome_registration', data: { nom: p.nom } })
     }).catch(function(){});
   }
+
+  // Open the dedicated candidate space
+  localStorage.setItem('dabanet_session', p.email);
+  setTimeout(function(){ location.href = '/espace'; }, 400);
 };
 
 // ══════════ AI Diagnosis in chat ══════════
@@ -2634,6 +2626,11 @@ window.applyEspaceLang = function() {
   renderNews();
   if (window.userProfile && window.userProfile.nom) { populateEspace(window.userProfile); }
 };
+
+// Show "Mon espace" nav link if a session exists
+if (localStorage.getItem('dabanet_session')) {
+  document.getElementById('navEspace').style.display = '';
+}
 
 // Init news on load (local first, then refresh with shared server data)
 renderNews();

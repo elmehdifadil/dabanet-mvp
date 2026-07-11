@@ -3,10 +3,10 @@ import { put, list } from "@vercel/blob";
 // Shared database for the DabaNet prototype, stored as JSON blobs.
 // GET  /api/data           → { rdvs, profils, news, ateliers, inscriptions }
 // POST /api/data {key,value} → saves one collection
-const KEYS = ["rdvs", "profils", "news", "ateliers", "inscriptions"];
+const KEYS = ["rdvs", "profils", "news", "ateliers", "inscriptions", "creneaux"];
 
 async function readAll() {
-  const data = { rdvs: [], profils: [], news: [], ateliers: [], inscriptions: [] };
+  const data = { rdvs: [], profils: [], news: [], ateliers: [], inscriptions: [], creneaux: [] };
   const { blobs } = await list({ prefix: "db/" });
   await Promise.all(
     blobs.map(async (b) => {
