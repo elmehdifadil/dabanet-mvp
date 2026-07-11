@@ -32,7 +32,7 @@ export default async function handler(req, res) {
       to: cleanPhone,
       type: "text",
       text: {
-        body: `🎯 *DabaNet — Nouvelle offre pour vous*\n\n${data?.title || "Offre ANAPEC"}\n📍 ${data?.region || "Maroc"}\n📋 ${data?.contrat || "CDI/CDD"}\n\n👉 Consultez les offres : https://www.anapec.org/sigec-app-rv/front/chercheurs/recherche_offre\n\n_Répondez à ce message pour continuer avec notre assistant._`
+        body: `🎯 *PALUCA — Nouvelle offre pour vous*\n\n${data?.title || "Offre ANAPEC"}\n📍 ${data?.region || "Maroc"}\n📋 ${data?.contrat || "CDI/CDD"}\n\n👉 Consultez les offres : https://www.anapec.org/sigec-app-rv/front/chercheurs/recherche_offre\n\n_Répondez à ce message pour continuer avec notre assistant._`
       }
     };
   } else if (type === "welcome") {
@@ -53,7 +53,7 @@ export default async function handler(req, res) {
       to: cleanPhone,
       type: "text",
       text: {
-        body: `✅ *DabaNet — Inscription confirmée*\n\nBonjour ! Vous êtes maintenant inscrit aux alertes emploi DabaNet.\n\nVous recevrez des notifications quand de nouvelles offres ANAPEC correspondant à votre profil seront disponibles.\n\n_Répondez à ce message pour parler à notre assistant IA._`
+        body: `✅ *PALUCA — Inscription confirmée*\n\nBonjour ! Vous êtes maintenant inscrit aux alertes emploi PALUCA.\n\nVous recevrez des notifications quand de nouvelles offres ANAPEC correspondant à votre profil seront disponibles.\n\n_Répondez à ce message pour parler à notre assistant IA._`
       }
     };
   }

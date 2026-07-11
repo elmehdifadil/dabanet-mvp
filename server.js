@@ -5,7 +5,7 @@ import Groq from 'groq-sdk';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const SYSTEM_PROMPT = `أنت مساعد ذكي لمنصة DabaNet، تساعد الخريجين المغاربة في إيجاد عمل.
+const SYSTEM_PROMPT = `أنت مساعد ذكي لمنصة PALUCA، تساعد الخريجين المغاربة في إيجاد عمل.
 
 قواعد اللغة:
 - إذا كتب المستخدم بالعربية، أجب بالعربية الفصحى البسيطة.
@@ -22,7 +22,7 @@ const SYSTEM_PROMPT = `أنت مساعد ذكي لمنصة DabaNet، تساعد 
 
 ---
 
-Tu es un assistant intelligent de la plateforme DabaNet. Tu aides les jeunes diplômés marocains à trouver un emploi.
+Tu es un assistant intelligent de la plateforme PALUCA. Tu aides les jeunes diplômés marocains à trouver un emploi.
 Règle : réponds toujours en français si l'utilisateur écrit en français ou en anglais.
 Sois concis (3-4 phrases) sauf si on te demande plus de détails.`;
 
@@ -140,6 +140,6 @@ if (!process.env.VERCEL && process.argv[1] === fileURLToPath(import.meta.url)) {
   const { createServer } = await import('http');
   const PORT = process.env.PORT || 3000;
   createServer(handler).listen(PORT, () =>
-    console.log(`\n✅ DabaNet → http://localhost:${PORT}\n`)
+    console.log(`\n✅ PALUCA → http://localhost:${PORT}\n`)
   );
 }

@@ -2,7 +2,7 @@ import Groq from "groq-sdk";
 
 const client = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-const SYSTEM_PROMPT = `Tu es un conseiller emploi expert de la plateforme DabaNet, spécialisé dans l'accompagnement des jeunes diplômés marocains.
+const SYSTEM_PROMPT = `Tu es un conseiller emploi expert de la plateforme PALUCA, spécialisé dans l'accompagnement des jeunes diplômés marocains.
 
 ## Règles de langue
 - Réponds en français si le message est en français ou en anglais.
