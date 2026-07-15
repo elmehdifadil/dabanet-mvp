@@ -34,6 +34,27 @@ Quand un utilisateur partage son profil (diplôme, expérience, compétences, se
 - Questions probables en entretien pour ce profil
 - Rémunération attendue sur le marché marocain
 
+## Le modèle du "Trèfle Chanceux" (méthodologie ANAPEC de positionnement)
+Tu utilises la méthodologie officielle ANAPEC du trèfle chanceux à QUATRE dimensions pour diagnostiquer tout chercheur d'emploi :
+1. **SOI (الذات)** — Connaissance de son profil et de ses ressources : compétences, qualités personnelles, capacité à les nommer et les valoriser dans ses candidatures.
+2. **PROJET (المشروع المهني)** — Clarté du projet professionnel : connaître l'emploi recherché, sa cohérence avec la formation et l'expérience, la mobilité géographique.
+3. **TERRITOIRE (سوق الشغل)** — Connaissance du marché de l'emploi : entreprises qui recrutent, métiers demandés, secteurs porteurs, types de contrats de travail.
+4. **MÉTHODE (المنهجية)** — Maîtrise des techniques de recherche d'emploi : CV attrayant et adapté, lettres de candidature convaincantes, préparation des entretiens d'embauche, plan d'action structuré.
+
+Sept types de difficultés peuvent se présenter par rapport à ces quatre dimensions. L'ANAPEC ne peut intervenir que sur les trois premières via ses prestations (ateliers).
+
+## Quand tu reçois un DIAGNOSTIC DE POSITIONNEMENT (réponses au questionnaire + scores)
+Produis un diagnostic structuré :
+1. **Score général /100** avec une phrase d'interprétation
+2. **Analyse par dimension** (SOI, PROJET, TERRITOIRE, MÉTHODE) : pour chaque dimension, 1-2 phrases sur les forces/faiblesses révélées par les réponses
+3. **Difficultés principales identifiées** (2-3 max, les plus urgentes)
+4. **Plan d'action priorisé** basé sur les dimensions faibles :
+   - MÉTHODE faible → Atelier CV, Atelier entretien d'embauche, Techniques de Recherche d'Emploi (TRE)
+   - TERRITOIRE faible → Atelier information sur le marché du travail, consultation des offres ANAPEC
+   - SOI faible → Atelier bilan personnel et professionnel
+   - PROJET faible → Atelier élaboration du projet professionnel
+5. **Encouragement final** personnalisé
+
 ## Style de réponse
 - Structuré avec des titres et listes
 - Concret, réaliste, encourageant
@@ -118,6 +139,13 @@ export default async function handler(req, res) {
     if (profile.langues) profileContext += `- Langues : ${profile.langues}\n`;
     if (profile.secteur) profileContext += `- Secteur cible : ${profile.secteur}\n`;
     if (profile.objectif) profileContext += `- Objectif : ${profile.objectif}\n`;
+    // Trèfle chanceux positioning diagnosis, when completed
+    if (profile.positionnement && profile.positionnement.scores) {
+      const s = profile.positionnement.scores;
+      profileContext += `\n## DIAGNOSTIC DE POSITIONNEMENT (Trèfle chanceux, déjà réalisé)\n`;
+      profileContext += `- Score général : ${s.global}/100\n- SOI : ${s.soi}/100\n- PROJET : ${s.projet}/100\n- TERRITOIRE : ${s.territoire}/100\n- MÉTHODE : ${s.methode}/100\n`;
+      profileContext += `Appuie toutes tes recommandations sur ces scores : priorise les dimensions les plus faibles.\n`;
+    }
     profileContext += `\nUtilise ces informations pour personnaliser entièrement tes réponses.`;
   }
 

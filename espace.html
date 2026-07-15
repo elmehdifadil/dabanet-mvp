@@ -94,6 +94,55 @@
     </div>
   </div>
 
+  <!-- ═══ Diagnostic de positionnement (Trèfle chanceux) ═══ -->
+  <div class="card" id="trefleCard">
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+      <div style="font-size:2rem;">🍀</div>
+      <div style="flex:1;min-width:200px;">
+        <h3 style="color:var(--purple-900);margin:0 0 4px;font-size:1.02rem;">المقابلة التشخيصية — Entretien de positionnement</h3>
+        <p style="color:var(--muted);font-size:0.82rem;margin:0;">أجب على أسئلة ورقة التحضير (ANAPEC) ليقوم الذكاء الاصطناعي بتشخيص ملفك حسب الأبعاد الأربعة</p>
+      </div>
+      <button class="btn-p" style="background:linear-gradient(135deg,#7E1F78,#4F1359);padding:11px 20px;" onclick="openTrefle()" id="trefleBtn">ابدأ التشخيص / Commencer</button>
+    </div>
+
+    <!-- Results -->
+    <div id="trefleResults" style="display:none;margin-top:20px;border-top:1px solid var(--border);padding-top:18px;">
+      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:16px;">
+        <div style="text-align:center;">
+          <div style="position:relative;width:110px;height:110px;">
+            <svg width="110" height="110" viewBox="0 0 110 110" style="transform:rotate(-90deg);">
+              <circle cx="55" cy="55" r="47" fill="none" stroke="#E8DEEC" stroke-width="11"/>
+              <circle id="tr-gauge" cx="55" cy="55" r="47" fill="none" stroke="#166534" stroke-width="11" stroke-linecap="round" stroke-dasharray="295.31" stroke-dashoffset="295.31" style="transition:stroke-dashoffset 1s ease;"/>
+            </svg>
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+              <b id="tr-global" style="font-family:'Cairo',sans-serif;font-size:1.6rem;color:var(--purple-900);">0</b>
+              <span style="font-size:0.62rem;color:var(--muted);">/100</span>
+            </div>
+          </div>
+          <div style="font-size:0.72rem;color:var(--muted);margin-top:2px;">النتيجة العامة / Score général</div>
+        </div>
+        <div style="flex:1;min-width:240px;display:flex;flex-direction:column;gap:10px;" id="tr-bars"></div>
+      </div>
+      <div id="tr-ai" style="background:var(--purple-100);border-radius:12px;padding:16px 18px;font-size:0.86rem;line-height:1.7;white-space:pre-wrap;"></div>
+      <button class="btn-p" style="margin-top:12px;background:#fff;color:var(--purple-700);border:1.5px solid var(--purple-600);" onclick="openTrefle()">🔄 إعادة التشخيص / Refaire</button>
+    </div>
+  </div>
+
+  <!-- Questionnaire modal -->
+  <div id="trefleModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9998;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:18px;width:min(640px,95vw);max-height:92vh;overflow-y:auto;padding:26px 28px;position:relative;">
+      <button onclick="document.getElementById('trefleModal').style.display='none'" style="position:absolute;top:12px;left:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);">✕</button>
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-size:1.8rem;">🍀</div>
+        <h3 style="color:var(--purple-900);margin:4px 0;font-size:1.05rem;">ورقة التحضير للمقابلة التشخيصية</h3>
+        <p style="color:var(--muted);font-size:0.78rem;margin:0;">Fiche de préparation à l'entretien de positionnement (ANAPEC)</p>
+      </div>
+      <form id="trefleForm"></form>
+      <button class="btn-p" style="width:100%;margin-top:16px;padding:13px;font-family:'Cairo',sans-serif;font-size:0.95rem;background:linear-gradient(135deg,#7E1F78,#4F1359);" onclick="submitTrefle()">🤖 تحليل إجاباتي بالذكاء الاصطناعي / Analyser</button>
+      <p id="trefleErr" style="text-align:center;color:#dc2626;font-size:0.8rem;min-height:16px;margin:8px 0 0;"></p>
+    </div>
+  </div>
+
   <!-- Offres -->
   <h3 class="sec">💼 عروض عمل مقترحة لك — Offres suggérées</h3>
   <div id="esp-offresList" class="grid-cards"></div>
@@ -255,6 +304,14 @@ function renderEspace(){
 
   renderSlots();
   renderMesRdvs();
+
+  // Trèfle: restore saved diagnosis, or invite new users to take it
+  if (p.positionnement && p.positionnement.scores) {
+    renderTrefleResults(p.positionnement.scores, p.positionnement.diagnostic || '📋 التشخيص الرقمي محفوظ — أعد التشخيص للحصول على التحليل الكامل بالذكاء الاصطناعي.', true);
+  } else if (!window._trefleInvited) {
+    window._trefleInvited = true;
+    setTimeout(function(){ openTrefle(); }, 1200);
+  }
 }
 
 window.registerAtelier = function(i, btn){
@@ -380,6 +437,181 @@ window.runDiagnosis = function(){
   addMsg('🤖 تشخيص ملفي...', 'user');
   callChat(prompt);
 };
+
+/* ══════════ Trèfle chanceux — Entretien de positionnement (fiche ANAPEC) ══════════ */
+var TREFLE_Q = [
+  { dim:'projet', titre:'أنا والعمل الذي أبحث عنه — Moi et l\'emploi que je recherche', color:'#7E1F78', items:[
+    { id:'p1', q:'هل تعرف المهنة أو العمل الذي تبحث عنه؟ — Connaissez-vous l\'emploi que vous recherchez ?', type:'ouinon', extra:{ id:'p1x', ph:'إذا نعم، ما هو؟ / Si oui, lequel ?' } },
+    { id:'p2', q:'هل تبحث عن عمل يتناسب مع تكوينك وتجربتك؟ — Cherchez-vous un emploi qui correspond à votre formation et expérience ?', type:'ouinon' },
+    { id:'p3', q:'هل يمكنك الذهاب للعمل في مدينة أخرى؟ — Êtes-vous mobile ?', type:'ouinon' },
+  ]},
+  { dim:'soi', titre:'معرفة الذات — Connaissance de mon profil', color:'#9C2484', items:[
+    { id:'s1', q:'هل تعرف الكفاءات المطلوبة لممارسة هذا العمل؟ — Connaissez-vous les compétences nécessaires pour cet emploi ?', type:'ouinon' },
+    { id:'s2', q:'اذكر ثلاثاً من كفاءاتك — Citez trois de vos compétences', type:'text', ph:'1... 2... 3...' },
+    { id:'s3', q:'اذكر ثلاثاً من مميزاتك الشخصية — Citez trois de vos qualités', type:'text', ph:'1... 2... 3...' },
+    { id:'s4', q:'هل تذكر كفاءاتك ومميزاتك في رسائل الترشيح؟ — Mentionnez-vous vos compétences et qualités dans vos candidatures ?', type:'ouinon' },
+    { id:'s5', q:'هل تظن أنك تحتاج إلى تكوين تكميلي؟ — Pensez-vous avoir besoin d\'une formation complémentaire ?', type:'ouinon', noscore:true },
+  ]},
+  { dim:'territoire', titre:'سوق الشغل — Mon marché de l\'emploi', color:'#B36C00', items:[
+    { id:'t1', q:'هل تعرف المقاولات التي يهمها العمل الذي تبحث عنه؟ — Connaissez-vous les entreprises qui recrutent dans votre domaine ?', type:'ouinon' },
+    { id:'t2', q:'هل تعرف المهن المطلوبة أكثر في سوق الشغل؟ — Connaissez-vous les métiers les plus demandés ?', type:'ouinon' },
+    { id:'t3', q:'هل تعرف القطاعات التي تشغّل أكثر؟ — Connaissez-vous les secteurs qui recrutent le plus ?', type:'ouinon' },
+    { id:'t4', q:'هل تعرف مختلف عقود الشغل؟ — Connaissez-vous les différents contrats de travail ?', type:'ouinon' },
+  ]},
+  { dim:'methode', titre:'المنهجية: سيرتي، رسائلي، مقابلاتي — Ma méthode : CV, candidatures, entretiens', color:'#166534', items:[
+    { id:'m1', q:'هل لديك سيرة ذاتية؟ — Avez-vous un CV ?', type:'ouinon' },
+    { id:'m2', q:'هل تبدو لك سيرتك الذاتية مرضية وجذابة؟ — Votre CV vous semble-t-il attrayant ?', type:'ouinon' },
+    { id:'m3', q:'هل تُكيّف سيرتك الذاتية حسب كل عرض عمل؟ — Adaptez-vous votre CV selon l\'offre d\'emploi ?', type:'ouinon' },
+    { id:'m4', q:'هل تعرف مواقع إلكترونية للتشغيل؟ — Connaissez-vous des sites de recrutement ?', type:'ouinon' },
+    { id:'m5', q:'هل تتصفح عروض العمل الخاصة بـANAPEC؟ — Consultez-vous les offres de l\'ANAPEC ?', type:'ouinon' },
+    { id:'m6', q:'هل تستعلم عن المقاولة قبل إعداد رسالة الترشيح؟ — Vous renseignez-vous sur l\'entreprise avant de postuler ?', type:'ouinon' },
+    { id:'m7', q:'هل تبدو لك رسائلك لطلب العمل مقنعة؟ — Vos candidatures vous semblent-elles convaincantes ?', type:'ouinon' },
+    { id:'m8', q:'هل سبق أن أجريت مقابلة تشغيل؟ — Avez-vous déjà passé un entretien d\'embauche ?', type:'ouinon' },
+    { id:'m9', q:'هل تعرف كيف تحضّر وتنجح في مقابلات التشغيل؟ — Savez-vous préparer et réussir un entretien d\'embauche ?', type:'ouinon' },
+    { id:'m10', q:'هل تعرف الخطوات اللازمة لمضاعفة حظوظك في إيجاد عمل؟ — Connaissez-vous les actions pour augmenter vos chances (plan d\'action) ?', type:'ouinon' },
+  ]},
+];
+
+function buildTrefleForm(){
+  var old = (ME.positionnement && ME.positionnement.answers) || {};
+  document.getElementById('trefleForm').innerHTML = TREFLE_Q.map(function(g){
+    return '<div style="margin-bottom:18px;">' +
+      '<div style="background:'+g.color+'15;border-right:4px solid '+g.color+';border-radius:8px;padding:8px 12px;font-weight:800;font-size:0.86rem;color:'+g.color+';margin-bottom:10px;">'+g.titre+'</div>' +
+      g.items.map(function(it){
+        var html = '<div style="margin-bottom:11px;"><div style="font-size:0.8rem;margin-bottom:5px;line-height:1.5;">'+it.q+'</div>';
+        if (it.type === 'ouinon') {
+          ['oui','non'].forEach(function(v){
+            var checked = old[it.id] === v ? ' checked' : '';
+            html += '<label style="display:inline-flex;align-items:center;gap:5px;margin-left:16px;font-size:0.8rem;cursor:pointer;font-weight:400;">' +
+              '<input type="radio" name="'+it.id+'" value="'+v+'"'+checked+' style="width:auto;">' + (v==='oui'?'نعم Oui':'لا Non') + '</label>';
+          });
+          if (it.extra) html += '<input type="text" id="'+it.extra.id+'" placeholder="'+it.extra.ph+'" value="'+(old[it.extra.id]||'')+'" style="margin-top:6px;font-size:0.8rem;padding:8px 10px;">';
+        } else {
+          html += '<input type="text" id="'+it.id+'" placeholder="'+(it.ph||'')+'" value="'+(old[it.id]||'')+'" style="font-size:0.8rem;padding:8px 10px;">';
+        }
+        return html + '</div>';
+      }).join('') + '</div>';
+  }).join('');
+}
+
+window.openTrefle = function(){
+  buildTrefleForm();
+  document.getElementById('trefleModal').style.display = 'flex';
+};
+
+function computeTrefle(answers){
+  var scores = {};
+  TREFLE_Q.forEach(function(g){
+    var pts = 0, tot = 0;
+    g.items.forEach(function(it){
+      if (it.noscore) return;
+      tot++;
+      if (it.type === 'ouinon') { if (answers[it.id] === 'oui') pts++; }
+      else { if ((answers[it.id]||'').trim().length >= 5) pts++; }
+    });
+    scores[g.dim] = Math.round(100 * pts / tot);
+  });
+  scores.global = Math.round((scores.projet + scores.soi + scores.territoire + scores.methode) / 4);
+  return scores;
+}
+
+window.submitTrefle = async function(){
+  var answers = {};
+  var missing = 0;
+  TREFLE_Q.forEach(function(g){ g.items.forEach(function(it){
+    if (it.type === 'ouinon') {
+      var checked = document.querySelector('input[name="'+it.id+'"]:checked');
+      if (checked) answers[it.id] = checked.value; else missing++;
+      if (it.extra) answers[it.extra.id] = (document.getElementById(it.extra.id).value||'').trim();
+    } else {
+      answers[it.id] = (document.getElementById(it.id).value||'').trim();
+    }
+  }); });
+  if (missing > 0) {
+    document.getElementById('trefleErr').textContent = '⚠️ أجب على جميع أسئلة نعم/لا ('+missing+' متبقية) — Répondez à toutes les questions Oui/Non';
+    return;
+  }
+  var scores = computeTrefle(answers);
+
+  // Save into profile (shared DB → visible to conseiller too)
+  ME.positionnement = { answers: answers, scores: scores, date: new Date().toISOString() };
+  var profils = dbGet('profils');
+  var idx = profils.findIndex(function(p){ return (p.email||'').toLowerCase() === ME.email.toLowerCase(); });
+  if (idx >= 0) { profils[idx] = ME; dbSet('profils', profils); }
+
+  document.getElementById('trefleModal').style.display = 'none';
+  renderTrefleResults(scores, '⏳ الذكاء الاصطناعي يحلل إجاباتك... / Analyse IA en cours...');
+
+  // AI diagnosis based on the trèfle answers
+  var lignes = [];
+  TREFLE_Q.forEach(function(g){ g.items.forEach(function(it){
+    var v = answers[it.id] || '—';
+    lignes.push('['+g.dim.toUpperCase()+'] ' + it.q.split('—')[1].trim() + ' → ' + v + (it.extra && answers[it.extra.id] ? ' ("' + answers[it.extra.id] + '")' : ''));
+  }); });
+  var prompt = 'DIAGNOSTIC DE POSITIONNEMENT (fiche ANAPEC — trèfle chanceux).\n' +
+    'Scores calculés : Général ' + scores.global + '/100 | SOI ' + scores.soi + ' | PROJET ' + scores.projet + ' | TERRITOIRE ' + scores.territoire + ' | MÉTHODE ' + scores.methode + '\n\nMes réponses :\n' + lignes.join('\n') +
+    '\n\nProduis mon diagnostic complet selon le modèle du trèfle chanceux (analyse par dimension, difficultés principales, plan d\'action priorisé avec les ateliers ANAPEC adaptés). Réponds en français.';
+  try {
+    var r = await fetch('/api/chat', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ messages:[{role:'user',content:prompt}], profile: ME })
+    });
+    var d = await r.json();
+    var txt = d.reply || 'حدث خطأ. حاول مرة أخرى.';
+    ME.positionnement.diagnostic = txt;
+    var profils2 = dbGet('profils');
+    var i2 = profils2.findIndex(function(p){ return (p.email||'').toLowerCase() === ME.email.toLowerCase(); });
+    if (i2 >= 0) { profils2[i2] = ME; dbSet('profils', profils2); }
+    renderTrefleResults(scores, txt);
+  } catch(e) {
+    renderTrefleResults(scores, '❌ تعذّر الاتصال بالمساعد. النتائج الرقمية محفوظة — أعد المحاولة لاحقاً للتحليل الكامل.');
+  }
+};
+
+var DIM_LABELS = { soi:{l:'الذات SOI',c:'#9C2484'}, projet:{l:'المشروع PROJET',c:'#7E1F78'}, territoire:{l:'السوق TERRITOIRE',c:'#B36C00'}, methode:{l:'المنهجية MÉTHODE',c:'#166534'} };
+
+function renderTrefleResults(scores, aiText, noScroll){
+  document.getElementById('trefleResults').style.display = 'block';
+  document.getElementById('trefleBtn').style.display = 'none';
+  var circ = 295.31;
+  document.getElementById('tr-global').textContent = scores.global;
+  var g = document.getElementById('tr-gauge');
+  g.style.strokeDashoffset = circ - (circ * scores.global / 100);
+  g.style.stroke = scores.global >= 70 ? '#166534' : scores.global >= 45 ? '#D88400' : '#dc2626';
+  document.getElementById('tr-bars').innerHTML = ['soi','projet','territoire','methode'].map(function(d){
+    var v = scores[d], L = DIM_LABELS[d];
+    return '<div><div style="display:flex;justify-content:space-between;font-size:0.76rem;margin-bottom:3px;"><b style="color:'+L.c+';">'+L.l+'</b><b>'+v+'/100</b></div>' +
+      '<div style="background:#E8DEEC;border-radius:20px;height:9px;overflow:hidden;"><div style="width:'+v+'%;height:100%;background:'+L.c+';border-radius:20px;transition:width 1s ease;"></div></div></div>';
+  }).join('');
+  document.getElementById('tr-ai').textContent = aiText;
+  renderAteliersReco(scores);
+  if (!noScroll) document.getElementById('trefleCard').scrollIntoView({ behavior:'smooth' });
+}
+
+// Ateliers ANAPEC recommandés selon les dimensions faibles du trèfle
+function renderAteliersReco(scores){
+  var recos = [];
+  if (scores.projet < 60)     recos.push({t:'ورشة بلورة المشروع المهني — Atelier élaboration du projet professionnel', why:'بُعد المشروع ضعيف / Dimension PROJET à renforcer'});
+  if (scores.soi < 60)        recos.push({t:'ورشة الحصيلة الشخصية والمهنية — Atelier bilan personnel et professionnel', why:'بُعد الذات ضعيف / Dimension SOI à renforcer'});
+  if (scores.territoire < 60) recos.push({t:'ورشة التعرف على سوق الشغل — Atelier information sur le marché du travail', why:'بُعد السوق ضعيف / Dimension TERRITOIRE à renforcer'});
+  if (scores.methode < 60)    recos.push({t:'ورشة تقنيات البحث عن عمل (CV، رسائل، مقابلات) — Techniques de Recherche d\'Emploi (TRE)', why:'بُعد المنهجية ضعيف / Dimension MÉTHODE à renforcer'});
+  var el = document.getElementById('trefleRecos');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'trefleRecos';
+    document.getElementById('trefleResults').appendChild(el);
+  }
+  if (!recos.length) {
+    el.innerHTML = '<div style="margin-top:12px;background:#DCFCE7;border-radius:10px;padding:12px 16px;font-size:0.83rem;color:#166534;">🎉 جميع الأبعاد الأربعة جيدة! واصل خطتك في البحث عن عمل.</div>';
+    return;
+  }
+  el.innerHTML = '<h4 style="color:var(--purple-900);font-size:0.92rem;margin:16px 0 10px;">🎯 ورشات ANAPEC موصى بها حسب تشخيصك — Prestations recommandées</h4>' +
+    recos.map(function(r){
+      return '<div style="border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;margin-bottom:8px;font-size:0.82rem;">'+
+        '<b>'+r.t+'</b><br><span style="color:var(--muted);font-size:0.75rem;">'+r.why+'</span><br>'+
+        '<a href="http://anapec-amrc.org/chercheur_ateliers/inscription" target="_blank" style="color:var(--purple-700);font-weight:700;font-size:0.78rem;">التسجيل عن بعد / S\'inscrire →</a></div>';
+    }).join('');
+}
 
 /* ══════════ Init ══════════ */
 (function init(){

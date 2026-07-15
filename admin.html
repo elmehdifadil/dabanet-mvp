@@ -444,9 +444,18 @@ function renderValidationTable(){
   var profils = store('dabanet_profils');
   var el = document.getElementById('validationTable');
   if (!profils.length) { el.innerHTML = '<div class="empty">Aucun inscrit pour le moment.</div>'; return; }
-  el.innerHTML = '<table><tr><th>Lauréat</th><th>Naissance</th><th>Ville</th><th>Diplôme</th><th>Tél WhatsApp</th><th>Statut</th><th>Actions</th></tr>' +
+  el.innerHTML = '<table><tr><th>Lauréat</th><th>Naissance</th><th>Ville</th><th>Diplôme</th><th>Tél WhatsApp</th><th>🍀 Positionnement</th><th>Statut</th><th>Actions</th></tr>' +
     profils.slice().reverse().map(function(p){
       var badge = p.verifie ? '<span class="badge accepted">✓ Validé</span>' : '<span class="badge pending">En attente</span>';
+      var trefle = '—';
+      if (p.positionnement && p.positionnement.scores) {
+        var s = p.positionnement.scores;
+        var col = s.global >= 70 ? 'var(--green)' : s.global >= 45 ? 'var(--gold-700)' : 'var(--red)';
+        trefle = '<b style="color:'+col+';font-size:0.95rem;">'+s.global+'/100</b><br>' +
+          '<span style="font-size:0.68rem;color:var(--muted);">S:'+s.soi+' · P:'+s.projet+' · T:'+s.territoire+' · M:'+s.methode+'</span>';
+      } else {
+        trefle = '<span style="color:var(--muted);font-size:0.75rem;">Non réalisé</span>';
+      }
       var actions = p.verifie
         ? '<span style="color:var(--muted);font-size:0.75rem;">Validé le ' + (p.verifieLe ? new Date(p.verifieLe).toLocaleDateString('fr-MA') : '—') + '</span>'
         : '<button class="act ok" onclick="validerInscrit(\'' + esc(p.email) + '\')">✓ Valider</button>' +
@@ -454,7 +463,7 @@ function renderValidationTable(){
       return '<tr><td><b>' + esc(p.nom) + '</b><br><span style="color:var(--muted);font-size:0.76rem;">' + esc(p.email||'') + '</span></td>' +
         '<td>' + esc(p.naissance||'—') + '</td><td>' + esc(p.ville) + '</td>' +
         '<td>' + esc(p.niveau||'') + '<br><span style="color:var(--muted);font-size:0.76rem;">' + esc(p.filiere||'') + '</span></td>' +
-        '<td>' + esc(p.tel||'—') + '</td><td>' + badge + '</td><td>' + actions + '</td></tr>';
+        '<td>' + esc(p.tel||'—') + '</td><td>' + trefle + '</td><td>' + badge + '</td><td>' + actions + '</td></tr>';
     }).join('') + '</table>';
 }
 function stat(n,l){ return '<div class="stat"><div class="n">'+n+'</div><div class="l">'+l+'</div></div>'; }
