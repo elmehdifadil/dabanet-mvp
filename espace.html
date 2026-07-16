@@ -109,7 +109,9 @@
         </div>
         <div style="flex:1;min-width:240px;display:flex;flex-direction:column;gap:10px;" id="tr-bars"></div>
       </div>
-      <div id="tr-ai" style="background:var(--purple-100);border-radius:12px;padding:16px 18px;font-size:0.86rem;line-height:1.7;white-space:pre-wrap;"></div>
+      <div id="tr-note" style="background:var(--purple-100);border-radius:12px;padding:12px 16px;font-size:0.8rem;color:var(--muted);">
+        📋 تم إرسال تقرير التشخيص الكامل إلى مستشارك في التشغيل — Le rapport complet a été transmis à votre conseiller emploi.
+      </div>
       <button class="btn-p" style="margin-top:12px;background:#fff;color:var(--purple-700);border:1.5px solid var(--purple-600);" onclick="openTrefle()">🔄 إعادة التشخيص / Refaire</button>
     </div>
   </div>
@@ -577,7 +579,6 @@ function renderTrefleResults(scores, aiText, noScroll){
     return '<div><div style="display:flex;justify-content:space-between;font-size:0.76rem;margin-bottom:3px;"><b style="color:'+L.c+';">'+L.l+'</b><b>'+v+'/100</b></div>' +
       '<div style="background:#E8DEEC;border-radius:20px;height:9px;overflow:hidden;"><div style="width:'+v+'%;height:100%;background:'+L.c+';border-radius:20px;transition:width 1s ease;"></div></div></div>';
   }).join('');
-  document.getElementById('tr-ai').textContent = aiText;
   renderAteliersReco(scores);
   if (!noScroll) document.getElementById('trefleCard').scrollIntoView({ behavior:'smooth' });
 }

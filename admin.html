@@ -291,17 +291,47 @@ function voirDiagnostic(email){
   var p = store('dabanet_profils').find(function(x){ return x.email === email; });
   if (!p || !p.positionnement) return;
   var s = p.positionnement.scores || {};
-  var diag = p.positionnement.diagnosticConseiller || p.positionnement.diagnostic || 'Analyse IA non disponible — seuls les scores chiffrés ont été enregistrés.';
   var date = p.positionnement.date ? new Date(p.positionnement.date).toLocaleDateString('fr-MA') : '—';
-  document.getElementById('diagTitle').textContent = '🍀 Diagnostic de positionnement — ' + p.nom;
+
+  // Compact scoring bars per dimension
+  var DIMS = [
+    { k:'soi',        l:'SOI — Connaissance de son profil',      c:'#9C2484' },
+    { k:'projet',     l:'PROJET — Projet professionnel',          c:'#7E1F78' },
+    { k:'territoire', l:'TERRITOIRE — Marché de l\'emploi',       c:'#B36C00' },
+    { k:'methode',    l:'MÉTHODE — Techniques de recherche',      c:'#166534' },
+  ];
+  var barsHtml = DIMS.map(function(d){
+    var v = s[d.k] || 0;
+    return '<div style="margin-bottom:9px;">' +
+      '<div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:3px;"><b style="color:'+d.c+';">'+d.l+'</b><b>'+v+'/100</b></div>' +
+      '<div style="background:#E8DEEC;border-radius:20px;height:8px;overflow:hidden;"><div style="width:'+v+'%;height:100%;background:'+d.c+';"></div></div></div>';
+  }).join('');
+
+  // Short result: candidate-version summary, clamped to a few lines
+  var resume = (p.positionnement.diagnostic || '').trim();
+  if (!resume) resume = 'Résultat chiffré uniquement — analyse IA non disponible.';
+  var lignes = resume.split('\n').filter(function(l){ return l.trim() && !/^[\s*#:—-]+$/.test(l); }).slice(0, 6);
+  resume = lignes.join('\n');
+
+  // Recommended prestations from weak dimensions (deterministic, compact)
+  var recos = [];
+  if ((s.projet||0)     < 60) recos.push('Atelier élaboration du projet professionnel');
+  if ((s.soi||0)        < 60) recos.push('Atelier bilan personnel et professionnel');
+  if ((s.territoire||0) < 60) recos.push('Atelier information sur le marché du travail');
+  if ((s.methode||0)    < 60) recos.push('Techniques de Recherche d\'Emploi (CV, candidatures, entretiens)');
+
+  var col = (s.global||0) >= 70 ? 'var(--green)' : (s.global||0) >= 45 ? 'var(--gold-700)' : 'var(--red)';
+  document.getElementById('diagTitle').textContent = '📋 Rapport de diagnostic — ' + p.nom;
   document.getElementById('diagBody').innerHTML =
-    '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">' +
-      ['<b>Général : '+ (s.global||0) +'/100</b>','SOI : '+(s.soi||0),'PROJET : '+(s.projet||0),'TERRITOIRE : '+(s.territoire||0),'MÉTHODE : '+(s.methode||0)].map(function(t){
-        return '<span style="background:var(--purple-100);border-radius:20px;padding:5px 12px;font-size:0.78rem;font-weight:700;color:var(--purple-800);">'+t+'</span>';
-      }).join('') +
+    '<div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">' +
+      '<div style="font-family:\'Cairo\',sans-serif;font-size:1.9rem;font-weight:800;color:'+col+';">'+(s.global||0)+'<span style="font-size:0.85rem;color:var(--muted);">/100</span></div>' +
+      '<div style="font-size:0.74rem;color:var(--muted);">Score général de positionnement<br>Réalisé le '+date+'</div>' +
     '</div>' +
-    '<div style="font-size:0.72rem;color:var(--muted);margin-bottom:10px;">Réalisé le ' + date + ' — analyse réservée au conseiller</div>' +
-    '<div style="white-space:pre-wrap;font-size:0.84rem;line-height:1.7;">' + esc(diag) + '</div>';
+    barsHtml +
+    '<div style="margin-top:12px;background:var(--purple-100);border-radius:10px;padding:11px 14px;font-size:0.8rem;line-height:1.6;white-space:pre-wrap;">'+esc(resume)+'</div>' +
+    (recos.length
+      ? '<div style="margin-top:10px;font-size:0.78rem;"><b style="color:var(--purple-900);">🎯 Prestations recommandées :</b><ul style="margin:6px 0 0;padding-right:18px;padding-left:18px;">'+recos.map(function(r){ return '<li>'+r+'</li>'; }).join('')+'</ul></div>'
+      : '<div style="margin-top:10px;font-size:0.78rem;color:var(--green);"><b>✅ Aucune prestation urgente — les 4 dimensions sont satisfaisantes.</b></div>');
   document.getElementById('diagModal').style.display = 'flex';
 }
 
@@ -481,7 +511,7 @@ function renderValidationTable(){
         var col = s.global >= 70 ? 'var(--green)' : s.global >= 45 ? 'var(--gold-700)' : 'var(--red)';
         trefle = '<b style="color:'+col+';font-size:0.95rem;">'+s.global+'/100</b><br>' +
           '<span style="font-size:0.68rem;color:var(--muted);">S:'+s.soi+' · P:'+s.projet+' · T:'+s.territoire+' · M:'+s.methode+'</span><br>' +
-          '<button class="act del" style="margin-top:4px;padding:3px 10px;" onclick="voirDiagnostic(\''+esc(p.email)+'\')">📋 Diagnostic</button>';
+          '<button class="act del" style="margin-top:4px;padding:3px 10px;" onclick="voirDiagnostic(\''+esc(p.email)+'\')">📋 Rapport de diagnostic</button>';
       } else {
         trefle = '<span style="color:var(--muted);font-size:0.75rem;">Non réalisé</span>';
       }
