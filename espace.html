@@ -7,213 +7,251 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --purple-900:#3A0F45; --purple-800:#4F1359; --purple-700:#7E1F78; --purple-600:#9C2484;
-    --purple-200:#EFD9F0; --purple-100:#FAF3FB;
-    --gold-700:#B36C00; --gold-600:#D88400;
-    --green:#166534; --muted:#7C6B82; --border:#E8DEEC;
-  }
-  *{ box-sizing:border-box; }
-  body{ margin:0; font-family:'Tajawal',sans-serif; background:linear-gradient(180deg,#FAF3FB,#fff 300px); color:#2A1733; }
-  h1,h2,h3,h4{ font-family:'Cairo',sans-serif; }
-  .topbar{ background:var(--purple-900); color:#fff; padding:13px 22px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
-  .topbar .brand{ font-family:'Cairo',sans-serif; font-weight:800; font-size:1.15rem; }
-  .topbar .brand small{ display:block; font-size:0.62rem; font-weight:500; color:#C7A8CB; }
-  .topbar .actions{ display:flex; gap:10px; }
-  .topbar button, .topbar a{ background:rgba(255,255,255,0.12); color:#fff; border:none; border-radius:8px; padding:8px 14px; font-size:0.82rem; cursor:pointer; text-decoration:none; font-family:inherit; }
-  .container{ max-width:1050px; margin:0 auto; padding:24px 18px 60px; }
-  .card{ background:#fff; border:1px solid var(--border); border-radius:18px; padding:22px 24px; box-shadow:0 6px 20px rgba(58,15,69,0.07); margin-bottom:22px; }
-  .grid-cards{ display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:16px; }
-  .mini-card{ background:#fff; border:1px solid var(--border); border-radius:14px; padding:16px 18px; box-shadow:0 4px 14px rgba(58,15,69,0.06); }
-  .mini-card h5{ font-family:'Cairo',sans-serif; font-weight:800; color:var(--purple-900); font-size:0.92rem; margin:0 0 8px; }
-  .mini-card p{ color:var(--muted); font-size:0.8rem; margin:0 0 4px; }
-  .btn-p{ display:inline-block; background:var(--purple-600); color:#fff; text-decoration:none; font-size:0.78rem; font-weight:700; padding:8px 14px; border-radius:8px; border:none; cursor:pointer; font-family:inherit; }
-  .btn-g{ background:var(--green); }
-  h3.sec{ color:var(--purple-900); font-size:1.05rem; margin:26px 0 14px; }
-  .slot{ border:1.5px solid var(--border); border-radius:10px; padding:9px 14px; font-size:0.84rem; cursor:pointer; background:#fff; transition:all .15s; }
-  .slot.sel{ border-color:var(--purple-600); background:var(--purple-100); font-weight:700; }
-  input, select, textarea{ width:100%; padding:10px 12px; border:1.5px solid var(--border); border-radius:10px; font-size:0.88rem; box-sizing:border-box; outline:none; font-family:inherit; background:#fff; }
-  label{ font-size:0.8rem; color:var(--purple-800); font-weight:700; display:block; margin-bottom:4px; }
-  /* Chat */
-  .chat-fab{ position:fixed; bottom:22px; left:22px; width:58px; height:58px; border-radius:50%; background:#25D366; border:none; cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center; z-index:999; }
-  .chat-fab svg{ width:30px; height:30px; fill:#fff; }
-  .chat-box{ position:fixed; bottom:22px; left:22px; width:min(370px,92vw); height:min(520px,80vh); background:#fff; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,0.3); display:none; flex-direction:column; overflow:hidden; z-index:1000; }
-  .chat-head{ background:#075E54; color:#fff; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; }
-  .chat-head b{ font-family:'Cairo',sans-serif; font-size:0.92rem; }
-  .chat-head button{ background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer; }
-  .chat-msgs{ flex:1; overflow-y:auto; padding:14px; background:#ECE5DD; display:flex; flex-direction:column; gap:8px; }
-  .msg{ max-width:82%; padding:9px 12px; border-radius:12px; font-size:0.84rem; line-height:1.55; white-space:pre-wrap; }
-  .msg.bot{ background:#fff; align-self:flex-start; border-bottom-right-radius:3px; }
-  .msg.user{ background:#DCF8C6; align-self:flex-end; border-bottom-left-radius:3px; }
-  .chat-input{ display:flex; gap:8px; padding:10px; background:#F0F0F0; }
-  .chat-input textarea{ flex:1; resize:none; border-radius:20px; padding:9px 14px; max-height:80px; }
-  .chat-input button{ background:#25D366; border:none; border-radius:50%; width:42px; height:42px; cursor:pointer; color:#fff; font-size:1.1rem; flex-shrink:0; }
-  @media(max-width:640px){ .container{ padding:16px 12px 60px; } }
+ :root{
+   --purple-900:#3A0F45; --purple-800:#4F1359; --purple-700:#7E1F78; --purple-600:#9C2484;
+   --purple-200:#EFD9F0; --purple-100:#FAF3FB;
+   --gold-700:#B36C00; --gold-600:#D88400;
+   --green:#166534; --muted:#7C6B82; --border:#E8DEEC;
+ }
+ *{ box-sizing:border-box; }
+ body{ margin:0; font-family:'Tajawal',sans-serif; background:linear-gradient(180deg,#FAF3FB,#fff 300px); color:#2A1733; }
+ h1,h2,h3,h4{ font-family:'Cairo',sans-serif; }
+ .topbar{ background:var(--purple-900); color:#fff; padding:13px 22px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+ .topbar .brand{ font-family:'Cairo',sans-serif; font-weight:800; font-size:1.15rem; }
+ .topbar .brand small{ display:block; font-size:0.62rem; font-weight:500; color:#C7A8CB; }
+ .topbar .actions{ display:flex; gap:10px; }
+ .topbar button, .topbar a{ background:rgba(255,255,255,0.12); color:#fff; border:none; border-radius:8px; padding:8px 14px; font-size:0.82rem; cursor:pointer; text-decoration:none; font-family:inherit; }
+ .container{ max-width:1050px; margin:0 auto; padding:24px 18px 60px; }
+ .card{ background:#fff; border:1px solid var(--border); border-radius:18px; padding:22px 24px; box-shadow:0 6px 20px rgba(58,15,69,0.07); margin-bottom:22px; }
+ .grid-cards{ display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:16px; }
+ .mini-card{ background:#fff; border:1px solid var(--border); border-radius:14px; padding:16px 18px; box-shadow:0 4px 14px rgba(58,15,69,0.06); }
+ .mini-card h5{ font-family:'Cairo',sans-serif; font-weight:800; color:var(--purple-900); font-size:0.92rem; margin:0 0 8px; }
+ .mini-card p{ color:var(--muted); font-size:0.8rem; margin:0 0 4px; }
+ .btn-p{ display:inline-block; background:var(--purple-600); color:#fff; text-decoration:none; font-size:0.78rem; font-weight:700; padding:8px 14px; border-radius:8px; border:none; cursor:pointer; font-family:inherit; }
+ .btn-g{ background:var(--green); }
+ h3.sec{ color:var(--purple-900); font-size:1.05rem; margin:26px 0 14px; }
+ .slot{ border:1.5px solid var(--border); border-radius:10px; padding:9px 14px; font-size:0.84rem; cursor:pointer; background:#fff; transition:all .15s; }
+ .slot.sel{ border-color:var(--purple-600); background:var(--purple-100); font-weight:700; }
+ input, select, textarea{ width:100%; padding:10px 12px; border:1.5px solid var(--border); border-radius:10px; font-size:0.88rem; box-sizing:border-box; outline:none; font-family:inherit; background:#fff; }
+ label{ font-size:0.8rem; color:var(--purple-800); font-weight:700; display:block; margin-bottom:4px; }
+ /* Chat */
+ .chat-fab{ position:fixed; bottom:22px; left:22px; width:58px; height:58px; border-radius:50%; background:#25D366; border:none; cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center; z-index:999; }
+ .chat-fab svg{ width:30px; height:30px; fill:#fff; }
+ .chat-box{ position:fixed; bottom:22px; left:22px; width:min(370px,92vw); height:min(520px,80vh); background:#fff; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,0.3); display:none; flex-direction:column; overflow:hidden; z-index:1000; }
+ .chat-head{ background:#075E54; color:#fff; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; }
+ .chat-head b{ font-family:'Cairo',sans-serif; font-size:0.92rem; }
+ .chat-head button{ background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer; }
+ .chat-msgs{ flex:1; overflow-y:auto; padding:14px; background:#ECE5DD; display:flex; flex-direction:column; gap:8px; }
+ .msg{ max-width:82%; padding:9px 12px; border-radius:12px; font-size:0.84rem; line-height:1.55; white-space:pre-wrap; }
+ .msg.bot{ background:#fff; align-self:flex-start; border-bottom-right-radius:3px; }
+ .msg.user{ background:#DCF8C6; align-self:flex-end; border-bottom-left-radius:3px; }
+ .chat-input{ display:flex; gap:8px; padding:10px; background:#F0F0F0; }
+ .chat-input textarea{ flex:1; resize:none; border-radius:20px; padding:9px 14px; max-height:80px; }
+ .chat-input button{ background:#25D366; border:none; border-radius:50%; width:42px; height:42px; cursor:pointer; color:#fff; font-size:1.1rem; flex-shrink:0; }
+ @media(max-width:640px){ .container{ padding:16px 12px 60px; } }
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <div class="brand">PALUCA<small>منصة مواكبة خريجي جامعة القاضي عياض</small></div>
-  <div class="actions">
-    <a href="/">🏠 الرئيسية / Accueil</a>
-    <button onclick="logoutEspace()">خروج / Déconnexion</button>
-  </div>
+ <div class="brand">PALUCA<small data-ar="منصة مواكبة خريجي جامعة القاضي عياض" data-fr="Plateforme d'Accompagnement des Lauréats Universitaires Cadi Ayyad">منصة مواكبة خريجي جامعة القاضي عياض</small></div>
+ <div class="actions">
+   <button id="langAr" onclick="setLangEspace('ar')">عربي</button>
+   <button id="langFr" onclick="setLangEspace('fr')">FR</button>
+   <a href="/">الرئيسية / Accueil</a>
+   <button onclick="logoutEspace()">خروج / Déconnexion</button>
+ </div>
 </div>
 
 <div class="container">
 
-  <!-- Verification banner -->
-  <div id="verifBanner" style="display:none;background:#FEF3C7;border:1.5px solid #FDE68A;border-radius:12px;padding:12px 18px;margin-bottom:18px;font-size:0.85rem;color:#92400E;">
-    ⏳ حسابك في انتظار التحقق من طرف المستشار — Votre compte est en attente de validation par le conseiller.
-  </div>
-  <div id="verifOk" style="display:none;background:#DCFCE7;border:1.5px solid #bbf7d0;border-radius:12px;padding:12px 18px;margin-bottom:18px;font-size:0.85rem;color:#166534;">
-    ✅ حسابك مُوثّق — Compte vérifié par le conseiller.
-  </div>
+ <!-- Verification banner -->
+ <div id="verifBanner" style="display:none;background:#FEF3C7;border:1.5px solid #FDE68A;border-radius:12px;padding:12px 18px;margin-bottom:18px;font-size:0.85rem;color:#92400E;">
+    حسابك في انتظار التحقق من طرف المستشار — Votre compte est en attente de validation par le conseiller.
+ </div>
+ <div id="verifOk" style="display:none;background:#DCFCE7;border:1.5px solid #bbf7d0;border-radius:12px;padding:12px 18px;margin-bottom:18px;font-size:0.85rem;color:#166534;">
+    حسابك مُوثّق — Compte vérifié par le conseiller.
+ </div>
 
-  <!-- Profile header -->
-  <div class="card" style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;">
-    <div id="esp-avatar" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#7E1F78,#4F1359);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Cairo',sans-serif;font-weight:800;font-size:1.3rem;flex-shrink:0;">؟</div>
-    <div style="flex:1;min-width:180px;">
-      <h3 id="esp-nom" style="color:var(--purple-900);margin:0 0 4px;font-size:1.15rem;">—</h3>
-      <p id="esp-meta" style="color:var(--muted);margin:0;font-size:0.85rem;">—</p>
-    </div>
-  </div>
+ <!-- Profile header -->
+ <div class="card" style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;">
+   <div id="esp-avatar" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#7E1F78,#4F1359);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Cairo',sans-serif;font-weight:800;font-size:1.3rem;flex-shrink:0;">؟</div>
+   <div style="flex:1;min-width:180px;">
+     <h3 id="esp-nom" style="color:var(--purple-900);margin:0 0 4px;font-size:1.15rem;">—</h3>
+     <p id="esp-meta" style="color:var(--muted);margin:0;font-size:0.85rem;">—</p>
+   </div>
+ </div>
 
-  <!-- ═══ Diagnostic de positionnement (Trèfle chanceux) ═══ -->
-  <div class="card" id="trefleCard">
-    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
-      <div style="font-size:2rem;">🍀</div>
-      <div style="flex:1;min-width:200px;">
-        <h3 style="color:var(--purple-900);margin:0 0 4px;font-size:1.02rem;">المقابلة التشخيصية — Entretien de positionnement</h3>
-        <p style="color:var(--muted);font-size:0.82rem;margin:0;">أجب على أسئلة ورقة التحضير (ANAPEC) ليقوم الذكاء الاصطناعي بتشخيص ملفك حسب الأبعاد الأربعة</p>
-      </div>
-      <button class="btn-p" style="background:linear-gradient(135deg,#7E1F78,#4F1359);padding:11px 20px;" onclick="openTrefle()" id="trefleBtn">ابدأ التشخيص / Commencer</button>
-    </div>
+ <!-- ═══ Diagnostic de positionnement (Trèfle chanceux) ═══ -->
+ <div class="card" id="trefleCard">
+   <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+     <div style="flex:1;min-width:200px;">
+       <h3 style="color:var(--purple-900);margin:0 0 4px;font-size:1.02rem;">المقابلة التشخيصية — Entretien de positionnement</h3>
+       <p style="color:var(--muted);font-size:0.82rem;margin:0;" data-ar="أجب على أسئلة ورقة التحضير (ANAPEC) ليقوم الذكاء الاصطناعي بتشخيص ملفك حسب الأبعاد الأربعة" data-fr="Répondez à la fiche de préparation (ANAPEC) : l'IA diagnostique votre profil selon les quatre dimensions">أجب على أسئلة ورقة التحضير (ANAPEC) ليقوم الذكاء الاصطناعي بتشخيص ملفك حسب الأبعاد الأربعة</p>
+     </div>
+     <button class="btn-p" style="background:linear-gradient(135deg,#7E1F78,#4F1359);padding:11px 20px;" onclick="openTrefle()" id="trefleBtn">ابدأ التشخيص / Commencer</button>
+   </div>
 
-    <!-- Results -->
-    <div id="trefleResults" style="display:none;margin-top:20px;border-top:1px solid var(--border);padding-top:18px;">
-      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:16px;">
-        <div style="text-align:center;">
-          <div style="position:relative;width:110px;height:110px;">
-            <svg width="110" height="110" viewBox="0 0 110 110" style="transform:rotate(-90deg);">
-              <circle cx="55" cy="55" r="47" fill="none" stroke="#E8DEEC" stroke-width="11"/>
-              <circle id="tr-gauge" cx="55" cy="55" r="47" fill="none" stroke="#166534" stroke-width="11" stroke-linecap="round" stroke-dasharray="295.31" stroke-dashoffset="295.31" style="transition:stroke-dashoffset 1s ease;"/>
-            </svg>
-            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-              <b id="tr-global" style="font-family:'Cairo',sans-serif;font-size:1.6rem;color:var(--purple-900);">0</b>
-              <span style="font-size:0.62rem;color:var(--muted);">/100</span>
-            </div>
-          </div>
-          <div style="font-size:0.72rem;color:var(--muted);margin-top:2px;">النتيجة العامة / Score général</div>
-        </div>
-        <div style="flex:1;min-width:240px;display:flex;flex-direction:column;gap:10px;" id="tr-bars"></div>
-      </div>
-      <div id="tr-note" style="background:var(--purple-100);border-radius:12px;padding:12px 16px;font-size:0.8rem;color:var(--muted);">
-        📋 تم إرسال تقرير التشخيص الكامل إلى مستشارك في التشغيل — Le rapport complet a été transmis à votre conseiller emploi.
-      </div>
-      <button class="btn-p" style="margin-top:12px;background:#fff;color:var(--purple-700);border:1.5px solid var(--purple-600);" onclick="openTrefle()">🔄 إعادة التشخيص / Refaire</button>
-    </div>
-  </div>
+   <!-- Results -->
+   <div id="trefleResults" style="display:none;margin-top:20px;border-top:1px solid var(--border);padding-top:18px;">
+     <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:16px;">
+       <div style="text-align:center;">
+         <div style="position:relative;width:110px;height:110px;">
+           <svg width="110" height="110" viewBox="0 0 110 110" style="transform:rotate(-90deg);">
+             <circle cx="55" cy="55" r="47" fill="none" stroke="#E8DEEC" stroke-width="11"/>
+             <circle id="tr-gauge" cx="55" cy="55" r="47" fill="none" stroke="#166534" stroke-width="11" stroke-linecap="round" stroke-dasharray="295.31" stroke-dashoffset="295.31" style="transition:stroke-dashoffset 1s ease;"/>
+           </svg>
+           <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+             <b id="tr-global" style="font-family:'Cairo',sans-serif;font-size:1.6rem;color:var(--purple-900);">0</b>
+             <span style="font-size:0.62rem;color:var(--muted);">/100</span>
+           </div>
+         </div>
+         <div style="font-size:0.72rem;color:var(--muted);margin-top:2px;">النتيجة العامة / Score général</div>
+       </div>
+       <div style="flex:1;min-width:240px;display:flex;flex-direction:column;gap:10px;" id="tr-bars"></div>
+     </div>
+     <div id="tr-note" style="background:var(--purple-100);border-radius:12px;padding:12px 16px;font-size:0.8rem;color:var(--muted);">
+        تم إرسال تقرير التشخيص الكامل إلى مستشارك في التشغيل — Le rapport complet a été transmis à votre conseiller emploi.
+     </div>
+     <button class="btn-p" style="margin-top:12px;background:#fff;color:var(--purple-700);border:1.5px solid var(--purple-600);" onclick="openTrefle()">إعادة التشخيص / Refaire</button>
+   </div>
+ </div>
 
-  <!-- Questionnaire modal -->
-  <div id="trefleModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9998;align-items:center;justify-content:center;">
-    <div style="background:#fff;border-radius:18px;width:min(640px,95vw);max-height:92vh;overflow-y:auto;padding:26px 28px;position:relative;">
-      <button id="trefleClose" onclick="document.getElementById('trefleModal').style.display='none'" style="position:absolute;top:12px;left:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);">✕</button>
-      <div style="text-align:center;margin-bottom:16px;">
-        <div style="font-size:1.8rem;">🍀</div>
-        <h3 style="color:var(--purple-900);margin:4px 0;font-size:1.05rem;">ورقة التحضير للمقابلة التشخيصية</h3>
-        <p style="color:var(--muted);font-size:0.78rem;margin:0;">Fiche de préparation à l'entretien de positionnement (ANAPEC)</p>
-        <div id="trefleMand" style="display:none;background:#FEF3C7;border-radius:8px;padding:8px 12px;font-size:0.75rem;color:#92400E;margin-top:10px;">
-          ⚠️ هذا التشخيص إجباري لإكمال تسجيلك — Ce diagnostic est obligatoire pour finaliser votre inscription.
-        </div>
-      </div>
-      <form id="trefleForm"></form>
-      <button class="btn-p" style="width:100%;margin-top:16px;padding:13px;font-family:'Cairo',sans-serif;font-size:0.95rem;background:linear-gradient(135deg,#7E1F78,#4F1359);" onclick="submitTrefle()">🤖 تحليل إجاباتي بالذكاء الاصطناعي / Analyser</button>
-      <p id="trefleErr" style="text-align:center;color:#dc2626;font-size:0.8rem;min-height:16px;margin:8px 0 0;"></p>
-    </div>
-  </div>
+ <!-- Questionnaire modal -->
+ <div id="trefleModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9998;align-items:center;justify-content:center;">
+   <div style="background:#fff;border-radius:18px;width:min(640px,95vw);max-height:92vh;overflow-y:auto;padding:26px 28px;position:relative;">
+     <button id="trefleClose" onclick="document.getElementById('trefleModal').style.display='none'" style="position:absolute;top:12px;left:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);">✕</button>
+     <div style="text-align:center;margin-bottom:16px;">
+       <h3 style="color:var(--purple-900);margin:4px 0;font-size:1.05rem;" data-ar="ورقة التحضير للمقابلة التشخيصية" data-fr="Fiche de préparation à l'entretien de positionnement">ورقة التحضير للمقابلة التشخيصية</h3>
+       <p style="color:var(--muted);font-size:0.78rem;margin:0;" data-ar="وثيقة ANAPEC الرسمية" data-fr="Document officiel ANAPEC">وثيقة ANAPEC الرسمية</p>
+       <div id="trefleMand" style="display:none;background:#FEF3C7;border-radius:8px;padding:8px 12px;font-size:0.75rem;color:#92400E;margin-top:10px;">
+          هذا التشخيص إجباري لإكمال تسجيلك — Ce diagnostic est obligatoire pour finaliser votre inscription.
+       </div>
+     </div>
+     <form id="trefleForm"></form>
+     <button class="btn-p" style="width:100%;margin-top:16px;padding:13px;font-family:'Cairo',sans-serif;font-size:0.95rem;background:linear-gradient(135deg,#7E1F78,#4F1359);" onclick="submitTrefle()">تحليل إجاباتي بالذكاء الاصطناعي / Analyser</button>
+     <p id="trefleErr" style="text-align:center;color:#dc2626;font-size:0.8rem;min-height:16px;margin:8px 0 0;"></p>
+   </div>
+ </div>
 
-  <!-- Offres -->
-  <h3 class="sec">💼 عروض عمل مقترحة لك — Offres suggérées</h3>
-  <div id="esp-offresList" class="grid-cards"></div>
+ <!-- Offres -->
+ <h3 class="sec">عروض عمل مقترحة لك — Offres suggérées</h3>
+ <div id="esp-offresList" class="grid-cards"></div>
 
-  <!-- Formations -->
-  <h3 class="sec">📚 تكوينات موصى بها — Formations recommandées</h3>
-  <div id="esp-formationsList" class="grid-cards"></div>
+ <!-- Formations -->
+ <h3 class="sec">تكوينات موصى بها — Formations recommandées</h3>
+ <div id="esp-formationsList" class="grid-cards"></div>
 
-  <!-- Ateliers -->
-  <h3 class="sec">🎓 ورشات متاحة — Ateliers ouverts</h3>
-  <div id="esp-ateliersList" class="grid-cards"></div>
+ <!-- Ateliers -->
+ <h3 class="sec">ورشات متاحة — Ateliers ouverts</h3>
+ <div id="esp-ateliersList" class="grid-cards"></div>
 
-  <!-- RDV avec créneaux -->
-  <h3 class="sec">📅 موعد مع مستشار التشغيل — RDV conseiller</h3>
-  <div class="card" id="rdvForm">
-    <p style="color:var(--muted);font-size:0.83rem;margin:0 0 16px;">اختر أحد المواعيد المتاحة التي نشرها المستشار — Choisissez un créneau publié par le conseiller.</p>
+ <!-- RDV avec créneaux -->
+ <h3 class="sec">موعد مع مستشار التشغيل — RDV conseiller</h3>
+ <div class="card" id="rdvForm">
+   <p style="color:var(--muted);font-size:0.83rem;margin:0 0 16px;">اختر أحد المواعيد المتاحة التي نشرها المستشار — Choisissez un créneau publié par le conseiller.</p>
 
-    <div id="slotsWrap">
-      <label>المواعيد المتاحة / Créneaux disponibles</label>
-      <div id="slotsList" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;"></div>
-    </div>
+   <div id="slotsWrap">
+     <label>المواعيد المتاحة / Créneaux disponibles</label>
+     <div id="slotsList" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;"></div>
+   </div>
 
-    <div id="noSlots" style="display:none;background:var(--purple-100);border-radius:10px;padding:12px 16px;font-size:0.82rem;color:var(--muted);margin-bottom:14px;">
-      لا توجد مواعيد منشورة حالياً — اقترح تاريخاً واختر النوع:
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;">
-        <div><label>التاريخ / Date</label><input id="rdv-date" type="date"></div>
-        <div><label>النوع / Type</label>
-          <select id="rdv-type"><option>Par téléphone</option><option>En agence (ANAPEC)</option><option>Par visioconférence</option></select></div>
-      </div>
-    </div>
+   <div id="noSlots" style="display:none;background:var(--purple-100);border-radius:10px;padding:12px 16px;font-size:0.82rem;color:var(--muted);margin-bottom:14px;">
+     <span data-ar="لا توجد مواعيد منشورة حالياً — اقترح تاريخاً واختر النوع:" data-fr="Aucun créneau publié pour le moment — proposez une date et choisissez le type :">لا توجد مواعيد منشورة حالياً — اقترح تاريخاً واختر النوع:</span>
+     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;">
+       <div><label>التاريخ / Date</label><input id="rdv-date" type="date"></div>
+       <div><label>النوع / Type</label>
+         <select id="rdv-type"><option>Par téléphone</option><option>En agence (ANAPEC)</option><option>Par visioconférence</option></select></div>
+     </div>
+   </div>
 
-    <label>موضوع اللقاء / Objet</label>
-    <textarea id="rdv-sujet" rows="2" placeholder="مثال: أحتاج مساعدة في توجيه بحثي عن عمل..."></textarea>
-    <button class="btn-p" style="width:100%;margin-top:14px;padding:13px;font-family:'Cairo',sans-serif;font-size:0.95rem;background:linear-gradient(135deg,#D88400,#B36C00);" onclick="submitRdvEspace()">تأكيد طلب الموعد / Confirmer</button>
-    <p id="rdv-msg" style="text-align:center;font-size:0.82rem;margin-top:10px;"></p>
-    <div id="mesRdvs" style="margin-top:14px;"></div>
-  </div>
+   <label>موضوع اللقاء / Objet</label>
+   <textarea id="rdv-sujet" rows="2" placeholder="مثال: أحتاج مساعدة في توجيه بحثي عن عمل..."></textarea>
+   <button class="btn-p" style="width:100%;margin-top:14px;padding:13px;font-family:'Cairo',sans-serif;font-size:0.95rem;background:linear-gradient(135deg,#D88400,#B36C00);" onclick="submitRdvEspace()">تأكيد طلب الموعد / Confirmer</button>
+   <p id="rdv-msg" style="text-align:center;font-size:0.82rem;margin-top:10px;"></p>
+   <div id="mesRdvs" style="margin-top:14px;"></div>
+ </div>
 
 </div>
 
 <!-- Chatbot -->
 <button class="chat-fab" id="chatFab" onclick="toggleChat(true)">
-  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.554 4.103 1.523 5.824L0 24l6.335-1.508A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.006-1.371l-.359-.214-3.724.887.919-3.634-.234-.374A9.818 9.818 0 1 1 12 21.818z"/></svg>
+ <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.554 4.103 1.523 5.824L0 24l6.335-1.508A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.006-1.371l-.359-.214-3.724.887.919-3.634-.234-.374A9.818 9.818 0 1 1 12 21.818z"/></svg>
 </button>
 <div class="chat-box" id="chatBox">
-  <div class="chat-head">
-    <b>PALUCA — مساعد ذكي 🤖</b>
-    <button onclick="toggleChat(false)">✕</button>
-  </div>
-  <div class="chat-msgs" id="chatMsgs">
-    <div class="msg bot">مرحباً 👋 أنا مساعد PALUCA. اضغط على "تشخيص ملفي" أو اطرح سؤالك.</div>
-  </div>
-  <div style="padding:8px 10px;background:#F0F0F0;border-bottom:1px solid #ddd;">
-    <button class="btn-p" style="width:100%;background:var(--purple-700);" onclick="runDiagnosis()">🤖 تشخيص ملفي بالذكاء الاصطناعي / Diagnostic IA</button>
-  </div>
-  <div class="chat-input">
-    <textarea id="chatInput" rows="1" placeholder="اكتب رسالتك…" dir="auto"></textarea>
-    <button onclick="sendChat()">◀</button>
-  </div>
+ <div class="chat-head">
+   <b data-ar="PALUCA — المساعد الذكي" data-fr="PALUCA — Assistant intelligent">PALUCA — المساعد الذكي</b>
+   <button onclick="toggleChat(false)">✕</button>
+ </div>
+ <div class="chat-msgs" id="chatMsgs">
+   <div class="msg bot" data-ar='مرحباً، أنا مساعد PALUCA. اضغط على "تشخيص ملفي" أو اطرح سؤالك.' data-fr='Bonjour, je suis l&#39;assistant PALUCA. Cliquez sur "Diagnostic IA" ou posez votre question.'>مرحباً، أنا مساعد PALUCA. اضغط على "تشخيص ملفي" أو اطرح سؤالك.</div>
+ </div>
+ <div style="padding:8px 10px;background:#F0F0F0;border-bottom:1px solid #ddd;">
+   <button class="btn-p" style="width:100%;background:var(--purple-700);" onclick="runDiagnosis()">تشخيص ملفي بالذكاء الاصطناعي / Diagnostic IA</button>
+ </div>
+ <div class="chat-input">
+   <textarea id="chatInput" rows="1" placeholder="اكتب رسالتك…" dir="auto"></textarea>
+   <button onclick="sendChat()">◀</button>
+ </div>
 </div>
 
 <script>
+/* ══════════ Langue (AR par défaut, bascule FR) ══════════ */
+var LANG = localStorage.getItem('dabanet_lang') || 'ar';
+function L(ar, fr){ return LANG === 'fr' ? fr : ar; }
+// T('نص عربي — Texte français') → renvoie la partie correspondant à la langue courante
+function T(s){
+  if (!s) return '';
+  var m = String(s).split(' — ');
+  if (m.length === 2) return LANG === 'fr' ? m[1] : m[0];
+  m = String(s).split(' / ');
+  if (m.length === 2) return LANG === 'fr' ? m[1] : m[0];
+  return s;
+}
+function setLangEspace(l){ localStorage.setItem('dabanet_lang', l); location.reload(); }
+// Applique la langue : découpe automatiquement les libellés statiques bilingues "AR — FR" / "AR / FR"
+function applyLang(){
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = LANG === 'fr' ? 'ltr' : 'rtl';
+  document.title = LANG === 'fr' ? 'PALUCA — Mon Espace' : 'PALUCA — فضائي';
+  document.querySelectorAll('body *').forEach(function(el){
+    if (el.children.length) return;
+    if (!el.dataset.ar) {
+      var t = el.textContent.trim();
+      var m = t.match(/^([^—\/]*[؀-ۿ][^—\/]*?)\s*[—\/]\s*([^؀-ۿ]{2,})$/);
+      if (m) { el.dataset.ar = m[1].trim(); el.dataset.fr = m[2].trim(); }
+    }
+    if (el.dataset.ar && el.dataset.fr) {
+      el.textContent = LANG === 'fr' ? el.dataset.fr : el.dataset.ar;
+    }
+  });
+  var la = document.getElementById('langAr'), lf = document.getElementById('langFr');
+  if (la) la.style.background = LANG === 'ar' ? '#D88400' : 'rgba(255,255,255,0.12)';
+  if (lf) lf.style.background = LANG === 'fr' ? '#D88400' : 'rgba(255,255,255,0.12)';
+  var ci = document.getElementById('chatInput');
+  if (ci) ci.placeholder = L('اكتب رسالتك…', 'Écrivez votre message…');
+  var rs = document.getElementById('rdv-sujet');
+  if (rs) rs.placeholder = L('مثال: أحتاج مساعدة في توجيه بحثي عن عمل...', 'Ex : J\'ai besoin d\'aide pour orienter ma recherche d\'emploi...');
+}
+
 /* ══════════ Shared DB (Vercel Blob + localStorage fallback) ══════════ */
 window.DB = {};
 function dbGet(key){
-  if (window.DB[key]) return window.DB[key];
-  try { return JSON.parse(localStorage.getItem('dabanet_' + key) || '[]'); } catch(e){ return []; }
+ if (window.DB[key]) return window.DB[key];
+ try { return JSON.parse(localStorage.getItem('dabanet_'+ key) || '[]'); } catch(e){ return []; }
 }
 function dbSet(key, value){
-  window.DB[key] = value;
-  try { localStorage.setItem('dabanet_' + key, JSON.stringify(value)); } catch(e){}
-  fetch('/api/data', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ key:key, value:value }) }).catch(function(){});
+ window.DB[key] = value;
+ try { localStorage.setItem('dabanet_'+ key, JSON.stringify(value)); } catch(e){}
+ fetch('/api/data', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ key:key, value:value }) }).catch(function(){});
 }
 function dbSync(cb){
-  fetch('/api/data').then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
-    if (d) ['rdvs','profils','news','ateliers','inscriptions','creneaux'].forEach(function(k){
-      if (Array.isArray(d[k])) { window.DB[k] = d[k]; try{ localStorage.setItem('dabanet_'+k, JSON.stringify(d[k])); }catch(e){} }
-    });
-    if (cb) cb();
-  }).catch(function(){ if (cb) cb(); });
+ fetch('/api/data').then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+   if (d) ['rdvs','profils','news','ateliers','inscriptions','creneaux'].forEach(function(k){
+     if (Array.isArray(d[k])) { window.DB[k] = d[k]; try{ localStorage.setItem('dabanet_'+k, JSON.stringify(d[k])); }catch(e){} }
+   });
+   if (cb) cb();
+ }).catch(function(){ if (cb) cb(); });
 }
 
 /* ══════════ Session ══════════ */
@@ -222,413 +260,415 @@ function logoutEspace(){ localStorage.removeItem('dabanet_session'); location.hr
 
 /* ══════════ Score & suggestions (same logic as homepage) ══════════ */
 function computeScore(p){
-  var w = { nom:8, age:8, ville:8, email:8, niveau:12, filiere:14, experience:12, langues:10, competences:12, objectif:8 };
-  var s = 0; Object.keys(w).forEach(function(f){ if (p[f] && String(p[f]).trim()) s += w[f]; });
-  return Math.min(100, s);
+ var w = { nom:8, age:8, ville:8, email:8, niveau:12, filiere:14, experience:12, langues:10, competences:12, objectif:8 };
+ var s = 0; Object.keys(w).forEach(function(f){ if (p[f] && String(p[f]).trim()) s += w[f]; });
+ return Math.min(100, s);
 }
 function buildSuggestions(p){
-  var f = (p.filiere || '').toLowerCase();
-  var sector = 'général';
-  if (/informat|développ|web|program|digital|réseau|data|logiciel|cyber|intelligence/.test(f)) sector = 'tech';
-  else if (/compt|finan|gestion|banque|économ|audit/.test(f)) sector = 'finance';
-  else if (/génie|ingénieur|électr|mécan|btp|civil|industriel/.test(f)) sector = 'ingenierie';
-  else if (/commerc|market|vente|communication/.test(f)) sector = 'commerce';
-  else if (/santé|infirm|médic|pharma|kiné|laboratoire/.test(f)) sector = 'sante';
-  var OFFERS = {
-    tech:[{t:'Développeur Web Full-Stack',c:'Casablanca · CDI',s:'8000-14000 DH'},{t:'Technicien Support IT',c:'Rabat · CDD',s:'5000-7000 DH'},{t:'Data Analyst Junior',c:'Casablanca · CDI',s:'7000-11000 DH'}],
-    finance:[{t:'Assistant Comptable',c:'Casablanca · CDI',s:'5000-8000 DH'},{t:'Chargé de clientèle bancaire',c:'Toutes régions · CDI',s:'6000-9000 DH'},{t:'Contrôleur de gestion junior',c:'Rabat · CDD',s:'7000-10000 DH'}],
-    ingenierie:[{t:'Ingénieur Génie Civil',c:'Marrakech · CDI',s:'9000-15000 DH'},{t:'Technicien Électromécanique',c:'Tanger · CDI',s:'6000-9000 DH'},{t:'Responsable HSE',c:'Casablanca · CDI',s:'8000-12000 DH'}],
-    commerce:[{t:'Commercial B2B',c:'Casablanca · CDI',s:'5000+commissions'},{t:'Community Manager',c:'Rabat · CDD',s:'5000-8000 DH'},{t:'Chef de rayon',c:'Toutes régions · CDI',s:'6000-9000 DH'}],
-    sante:[{t:'Infirmier polyvalent',c:'Toutes régions · CDD',s:'6000-9000 DH'},{t:'Technicien de laboratoire',c:'Casablanca · CDI',s:'5000-8000 DH'},{t:'Aide-soignant',c:'Toutes régions · CDD',s:'4000-6000 DH'}],
-    'général':[{t:'Agent administratif',c:'Toutes régions · CDD',s:'4000-6000 DH'},{t:'Chargé de saisie',c:'Casablanca · CDD',s:'4000-5500 DH'},{t:'Assistant polyvalent',c:'Rabat · CDI',s:'5000-7000 DH'}],
-  };
-  var FORM = {
-    tech:[{t:'Certification Full-Stack JavaScript',o:'OFPPT · 6 mois · Gratuit'},{t:'Data Science & Python',o:'En ligne · 3 mois'},{t:'Cybersécurité fondamentale',o:'OFPPT · 4 mois'}],
-    finance:[{t:'Comptabilité sur SAGE',o:'OFPPT · 3 mois · Gratuit'},{t:'Analyse financière avancée',o:'En ligne · 2 mois'},{t:'Fiscalité marocaine',o:'CNSS · 1 mois'}],
-    ingenierie:[{t:'AutoCAD & Revit',o:'OFPPT · 4 mois · Gratuit'},{t:'Gestion de projet PMP',o:'En ligne · 3 mois'},{t:'Normes qualité ISO',o:'IMANOR · 2 mois'}],
-    commerce:[{t:'Marketing Digital complet',o:'OFPPT · 4 mois · Gratuit'},{t:'Techniques de vente',o:'ANAPEC · 1 mois'},{t:'CRM & prospection',o:'En ligne · 2 mois'}],
-    sante:[{t:'Premiers secours certifiés',o:'Croix-Rouge · 1 mois'},{t:'Gestion des dossiers médicaux',o:'OFPPT · 2 mois'},{t:'Anglais médical',o:'En ligne · 3 mois'}],
-    'général':[{t:'Bureautique & Excel avancé',o:'OFPPT · 2 mois · Gratuit'},{t:'Communication professionnelle',o:'ANAPEC · 1 mois'},{t:'Langues (Français/Anglais)',o:'En ligne · 3 mois'}],
-  };
-  return { offers: OFFERS[sector], formations: FORM[sector] };
+ var f = (p.filiere || '').toLowerCase();
+ var sector = 'général';
+ if (/informat|développ|web|program|digital|réseau|data|logiciel|cyber|intelligence/.test(f)) sector = 'tech';
+ else if (/compt|finan|gestion|banque|économ|audit/.test(f)) sector = 'finance';
+ else if (/génie|ingénieur|électr|mécan|btp|civil|industriel/.test(f)) sector = 'ingenierie';
+ else if (/commerc|market|vente|communication/.test(f)) sector = 'commerce';
+ else if (/santé|infirm|médic|pharma|kiné|laboratoire/.test(f)) sector = 'sante';
+ var OFFERS = {
+   tech:[{t:'Développeur Web Full-Stack',c:'Casablanca · CDI',s:'8000-14000 DH'},{t:'Technicien Support IT',c:'Rabat · CDD',s:'5000-7000 DH'},{t:'Data Analyst Junior',c:'Casablanca · CDI',s:'7000-11000 DH'}],
+   finance:[{t:'Assistant Comptable',c:'Casablanca · CDI',s:'5000-8000 DH'},{t:'Chargé de clientèle bancaire',c:'Toutes régions · CDI',s:'6000-9000 DH'},{t:'Contrôleur de gestion junior',c:'Rabat · CDD',s:'7000-10000 DH'}],
+   ingenierie:[{t:'Ingénieur Génie Civil',c:'Marrakech · CDI',s:'9000-15000 DH'},{t:'Technicien Électromécanique',c:'Tanger · CDI',s:'6000-9000 DH'},{t:'Responsable HSE',c:'Casablanca · CDI',s:'8000-12000 DH'}],
+   commerce:[{t:'Commercial B2B',c:'Casablanca · CDI',s:'5000+commissions'},{t:'Community Manager',c:'Rabat · CDD',s:'5000-8000 DH'},{t:'Chef de rayon',c:'Toutes régions · CDI',s:'6000-9000 DH'}],
+   sante:[{t:'Infirmier polyvalent',c:'Toutes régions · CDD',s:'6000-9000 DH'},{t:'Technicien de laboratoire',c:'Casablanca · CDI',s:'5000-8000 DH'},{t:'Aide-soignant',c:'Toutes régions · CDD',s:'4000-6000 DH'}],
+   'général':[{t:'Agent administratif',c:'Toutes régions · CDD',s:'4000-6000 DH'},{t:'Chargé de saisie',c:'Casablanca · CDD',s:'4000-5500 DH'},{t:'Assistant polyvalent',c:'Rabat · CDI',s:'5000-7000 DH'}],
+ };
+ var FORM = {
+   tech:[{t:'Certification Full-Stack JavaScript',o:'OFPPT · 6 mois · Gratuit'},{t:'Data Science & Python',o:'En ligne · 3 mois'},{t:'Cybersécurité fondamentale',o:'OFPPT · 4 mois'}],
+   finance:[{t:'Comptabilité sur SAGE',o:'OFPPT · 3 mois · Gratuit'},{t:'Analyse financière avancée',o:'En ligne · 2 mois'},{t:'Fiscalité marocaine',o:'CNSS · 1 mois'}],
+   ingenierie:[{t:'AutoCAD & Revit',o:'OFPPT · 4 mois · Gratuit'},{t:'Gestion de projet PMP',o:'En ligne · 3 mois'},{t:'Normes qualité ISO',o:'IMANOR · 2 mois'}],
+   commerce:[{t:'Marketing Digital complet',o:'OFPPT · 4 mois · Gratuit'},{t:'Techniques de vente',o:'ANAPEC · 1 mois'},{t:'CRM & prospection',o:'En ligne · 2 mois'}],
+   sante:[{t:'Premiers secours certifiés',o:'Croix-Rouge · 1 mois'},{t:'Gestion des dossiers médicaux',o:'OFPPT · 2 mois'},{t:'Anglais médical',o:'En ligne · 3 mois'}],
+   'général':[{t:'Bureautique & Excel avancé',o:'OFPPT · 2 mois · Gratuit'},{t:'Communication professionnelle',o:'ANAPEC · 1 mois'},{t:'Langues (Français/Anglais)',o:'En ligne · 3 mois'}],
+ };
+ return { offers: OFFERS[sector], formations: FORM[sector] };
 }
 var ATELIERS_DEFAUT = [
-  {t:'ورشة إعداد السيرة الذاتية (CV)',d:'الأربعاء 22 يوليوز · 10:00',lieu:'وكالة ANAPEC الرباط',places:'8 أماكن متبقية'},
-  {t:'التحضير لمقابلة العمل',d:'الجمعة 24 يوليوز · 14:00',lieu:'عن بُعد (Zoom)',places:'15 مكان متبقي'},
-  {t:'البحث الفعّال عن عمل عبر الإنترنت',d:'الاثنين 27 يوليوز · 10:00',lieu:'وكالة ANAPEC الدار البيضاء',places:'5 أماكن متبقية'},
-  {t:'تطوير المهارات الشخصية (Soft Skills)',d:'الأربعاء 29 يوليوز · 15:00',lieu:'عن بُعد (Zoom)',places:'20 مكان متبقي'},
+ {t:'ورشة إعداد السيرة الذاتية — Atelier rédaction de CV',d:'الأربعاء 22 يوليوز · 10:00 — Mercredi 22 juillet · 10h00',lieu:'وكالة ANAPEC الرباط — Agence ANAPEC Rabat',places:'8 أماكن متبقية — 8 places restantes'},
+ {t:'التحضير لمقابلة العمل — Préparation à l\'entretien',d:'الجمعة 24 يوليوز · 14:00 — Vendredi 24 juillet · 14h00',lieu:'عن بُعد (Zoom) — À distance (Zoom)',places:'15 مكان متبقي — 15 places restantes'},
+ {t:'البحث الفعّال عن عمل عبر الإنترنت — Recherche d\'emploi en ligne',d:'الاثنين 27 يوليوز · 10:00 — Lundi 27 juillet · 10h00',lieu:'وكالة ANAPEC الدار البيضاء — Agence ANAPEC Casablanca',places:'5 أماكن متبقية — 5 places restantes'},
+ {t:'تطوير المهارات الشخصية — Soft Skills',d:'الأربعاء 29 يوليوز · 15:00 — Mercredi 29 juillet · 15h00',lieu:'عن بُعد (Zoom) — À distance (Zoom)',places:'20 مكان متبقي — 20 places restantes'},
 ];
 function getAllAteliers(){
-  var admin = dbGet('ateliers').map(function(a){ return { t:a.t, d:a.d, lieu:a.lieu, places:a.places }; });
-  return admin.concat(ATELIERS_DEFAUT);
+ var admin = dbGet('ateliers').map(function(a){ return { t:a.t, d:a.d, lieu:a.lieu, places:a.places }; });
+ return admin.concat(ATELIERS_DEFAUT);
 }
 
 /* ══════════ Render ══════════ */
 function esc(s){ var d=document.createElement('div'); d.textContent=String(s==null?'':s); return d.innerHTML; }
 
 function renderEspace(){
-  var p = ME;
-  var initials = (p.nom||'؟').trim().split(/\s+/).map(function(w){return w[0];}).slice(0,2).join('');
-  document.getElementById('esp-avatar').textContent = initials;
-  document.getElementById('esp-nom').textContent = p.nom;
-  document.getElementById('esp-meta').textContent = [p.niveau, p.filiere, p.ville].filter(Boolean).join(' · ');
+ var p = ME;
+ var initials = (p.nom||'؟').trim().split(/\s+/).map(function(w){return w[0];}).slice(0,2).join('');
+ document.getElementById('esp-avatar').textContent = initials;
+ document.getElementById('esp-nom').textContent = p.nom;
+ document.getElementById('esp-meta').textContent = [p.niveau, p.filiere, p.ville].filter(Boolean).join('· ');
 
-  document.getElementById(p.verifie ? 'verifOk' : 'verifBanner').style.display = 'block';
-  document.getElementById(p.verifie ? 'verifBanner' : 'verifOk').style.display = 'none';
+ document.getElementById(p.verifie ? 'verifOk': 'verifBanner').style.display = 'block';
+ document.getElementById(p.verifie ? 'verifBanner': 'verifOk').style.display = 'none';
 
-  var sug = buildSuggestions(p);
-  document.getElementById('esp-offresList').innerHTML = sug.offers.map(function(o){
-    return '<div class="mini-card"><h5>'+esc(o.t)+'</h5><p>📍 '+esc(o.c)+'</p><p style="color:var(--green);font-weight:700;">💰 '+esc(o.s)+'</p>'+
-      '<a class="btn-p" target="_blank" href="https://www.anapec.org/sigec-app-rv/front/chercheurs/recherche_offre">التقديم عبر ANAPEC</a></div>';
-  }).join('');
-  document.getElementById('esp-formationsList').innerHTML = sug.formations.map(function(f){
-    return '<div class="mini-card"><h5>'+esc(f.t)+'</h5><p>🎓 '+esc(f.o)+'</p>'+
-      '<a class="btn-p btn-g" target="_blank" href="https://www.ofppt.ma">معلومات التسجيل</a></div>';
-  }).join('');
-  document.getElementById('esp-ateliersList').innerHTML = getAllAteliers().map(function(a,i){
-    return '<div class="mini-card"><h5>'+esc(a.t)+'</h5><p>🗓 '+esc(a.d)+'</p><p>📍 '+esc(a.lieu)+'</p><p style="color:var(--gold-700);font-weight:700;">🔥 '+esc(a.places)+'</p>'+
-      '<button class="btn-p btn-g" onclick="registerAtelier('+i+',this)">سجّل في الورشة / S\'inscrire</button></div>';
-  }).join('');
+ var sug = buildSuggestions(p);
+ document.getElementById('esp-offresList').innerHTML = sug.offers.map(function(o){
+   return '<div class="mini-card"><h5>'+esc(o.t)+'</h5><p> '+esc(o.c)+'</p><p style="color:var(--green);font-weight:700;">'+esc(o.s)+'</p>'+
+     '<a class="btn-p" target="_blank" href="https://www.anapec.org/sigec-app-rv/front/chercheurs/recherche_offre">'+L('التقديم عبر ANAPEC','Postuler via ANAPEC')+'</a></div>';
+ }).join('');
+ document.getElementById('esp-formationsList').innerHTML = sug.formations.map(function(f){
+   return '<div class="mini-card"><h5>'+esc(f.t)+'</h5><p> '+esc(f.o)+'</p>'+
+     '<a class="btn-p btn-g" target="_blank" href="https://www.ofppt.ma">'+L('معلومات التسجيل','Infos inscription')+'</a></div>';
+ }).join('');
+ document.getElementById('esp-ateliersList').innerHTML = getAllAteliers().map(function(a,i){
+   return '<div class="mini-card"><h5>'+esc(T(a.t))+'</h5><p> '+esc(T(a.d))+'</p><p> '+esc(T(a.lieu))+'</p><p style="color:var(--gold-700);font-weight:700;">'+esc(T(a.places))+'</p>'+
+     '<button class="btn-p btn-g" onclick="registerAtelier('+i+',this)">سجّل في الورشة / S\'inscrire</button></div>';
+ }).join('');
 
-  renderSlots();
-  renderMesRdvs();
+ renderSlots();
+ renderMesRdvs();
 
-  // Trèfle: restore saved diagnosis, or invite new users to take it
-  if (p.positionnement && p.positionnement.scores) {
-    renderTrefleResults(p.positionnement.scores, p.positionnement.diagnostic || '📋 التشخيص الرقمي محفوظ — أعد التشخيص للحصول على التحليل الكامل بالذكاء الاصطناعي.', true);
-  } else {
-    // Mandatory questionnaire right after registration
-    setTimeout(function(){ openTrefle(); }, 600);
-  }
+ // Trèfle: restore saved diagnosis, or invite new users to take it
+ if (p.positionnement && p.positionnement.scores) {
+   renderTrefleResults(p.positionnement.scores, p.positionnement.diagnostic || 'التشخيص الرقمي محفوظ — أعد التشخيص للحصول على التحليل الكامل بالذكاء الاصطناعي.', true);
+ } else {
+   // Mandatory questionnaire right after registration
+   setTimeout(function(){ openTrefle(); }, 600);
+ }
 }
 
 window.registerAtelier = function(i, btn){
-  btn.textContent = '✓ تم التسجيل'; btn.style.background = '#9CA3AF'; btn.disabled = true;
-  var w = getAllAteliers()[i];
-  var insc = dbGet('inscriptions');
-  insc.push({ atelier: w.t, nom: ME.nom, email: ME.email, date: new Date().toISOString() });
-  dbSet('inscriptions', insc);
-  alert('✅ تم تسجيلك في: ' + w.t);
+ btn.textContent = '✓ ' + L('تم التسجيل','Inscrit'); btn.style.background = '#9CA3AF'; btn.disabled = true;
+ var w = getAllAteliers()[i];
+ var insc = dbGet('inscriptions');
+ insc.push({ atelier: T(w.t), nom: ME.nom, email: ME.email, date: new Date().toISOString() });
+ dbSet('inscriptions', insc);
+ alert('تم تسجيلك في: '+ w.t);
 };
 
 /* ══════════ Créneaux + RDV ══════════ */
 var selectedSlot = null;
 function renderSlots(){
-  var creneaux = dbGet('creneaux').filter(function(c){ return c.status === 'libre'; });
-  var list = document.getElementById('slotsList');
-  if (!creneaux.length) {
-    document.getElementById('slotsWrap').style.display = 'none';
-    document.getElementById('noSlots').style.display = 'block';
-    return;
-  }
-  document.getElementById('slotsWrap').style.display = 'block';
-  document.getElementById('noSlots').style.display = 'none';
-  list.innerHTML = creneaux.map(function(c){
-    var jours = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-    var d = new Date(c.date + 'T00:00:00');
-    return '<button type="button" class="slot" data-id="'+c.id+'" onclick="pickSlot(this,'+c.id+')">'+
-      jours[d.getDay()] + ' ' + esc(c.date) + ' · <b>' + esc(c.heure) + '</b><br><span style="font-size:0.72rem;color:var(--muted);">' + esc(c.type) + '</span></button>';
-  }).join('');
+ var creneaux = dbGet('creneaux').filter(function(c){ return c.status === 'libre'; });
+ var list = document.getElementById('slotsList');
+ if (!creneaux.length) {
+   document.getElementById('slotsWrap').style.display = 'none';
+   document.getElementById('noSlots').style.display = 'block';
+   return;
+ }
+ document.getElementById('slotsWrap').style.display = 'block';
+ document.getElementById('noSlots').style.display = 'none';
+ list.innerHTML = creneaux.map(function(c){
+   var jours = LANG === 'fr' ? ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'] : ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+   var d = new Date(c.date + 'T00:00:00');
+   return '<button type="button" class="slot" data-id="'+c.id+'" onclick="pickSlot(this,'+c.id+')">'+
+     jours[d.getDay()] + ''+ esc(c.date) + '· <b>'+ esc(c.heure) + '</b><br><span style="font-size:0.72rem;color:var(--muted);">'+ esc(c.type) + '</span></button>';
+ }).join('');
 }
 window.pickSlot = function(el, id){
-  selectedSlot = id;
-  document.querySelectorAll('.slot').forEach(function(s){ s.classList.remove('sel'); });
-  el.classList.add('sel');
+ selectedSlot = id;
+ document.querySelectorAll('.slot').forEach(function(s){ s.classList.remove('sel'); });
+ el.classList.add('sel');
 };
 window.submitRdvEspace = function(){
-  var msg = document.getElementById('rdv-msg');
-  var creneaux = dbGet('creneaux');
-  var rdvs = dbGet('rdvs');
-  var slot = creneaux.find(function(c){ return c.id === selectedSlot && c.status === 'libre'; });
-  var date, type;
-  if (slot) {
-    date = slot.date + ' ' + slot.heure; type = slot.type;
-    slot.status = 'reserve'; slot.reservePar = ME.nom;
-    dbSet('creneaux', creneaux);
-  } else {
-    var manual = document.getElementById('rdv-date');
-    if (document.getElementById('noSlots').style.display !== 'none' && manual.value) {
-      date = manual.value; type = document.getElementById('rdv-type').value;
-    } else {
-      msg.textContent = '⚠️ اختر موعداً من القائمة'; msg.style.color = '#dc2626'; return;
-    }
-  }
-  rdvs.push({
-    id: Date.now(), nom: ME.nom, email: ME.email, tel: ME.tel || '', filiere: ME.filiere || '',
-    date: date, type: type, sujet: document.getElementById('rdv-sujet').value.trim(),
-    status: 'pending', creneauId: slot ? slot.id : null, createdAt: new Date().toISOString()
-  });
-  dbSet('rdvs', rdvs);
-  selectedSlot = null;
-  msg.textContent = '✅ تم إرسال طلب الموعد. ستصلك رسالة WhatsApp عند تأكيده من طرف المستشار.';
-  msg.style.color = 'var(--green)';
-  renderSlots(); renderMesRdvs();
+ var msg = document.getElementById('rdv-msg');
+ var creneaux = dbGet('creneaux');
+ var rdvs = dbGet('rdvs');
+ var slot = creneaux.find(function(c){ return c.id === selectedSlot && c.status === 'libre'; });
+ var date, type;
+ if (slot) {
+   date = slot.date + ''+ slot.heure; type = slot.type;
+   slot.status = 'reserve'; slot.reservePar = ME.nom;
+   dbSet('creneaux', creneaux);
+ } else {
+   var manual = document.getElementById('rdv-date');
+   if (document.getElementById('noSlots').style.display !== 'none'&& manual.value) {
+     date = manual.value; type = document.getElementById('rdv-type').value;
+   } else {
+     msg.textContent = L('اختر موعداً من القائمة','Choisissez un créneau dans la liste'); msg.style.color = '#dc2626'; return;
+   }
+ }
+ rdvs.push({
+   id: Date.now(), nom: ME.nom, email: ME.email, tel: ME.tel || '', filiere: ME.filiere || '',
+   date: date, type: type, sujet: document.getElementById('rdv-sujet').value.trim(),
+   status: 'pending', creneauId: slot ? slot.id : null, createdAt: new Date().toISOString()
+ });
+ dbSet('rdvs', rdvs);
+ selectedSlot = null;
+ msg.textContent = L('تم إرسال طلب الموعد. ستصلك رسالة WhatsApp عند تأكيده من طرف المستشار.','Demande envoyée. Vous recevrez un message WhatsApp dès la confirmation par le conseiller.');
+ msg.style.color = 'var(--green)';
+ renderSlots(); renderMesRdvs(); applyLang();
 };
 function renderMesRdvs(){
-  var mine = dbGet('rdvs').filter(function(r){ return r.email === ME.email; });
-  var el = document.getElementById('mesRdvs');
-  if (!mine.length) { el.innerHTML = ''; return; }
-  el.innerHTML = '<label>مواعيدي / Mes rendez-vous</label>' + mine.slice().reverse().map(function(r){
-    var badge = r.status==='accepted' ? '<span style="color:var(--green);font-weight:700;">✅ مؤكد</span>'
-              : r.status==='refused'  ? '<span style="color:#dc2626;font-weight:700;">❌ مرفوض</span>'
-              : '<span style="color:#B36C00;font-weight:700;">⏳ في الانتظار</span>';
-    return '<div style="border:1px solid var(--border);border-radius:10px;padding:9px 14px;margin-top:8px;font-size:0.82rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;">'+
-      '<span>🗓 '+esc(r.date)+' · '+esc(r.type)+'</span>'+badge+'</div>';
-  }).join('');
+ var mine = dbGet('rdvs').filter(function(r){ return r.email === ME.email; });
+ var el = document.getElementById('mesRdvs');
+ if (!mine.length) { el.innerHTML = ''; return; }
+ el.innerHTML = '<label>'+L('مواعيدي','Mes rendez-vous')+'</label>'+ mine.slice().reverse().map(function(r){
+   var badge = r.status==='accepted'? '<span style="color:var(--green);font-weight:700;">✓ '+L('مؤكد','Confirmé')+'</span>'
+             : r.status==='refused'? '<span style="color:#dc2626;font-weight:700;">✕ '+L('مرفوض','Refusé')+'</span>'
+             : '<span style="color:#B36C00;font-weight:700;">'+L('في الانتظار','En attente')+'</span>';
+   return '<div style="border:1px solid var(--border);border-radius:10px;padding:9px 14px;margin-top:8px;font-size:0.82rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;">'+
+     '<span> '+esc(r.date)+'· '+esc(r.type)+'</span>'+badge+'</div>';
+ }).join('');
 }
 
 /* ══════════ Chatbot ══════════ */
 var chatHistory = [];
 function toggleChat(open){
-  document.getElementById('chatBox').style.display = open ? 'flex' : 'none';
-  document.getElementById('chatFab').style.display = open ? 'none' : 'flex';
+ document.getElementById('chatBox').style.display = open ? 'flex': 'none';
+ document.getElementById('chatFab').style.display = open ? 'none': 'flex';
 }
 function addMsg(text, cls){
-  var d = document.createElement('div');
-  d.className = 'msg ' + cls; d.textContent = text;
-  var box = document.getElementById('chatMsgs');
-  box.appendChild(d); box.scrollTop = box.scrollHeight;
-  return d;
+ var d = document.createElement('div');
+ d.className = 'msg '+ cls; d.textContent = text;
+ var box = document.getElementById('chatMsgs');
+ box.appendChild(d); box.scrollTop = box.scrollHeight;
+ return d;
 }
 async function callChat(prompt){
-  var typing = addMsg('...', 'bot');
-  try {
-    var r = await fetch('/api/chat', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ messages: chatHistory.concat([{role:'user',content:prompt}]), profile: ME })
-    });
-    var d = await r.json();
-    typing.remove();
-    var reply = d.reply || 'حدث خطأ. حاول مرة أخرى.';
-    addMsg(reply, 'bot');
-    chatHistory.push({role:'user',content:prompt});
-    chatHistory.push({role:'assistant',content:reply});
-  } catch(e){ typing.remove(); addMsg('❌ تعذّر الاتصال.', 'bot'); }
+ var typing = addMsg('...', 'bot');
+ try {
+   var r = await fetch('/api/chat', {
+     method:'POST', headers:{'Content-Type':'application/json'},
+     body: JSON.stringify({ messages: chatHistory.concat([{role:'user',content:prompt}]), profile: ME })
+   });
+   var d = await r.json();
+   typing.remove();
+   var reply = d.reply || L('حدث خطأ. حاول مرة أخرى.','Une erreur est survenue. Réessayez.');
+   addMsg(reply, 'bot');
+   chatHistory.push({role:'user',content:prompt});
+   chatHistory.push({role:'assistant',content:reply});
+ } catch(e){ typing.remove(); addMsg(L('تعذّر الاتصال.','Connexion impossible.'), 'bot'); }
 }
 window.sendChat = function(){
-  var inp = document.getElementById('chatInput');
-  var t = inp.value.trim(); if (!t) return;
-  inp.value = '';
-  addMsg(t, 'user');
-  callChat(t);
+ var inp = document.getElementById('chatInput');
+ var t = inp.value.trim(); if (!t) return;
+ inp.value = '';
+ addMsg(t, 'user');
+ callChat(t);
 };
 document.getElementById('chatInput').addEventListener('keydown', function(e){
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+ if (e.key === 'Enter'&& !e.shiftKey) { e.preventDefault(); sendChat(); }
 });
 window.runDiagnosis = function(){
-  var p = ME;
-  var prompt = 'Je suis ' + p.nom + (p.age ? ', ' + p.age + ' ans' : '') + ', à ' + (p.ville||'') +
-    '. Niveau ' + (p.niveau||'') + ' en ' + (p.filiere||'') +
-    (p.experience ? ', expérience : ' + p.experience : '') +
-    (p.competences ? ', compétences : ' + p.competences : '') +
-    '. Fais un diagnostic complet de mon profil (score, points forts, points faibles) et un plan d\'action concret avec les offres ANAPEC adaptées.';
-  addMsg('🤖 تشخيص ملفي...', 'user');
-  callChat(prompt);
+ var p = ME;
+ var prompt = 'Je suis '+ p.nom + (p.age ? ', '+ p.age + 'ans': '') + ', à '+ (p.ville||'') +
+   '. Niveau '+ (p.niveau||'') + 'en '+ (p.filiere||'') +
+   (p.experience ? ', expérience : '+ p.experience : '') +
+   (p.competences ? ', compétences : '+ p.competences : '') +
+   '. Fais un diagnostic complet de mon profil (score, points forts, points faibles) et un plan d\'action concret avec les offres ANAPEC adaptées.';
+ addMsg(L('تشخيص ملفي...','Diagnostic de mon profil...'), 'user');
+ callChat(prompt);
 };
 
 /* ══════════ Trèfle chanceux — Entretien de positionnement (fiche ANAPEC) ══════════ */
 var TREFLE_Q = [
-  { dim:'projet', titre:'أنا والعمل الذي أبحث عنه — Moi et l\'emploi que je recherche', color:'#7E1F78', items:[
-    { id:'p1', q:'هل تعرف المهنة أو العمل الذي تبحث عنه؟ — Connaissez-vous l\'emploi que vous recherchez ?', type:'ouinon', extra:{ id:'p1x', ph:'إذا نعم، ما هو؟ / Si oui, lequel ?' } },
-    { id:'p2', q:'هل تبحث عن عمل يتناسب مع تكوينك وتجربتك؟ — Cherchez-vous un emploi qui correspond à votre formation et expérience ?', type:'ouinon' },
-    { id:'p3', q:'هل يمكنك الذهاب للعمل في مدينة أخرى؟ — Êtes-vous mobile ?', type:'ouinon' },
-  ]},
-  { dim:'soi', titre:'معرفة الذات — Connaissance de mon profil', color:'#9C2484', items:[
-    { id:'s1', q:'هل تعرف الكفاءات المطلوبة لممارسة هذا العمل؟ — Connaissez-vous les compétences nécessaires pour cet emploi ?', type:'ouinon' },
-    { id:'s2', q:'اذكر ثلاثاً من كفاءاتك — Citez trois de vos compétences', type:'text', ph:'1... 2... 3...' },
-    { id:'s3', q:'اذكر ثلاثاً من مميزاتك الشخصية — Citez trois de vos qualités', type:'text', ph:'1... 2... 3...' },
-    { id:'s4', q:'هل تذكر كفاءاتك ومميزاتك في رسائل الترشيح؟ — Mentionnez-vous vos compétences et qualités dans vos candidatures ?', type:'ouinon' },
-    { id:'s5', q:'هل تظن أنك تحتاج إلى تكوين تكميلي؟ — Pensez-vous avoir besoin d\'une formation complémentaire ?', type:'ouinon', noscore:true },
-  ]},
-  { dim:'territoire', titre:'سوق الشغل — Mon marché de l\'emploi', color:'#B36C00', items:[
-    { id:'t1', q:'هل تعرف المقاولات التي يهمها العمل الذي تبحث عنه؟ — Connaissez-vous les entreprises qui recrutent dans votre domaine ?', type:'ouinon' },
-    { id:'t2', q:'هل تعرف المهن المطلوبة أكثر في سوق الشغل؟ — Connaissez-vous les métiers les plus demandés ?', type:'ouinon' },
-    { id:'t3', q:'هل تعرف القطاعات التي تشغّل أكثر؟ — Connaissez-vous les secteurs qui recrutent le plus ?', type:'ouinon' },
-    { id:'t4', q:'هل تعرف مختلف عقود الشغل؟ — Connaissez-vous les différents contrats de travail ?', type:'ouinon' },
-  ]},
-  { dim:'methode', titre:'المنهجية: سيرتي، رسائلي، مقابلاتي — Ma méthode : CV, candidatures, entretiens', color:'#166534', items:[
-    { id:'m1', q:'هل لديك سيرة ذاتية؟ — Avez-vous un CV ?', type:'ouinon' },
-    { id:'m2', q:'هل تبدو لك سيرتك الذاتية مرضية وجذابة؟ — Votre CV vous semble-t-il attrayant ?', type:'ouinon' },
-    { id:'m3', q:'هل تُكيّف سيرتك الذاتية حسب كل عرض عمل؟ — Adaptez-vous votre CV selon l\'offre d\'emploi ?', type:'ouinon' },
-    { id:'m4', q:'هل تعرف مواقع إلكترونية للتشغيل؟ — Connaissez-vous des sites de recrutement ?', type:'ouinon' },
-    { id:'m5', q:'هل تتصفح عروض العمل الخاصة بـANAPEC؟ — Consultez-vous les offres de l\'ANAPEC ?', type:'ouinon' },
-    { id:'m6', q:'هل تستعلم عن المقاولة قبل إعداد رسالة الترشيح؟ — Vous renseignez-vous sur l\'entreprise avant de postuler ?', type:'ouinon' },
-    { id:'m7', q:'هل تبدو لك رسائلك لطلب العمل مقنعة؟ — Vos candidatures vous semblent-elles convaincantes ?', type:'ouinon' },
-    { id:'m8', q:'هل سبق أن أجريت مقابلة تشغيل؟ — Avez-vous déjà passé un entretien d\'embauche ?', type:'ouinon' },
-    { id:'m9', q:'هل تعرف كيف تحضّر وتنجح في مقابلات التشغيل؟ — Savez-vous préparer et réussir un entretien d\'embauche ?', type:'ouinon' },
-    { id:'m10', q:'هل تعرف الخطوات اللازمة لمضاعفة حظوظك في إيجاد عمل؟ — Connaissez-vous les actions pour augmenter vos chances (plan d\'action) ?', type:'ouinon' },
-  ]},
+ { dim:'projet', titre:'أنا والعمل الذي أبحث عنه — Moi et l\'emploi que je recherche', color:'#7E1F78', items:[
+   { id:'p1', q:'هل تعرف المهنة أو العمل الذي تبحث عنه؟ — Connaissez-vous l\'emploi que vous recherchez ?', type:'ouinon', extra:{ id:'p1x', ph:'إذا نعم، ما هو؟ / Si oui, lequel ?'} },
+   { id:'p2', q:'هل تبحث عن عمل يتناسب مع تكوينك وتجربتك؟ — Cherchez-vous un emploi qui correspond à votre formation et expérience ?', type:'ouinon'},
+   { id:'p3', q:'هل يمكنك الذهاب للعمل في مدينة أخرى؟ — Êtes-vous mobile ?', type:'ouinon'},
+ ]},
+ { dim:'soi', titre:'معرفة الذات — Connaissance de mon profil', color:'#9C2484', items:[
+   { id:'s1', q:'هل تعرف الكفاءات المطلوبة لممارسة هذا العمل؟ — Connaissez-vous les compétences nécessaires pour cet emploi ?', type:'ouinon'},
+   { id:'s2', q:'اذكر ثلاثاً من كفاءاتك — Citez trois de vos compétences', type:'text', ph:'1... 2... 3...'},
+   { id:'s3', q:'اذكر ثلاثاً من مميزاتك الشخصية — Citez trois de vos qualités', type:'text', ph:'1... 2... 3...'},
+   { id:'s4', q:'هل تذكر كفاءاتك ومميزاتك في رسائل الترشيح؟ — Mentionnez-vous vos compétences et qualités dans vos candidatures ?', type:'ouinon'},
+   { id:'s5', q:'هل تظن أنك تحتاج إلى تكوين تكميلي؟ — Pensez-vous avoir besoin d\'une formation complémentaire ?', type:'ouinon', noscore:true },
+ ]},
+ { dim:'territoire', titre:'سوق الشغل — Mon marché de l\'emploi', color:'#B36C00', items:[
+   { id:'t1', q:'هل تعرف المقاولات التي يهمها العمل الذي تبحث عنه؟ — Connaissez-vous les entreprises qui recrutent dans votre domaine ?', type:'ouinon'},
+   { id:'t2', q:'هل تعرف المهن المطلوبة أكثر في سوق الشغل؟ — Connaissez-vous les métiers les plus demandés ?', type:'ouinon'},
+   { id:'t3', q:'هل تعرف القطاعات التي تشغّل أكثر؟ — Connaissez-vous les secteurs qui recrutent le plus ?', type:'ouinon'},
+   { id:'t4', q:'هل تعرف مختلف عقود الشغل؟ — Connaissez-vous les différents contrats de travail ?', type:'ouinon'},
+ ]},
+ { dim:'methode', titre:'المنهجية: سيرتي، رسائلي، مقابلاتي — Ma méthode : CV, candidatures, entretiens', color:'#166534', items:[
+   { id:'m1', q:'هل لديك سيرة ذاتية؟ — Avez-vous un CV ?', type:'ouinon'},
+   { id:'m2', q:'هل تبدو لك سيرتك الذاتية مرضية وجذابة؟ — Votre CV vous semble-t-il attrayant ?', type:'ouinon'},
+   { id:'m3', q:'هل تُكيّف سيرتك الذاتية حسب كل عرض عمل؟ — Adaptez-vous votre CV selon l\'offre d\'emploi ?', type:'ouinon'},
+   { id:'m4', q:'هل تعرف مواقع إلكترونية للتشغيل؟ — Connaissez-vous des sites de recrutement ?', type:'ouinon'},
+   { id:'m5', q:'هل تتصفح عروض العمل الخاصة بـANAPEC؟ — Consultez-vous les offres de l\'ANAPEC ?', type:'ouinon'},
+   { id:'m6', q:'هل تستعلم عن المقاولة قبل إعداد رسالة الترشيح؟ — Vous renseignez-vous sur l\'entreprise avant de postuler ?', type:'ouinon'},
+   { id:'m7', q:'هل تبدو لك رسائلك لطلب العمل مقنعة؟ — Vos candidatures vous semblent-elles convaincantes ?', type:'ouinon'},
+   { id:'m8', q:'هل سبق أن أجريت مقابلة تشغيل؟ — Avez-vous déjà passé un entretien d\'embauche ?', type:'ouinon'},
+   { id:'m9', q:'هل تعرف كيف تحضّر وتنجح في مقابلات التشغيل؟ — Savez-vous préparer et réussir un entretien d\'embauche ?', type:'ouinon'},
+   { id:'m10', q:'هل تعرف الخطوات اللازمة لمضاعفة حظوظك في إيجاد عمل؟ — Connaissez-vous les actions pour augmenter vos chances (plan d\'action) ?', type:'ouinon'},
+ ]},
 ];
 
 function buildTrefleForm(){
-  var old = (ME.positionnement && ME.positionnement.answers) || {};
-  document.getElementById('trefleForm').innerHTML = TREFLE_Q.map(function(g){
-    return '<div style="margin-bottom:18px;">' +
-      '<div style="background:'+g.color+'15;border-right:4px solid '+g.color+';border-radius:8px;padding:8px 12px;font-weight:800;font-size:0.86rem;color:'+g.color+';margin-bottom:10px;">'+g.titre+'</div>' +
-      g.items.map(function(it){
-        var html = '<div style="margin-bottom:11px;"><div style="font-size:0.8rem;margin-bottom:5px;line-height:1.5;">'+it.q+'</div>';
-        if (it.type === 'ouinon') {
-          ['oui','non'].forEach(function(v){
-            var checked = old[it.id] === v ? ' checked' : '';
-            html += '<label style="display:inline-flex;align-items:center;gap:5px;margin-left:16px;font-size:0.8rem;cursor:pointer;font-weight:400;">' +
-              '<input type="radio" name="'+it.id+'" value="'+v+'"'+checked+' style="width:auto;">' + (v==='oui'?'نعم Oui':'لا Non') + '</label>';
-          });
-          if (it.extra) html += '<input type="text" id="'+it.extra.id+'" placeholder="'+it.extra.ph+'" value="'+(old[it.extra.id]||'')+'" style="margin-top:6px;font-size:0.8rem;padding:8px 10px;">';
-        } else {
-          html += '<input type="text" id="'+it.id+'" placeholder="'+(it.ph||'')+'" value="'+(old[it.id]||'')+'" style="font-size:0.8rem;padding:8px 10px;">';
-        }
-        return html + '</div>';
-      }).join('') + '</div>';
-  }).join('');
+ var old = (ME.positionnement && ME.positionnement.answers) || {};
+ document.getElementById('trefleForm').innerHTML = TREFLE_Q.map(function(g){
+   return '<div style="margin-bottom:18px;">'+
+     '<div style="background:'+g.color+'15;border-right:4px solid '+g.color+';border-radius:8px;padding:8px 12px;font-weight:800;font-size:0.86rem;color:'+g.color+';margin-bottom:10px;">'+T(g.titre)+'</div>'+
+     g.items.map(function(it){
+       var html = '<div style="margin-bottom:11px;"><div style="font-size:0.8rem;margin-bottom:5px;line-height:1.5;">'+T(it.q)+'</div>';
+       if (it.type === 'ouinon') {
+         ['oui','non'].forEach(function(v){
+           var checked = old[it.id] === v ? 'checked': '';
+           html += '<label style="display:inline-flex;align-items:center;gap:5px;margin-left:16px;font-size:0.8rem;cursor:pointer;font-weight:400;">'+
+             '<input type="radio" name="'+it.id+'" value="'+v+'"'+checked+'style="width:auto;">'+ (v==='oui'?L('نعم','Oui'):L('لا','Non')) + '</label>';
+         });
+         if (it.extra) html += '<input type="text" id="'+it.extra.id+'" placeholder="'+T(it.extra.ph)+'" value="'+(old[it.extra.id]||'')+'" style="margin-top:6px;font-size:0.8rem;padding:8px 10px;">';
+       } else {
+         html += '<input type="text" id="'+it.id+'" placeholder="'+T(it.ph||'')+'" value="'+(old[it.id]||'')+'" style="font-size:0.8rem;padding:8px 10px;">';
+       }
+       return html + '</div>';
+     }).join('') + '</div>';
+ }).join('');
 }
 
 window.openTrefle = function(){
-  buildTrefleForm();
-  // Mandatory until the first diagnosis is completed: hide the close button
-  var mandatory = !(ME && ME.positionnement && ME.positionnement.scores);
-  document.getElementById('trefleClose').style.display = mandatory ? 'none' : 'block';
-  document.getElementById('trefleMand').style.display = mandatory ? 'block' : 'none';
-  document.getElementById('trefleModal').style.display = 'flex';
+ buildTrefleForm();
+ // Mandatory until the first diagnosis is completed: hide the close button
+ var mandatory = !(ME && ME.positionnement && ME.positionnement.scores);
+ document.getElementById('trefleClose').style.display = mandatory ? 'none': 'block';
+ document.getElementById('trefleMand').style.display = mandatory ? 'block': 'none';
+ document.getElementById('trefleModal').style.display = 'flex';
 };
 
 function computeTrefle(answers){
-  var scores = {};
-  TREFLE_Q.forEach(function(g){
-    var pts = 0, tot = 0;
-    g.items.forEach(function(it){
-      if (it.noscore) return;
-      tot++;
-      if (it.type === 'ouinon') { if (answers[it.id] === 'oui') pts++; }
-      else { if ((answers[it.id]||'').trim().length >= 5) pts++; }
-    });
-    scores[g.dim] = Math.round(100 * pts / tot);
-  });
-  scores.global = Math.round((scores.projet + scores.soi + scores.territoire + scores.methode) / 4);
-  return scores;
+ var scores = {};
+ TREFLE_Q.forEach(function(g){
+   var pts = 0, tot = 0;
+   g.items.forEach(function(it){
+     if (it.noscore) return;
+     tot++;
+     if (it.type === 'ouinon') { if (answers[it.id] === 'oui') pts++; }
+     else { if ((answers[it.id]||'').trim().length >= 5) pts++; }
+   });
+   scores[g.dim] = Math.round(100 * pts / tot);
+ });
+ scores.global = Math.round((scores.projet + scores.soi + scores.territoire + scores.methode) / 4);
+ return scores;
 }
 
 window.submitTrefle = async function(){
-  var answers = {};
-  var missing = 0;
-  TREFLE_Q.forEach(function(g){ g.items.forEach(function(it){
-    if (it.type === 'ouinon') {
-      var checked = document.querySelector('input[name="'+it.id+'"]:checked');
-      if (checked) answers[it.id] = checked.value; else missing++;
-      if (it.extra) answers[it.extra.id] = (document.getElementById(it.extra.id).value||'').trim();
-    } else {
-      answers[it.id] = (document.getElementById(it.id).value||'').trim();
-    }
-  }); });
-  if (missing > 0) {
-    document.getElementById('trefleErr').textContent = '⚠️ أجب على جميع أسئلة نعم/لا ('+missing+' متبقية) — Répondez à toutes les questions Oui/Non';
-    return;
-  }
-  var scores = computeTrefle(answers);
+ var answers = {};
+ var missing = 0;
+ TREFLE_Q.forEach(function(g){ g.items.forEach(function(it){
+   if (it.type === 'ouinon') {
+     var checked = document.querySelector('input[name="'+it.id+'"]:checked');
+     if (checked) answers[it.id] = checked.value; else missing++;
+     if (it.extra) answers[it.extra.id] = (document.getElementById(it.extra.id).value||'').trim();
+   } else {
+     answers[it.id] = (document.getElementById(it.id).value||'').trim();
+   }
+ }); });
+ if (missing > 0) {
+   document.getElementById('trefleErr').textContent = L('أجب على جميع أسئلة نعم/لا ('+missing+' متبقية)','Répondez à toutes les questions Oui/Non ('+missing+' restantes)');
+   return;
+ }
+ var scores = computeTrefle(answers);
 
-  // Save into profile (shared DB → visible to conseiller too)
-  ME.positionnement = { answers: answers, scores: scores, date: new Date().toISOString() };
-  var profils = dbGet('profils');
-  var idx = profils.findIndex(function(p){ return (p.email||'').toLowerCase() === ME.email.toLowerCase(); });
-  if (idx >= 0) { profils[idx] = ME; dbSet('profils', profils); }
+ // Save into profile (shared DB → visible to conseiller too)
+ ME.positionnement = { answers: answers, scores: scores, date: new Date().toISOString() };
+ var profils = dbGet('profils');
+ var idx = profils.findIndex(function(p){ return (p.email||'').toLowerCase() === ME.email.toLowerCase(); });
+ if (idx >= 0) { profils[idx] = ME; dbSet('profils', profils); }
 
-  document.getElementById('trefleModal').style.display = 'none';
-  renderTrefleResults(scores, '⏳ الذكاء الاصطناعي يحلل إجاباتك... / Analyse IA en cours...');
+ document.getElementById('trefleModal').style.display = 'none';
+ renderTrefleResults(scores, 'الذكاء الاصطناعي يحلل إجاباتك... / Analyse IA en cours...');
 
-  // AI diagnosis based on the trèfle answers
-  var lignes = [];
-  TREFLE_Q.forEach(function(g){ g.items.forEach(function(it){
-    var v = answers[it.id] || '—';
-    lignes.push('['+g.dim.toUpperCase()+'] ' + it.q.split('—')[1].trim() + ' → ' + v + (it.extra && answers[it.extra.id] ? ' ("' + answers[it.extra.id] + '")' : ''));
-  }); });
-  var prompt = 'DIAGNOSTIC DE POSITIONNEMENT (fiche ANAPEC — trèfle chanceux).\n' +
-    'Scores calculés : Général ' + scores.global + '/100 | SOI ' + scores.soi + ' | PROJET ' + scores.projet + ' | TERRITOIRE ' + scores.territoire + ' | MÉTHODE ' + scores.methode + '\n\nMes réponses :\n' + lignes.join('\n') +
-    '\n\nProduis le diagnostic en DEUX parties séparées par ces marqueurs EXACTS :\n' +
-    '[POUR_LE_CANDIDAT]\n(version courte pour le chercheur d\'emploi : maximum 70 mots, langage simple et encourageant, sans jargon — 2 constats principaux puis 3 actions concrètes en liste)\n' +
-    '[POUR_LE_CONSEILLER]\n(commentaire PRÉCIS et CONCIS adressé directement au conseiller ANAPEC — maximum 5 lignes : lecture synthétique des scores de ce candidat, difficulté principale identifiée, et LA prestation prioritaire à lui proposer. Parle du candidat à la 3e personne, ex. "Ce candidat maîtrise... mais...")\n' +
-    'Réponds en français.';
-  try {
-    var r = await fetch('/api/chat', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ messages:[{role:'user',content:prompt}], profile: ME })
-    });
-    var d = await r.json();
-    var txt = d.reply || '';
-    // Split candidate / conseiller parts
-    var candidat = txt, conseiller = txt;
-    if (txt.indexOf('[POUR_LE_CONSEILLER]') !== -1) {
-      var parts = txt.split('[POUR_LE_CONSEILLER]');
-      candidat = parts[0].replace('[POUR_LE_CANDIDAT]', '').replace(/^[\s*#:—-]+/, '').trim();
-      conseiller = parts[1].replace(/^[\s*#:—-]+/, '').trim();
-    }
-    ME.positionnement.diagnostic = candidat;
-    ME.positionnement.diagnosticConseiller = conseiller;
-    var profils2 = dbGet('profils');
-    var i2 = profils2.findIndex(function(p){ return (p.email||'').toLowerCase() === ME.email.toLowerCase(); });
-    if (i2 >= 0) { profils2[i2] = ME; dbSet('profils', profils2); }
-    renderTrefleResults(scores, candidat || 'حدث خطأ. حاول مرة أخرى.');
-  } catch(e) {
-    renderTrefleResults(scores, '❌ تعذّر الاتصال بالمساعد. النتائج الرقمية محفوظة — أعد المحاولة لاحقاً للتحليل الكامل.');
-  }
+ // AI diagnosis based on the trèfle answers
+ var lignes = [];
+ TREFLE_Q.forEach(function(g){ g.items.forEach(function(it){
+   var v = answers[it.id] || '—';
+   lignes.push('['+g.dim.toUpperCase()+'] '+ it.q.split('—')[1].trim() + '→ '+ v + (it.extra && answers[it.extra.id] ? '("'+ answers[it.extra.id] + '")': ''));
+ }); });
+ var prompt = 'DIAGNOSTIC DE POSITIONNEMENT (fiche ANAPEC — trèfle chanceux).\n'+
+   'Scores calculés : Général '+ scores.global + '/100 | SOI '+ scores.soi + '| PROJET '+ scores.projet + '| TERRITOIRE '+ scores.territoire + '| MÉTHODE '+ scores.methode + '\n\nMes réponses :\n'+ lignes.join('\n') +
+   '\n\nProduis le diagnostic en DEUX parties séparées par ces marqueurs EXACTS :\n'+
+   '[POUR_LE_CANDIDAT]\n(version courte pour le chercheur d\'emploi : maximum 70 mots, langage simple et encourageant, sans jargon — 2 constats principaux puis 3 actions concrètes en liste)\n'+
+   '[POUR_LE_CONSEILLER]\n(commentaire PRÉCIS et CONCIS adressé directement au conseiller ANAPEC — maximum 5 lignes : lecture synthétique des scores de ce candidat, difficulté principale identifiée, et LA prestation prioritaire à lui proposer. Parle du candidat à la 3e personne, ex. "Ce candidat maîtrise... mais...")\n'+
+   'Réponds en français.';
+ try {
+   var r = await fetch('/api/chat', {
+     method:'POST', headers:{'Content-Type':'application/json'},
+     body: JSON.stringify({ messages:[{role:'user',content:prompt}], profile: ME })
+   });
+   var d = await r.json();
+   var txt = d.reply || '';
+   // Split candidate / conseiller parts
+   var candidat = txt, conseiller = txt;
+   if (txt.indexOf('[POUR_LE_CONSEILLER]') !== -1) {
+     var parts = txt.split('[POUR_LE_CONSEILLER]');
+     candidat = parts[0].replace('[POUR_LE_CANDIDAT]', '').replace(/^[\s*#:—-]+/, '').trim();
+     conseiller = parts[1].replace(/^[\s*#:—-]+/, '').trim();
+   }
+   ME.positionnement.diagnostic = candidat;
+   ME.positionnement.diagnosticConseiller = conseiller;
+   var profils2 = dbGet('profils');
+   var i2 = profils2.findIndex(function(p){ return (p.email||'').toLowerCase() === ME.email.toLowerCase(); });
+   if (i2 >= 0) { profils2[i2] = ME; dbSet('profils', profils2); }
+   renderTrefleResults(scores, candidat || L('حدث خطأ. حاول مرة أخرى.','Une erreur est survenue. Réessayez.'));
+ } catch(e) {
+   renderTrefleResults(scores, 'تعذّر الاتصال بالمساعد. النتائج الرقمية محفوظة — أعد المحاولة لاحقاً للتحليل الكامل.');
+ }
 };
 
-var DIM_LABELS = { soi:{l:'الذات SOI',c:'#9C2484'}, projet:{l:'المشروع PROJET',c:'#7E1F78'}, territoire:{l:'السوق TERRITOIRE',c:'#B36C00'}, methode:{l:'المنهجية MÉTHODE',c:'#166534'} };
+var DIM_LABELS = { soi:{l:L('الذات','SOI — Connaissance du profil'),c:'#9C2484'}, projet:{l:L('المشروع المهني','PROJET professionnel'),c:'#7E1F78'}, territoire:{l:L('سوق الشغل','TERRITOIRE — Marché'),c:'#B36C00'}, methode:{l:L('المنهجية','MÉTHODE de recherche'),c:'#166534'} };
 
 function renderTrefleResults(scores, aiText, noScroll){
-  document.getElementById('trefleResults').style.display = 'block';
-  document.getElementById('trefleBtn').style.display = 'none';
-  var circ = 295.31;
-  document.getElementById('tr-global').textContent = scores.global;
-  var g = document.getElementById('tr-gauge');
-  g.style.strokeDashoffset = circ - (circ * scores.global / 100);
-  g.style.stroke = scores.global >= 70 ? '#166534' : scores.global >= 45 ? '#D88400' : '#dc2626';
-  document.getElementById('tr-bars').innerHTML = ['soi','projet','territoire','methode'].map(function(d){
-    var v = scores[d], L = DIM_LABELS[d];
-    return '<div><div style="display:flex;justify-content:space-between;font-size:0.76rem;margin-bottom:3px;"><b style="color:'+L.c+';">'+L.l+'</b><b>'+v+'/100</b></div>' +
-      '<div style="background:#E8DEEC;border-radius:20px;height:9px;overflow:hidden;"><div style="width:'+v+'%;height:100%;background:'+L.c+';border-radius:20px;transition:width 1s ease;"></div></div></div>';
-  }).join('');
-  renderAteliersReco(scores);
-  if (!noScroll) document.getElementById('trefleCard').scrollIntoView({ behavior:'smooth' });
+ document.getElementById('trefleResults').style.display = 'block';
+ document.getElementById('trefleBtn').style.display = 'none';
+ var circ = 295.31;
+ document.getElementById('tr-global').textContent = scores.global;
+ var g = document.getElementById('tr-gauge');
+ g.style.strokeDashoffset = circ - (circ * scores.global / 100);
+ g.style.stroke = scores.global >= 70 ? '#166534': scores.global >= 45 ? '#D88400': '#dc2626';
+ document.getElementById('tr-bars').innerHTML = ['soi','projet','territoire','methode'].map(function(d){
+   var v = scores[d], L = DIM_LABELS[d];
+   return '<div><div style="display:flex;justify-content:space-between;font-size:0.76rem;margin-bottom:3px;"><b style="color:'+L.c+';">'+L.l+'</b><b>'+v+'/100</b></div>'+
+     '<div style="background:#E8DEEC;border-radius:20px;height:9px;overflow:hidden;"><div style="width:'+v+'%;height:100%;background:'+L.c+';border-radius:20px;transition:width 1s ease;"></div></div></div>';
+ }).join('');
+ renderAteliersReco(scores);
+ if (!noScroll) document.getElementById('trefleCard').scrollIntoView({ behavior:'smooth'});
 }
 
 // Ateliers ANAPEC recommandés selon les dimensions faibles du trèfle
 function renderAteliersReco(scores){
-  var recos = [];
-  if (scores.projet < 60)     recos.push({t:'ورشة بلورة المشروع المهني — Atelier élaboration du projet professionnel', why:'بُعد المشروع ضعيف / Dimension PROJET à renforcer'});
-  if (scores.soi < 60)        recos.push({t:'ورشة الحصيلة الشخصية والمهنية — Atelier bilan personnel et professionnel', why:'بُعد الذات ضعيف / Dimension SOI à renforcer'});
-  if (scores.territoire < 60) recos.push({t:'ورشة التعرف على سوق الشغل — Atelier information sur le marché du travail', why:'بُعد السوق ضعيف / Dimension TERRITOIRE à renforcer'});
-  if (scores.methode < 60)    recos.push({t:'ورشة تقنيات البحث عن عمل (CV، رسائل، مقابلات) — Techniques de Recherche d\'Emploi (TRE)', why:'بُعد المنهجية ضعيف / Dimension MÉTHODE à renforcer'});
-  var el = document.getElementById('trefleRecos');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = 'trefleRecos';
-    document.getElementById('trefleResults').appendChild(el);
-  }
-  if (!recos.length) {
-    el.innerHTML = '<div style="margin-top:12px;background:#DCFCE7;border-radius:10px;padding:12px 16px;font-size:0.83rem;color:#166534;">🎉 جميع الأبعاد الأربعة جيدة! واصل خطتك في البحث عن عمل.</div>';
-    return;
-  }
-  el.innerHTML = '<h4 style="color:var(--purple-900);font-size:0.92rem;margin:16px 0 10px;">🎯 ورشات ANAPEC موصى بها حسب تشخيصك — Prestations recommandées</h4>' +
-    recos.map(function(r){
-      return '<div style="border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;margin-bottom:8px;font-size:0.82rem;">'+
-        '<b>'+r.t+'</b><br><span style="color:var(--muted);font-size:0.75rem;">'+r.why+'</span><br>'+
-        '<a href="http://anapec-amrc.org/chercheur_ateliers/inscription" target="_blank" style="color:var(--purple-700);font-weight:700;font-size:0.78rem;">التسجيل عن بعد / S\'inscrire →</a></div>';
-    }).join('');
+ var recos = [];
+ if (scores.projet < 60)     recos.push({t:'ورشة بلورة المشروع المهني — Atelier élaboration du projet professionnel', why:'بُعد المشروع ضعيف / Dimension PROJET à renforcer'});
+ if (scores.soi < 60)        recos.push({t:'ورشة الحصيلة الشخصية والمهنية — Atelier bilan personnel et professionnel', why:'بُعد الذات ضعيف / Dimension SOI à renforcer'});
+ if (scores.territoire < 60) recos.push({t:'ورشة التعرف على سوق الشغل — Atelier information sur le marché du travail', why:'بُعد السوق ضعيف / Dimension TERRITOIRE à renforcer'});
+ if (scores.methode < 60)    recos.push({t:'ورشة تقنيات البحث عن عمل (CV، رسائل، مقابلات) — Techniques de Recherche d\'Emploi (TRE)', why:'بُعد المنهجية ضعيف / Dimension MÉTHODE à renforcer'});
+ var el = document.getElementById('trefleRecos');
+ if (!el) {
+   el = document.createElement('div');
+   el.id = 'trefleRecos';
+   document.getElementById('trefleResults').appendChild(el);
+ }
+ if (!recos.length) {
+   el.innerHTML = '<div style="margin-top:12px;background:#DCFCE7;border-radius:10px;padding:12px 16px;font-size:0.83rem;color:#166534;">'+L('جميع الأبعاد الأربعة جيدة! واصل خطتك في البحث عن عمل.','Les quatre dimensions sont satisfaisantes ! Poursuivez votre plan de recherche.')+'</div>';
+   return;
+ }
+ el.innerHTML = '<h4 style="color:var(--purple-900);font-size:0.92rem;margin:16px 0 10px;">'+L('ورشات ANAPEC موصى بها حسب تشخيصك','Prestations ANAPEC recommandées selon votre diagnostic')+'</h4>'+
+   recos.map(function(r){
+     return '<div style="border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;margin-bottom:8px;font-size:0.82rem;">'+
+       '<b>'+T(r.t)+'</b><br><span style="color:var(--muted);font-size:0.75rem;">'+T(r.why)+'</span><br>'+
+       '<a href="http://anapec-amrc.org/chercheur_ateliers/inscription" target="_blank" style="color:var(--purple-700);font-weight:700;font-size:0.78rem;">'+L('التسجيل عن بعد','S\'inscrire à distance')+' →</a></div>';
+   }).join('');
 }
 
 /* ══════════ Init ══════════ */
 (function init(){
-  var email = localStorage.getItem('dabanet_session');
-  if (!email) { location.href = '/'; return; }
-  function findMe(){
-    return dbGet('profils').find(function(p){ return (p.email||'').toLowerCase() === email.toLowerCase(); });
-  }
-  ME = findMe();
-  if (ME) renderEspace();
-  dbSync(function(){
-    ME = findMe();
-    if (!ME) { location.href = '/'; return; }
-    renderEspace();
-  });
+ applyLang();
+ var email = localStorage.getItem('dabanet_session');
+ if (!email) { location.href = '/'; return; }
+ function findMe(){
+   return dbGet('profils').find(function(p){ return (p.email||'').toLowerCase() === email.toLowerCase(); });
+ }
+ ME = findMe();
+ if (ME) { renderEspace(); applyLang(); }
+ dbSync(function(){
+   ME = findMe();
+   if (!ME) { location.href = '/'; return; }
+   renderEspace();
+   applyLang();
+ });
 })();
 </script>
 </body>

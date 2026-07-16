@@ -6,12 +6,14 @@
     { "src": "espace.html", "use": "@vercel/static" },
     { "src": "api/chat.mjs", "use": "@vercel/node" },
     { "src": "api/notify.mjs", "use": "@vercel/node" },
-    { "src": "api/data.mjs", "use": "@vercel/node" }
+    { "src": "api/data.mjs", "use": "@vercel/node" },
+    { "src": "api/cv.mjs", "use": "@vercel/node" }
   ],
   "routes": [
     { "src": "/api/chat", "dest": "/api/chat.mjs" },
     { "src": "/api/notify", "dest": "/api/notify.mjs" },
     { "src": "/api/data", "dest": "/api/data.mjs" },
+    { "src": "/api/cv", "dest": "/api/cv.mjs" },
     { "src": "/admin", "dest": "/admin.html" },
     { "src": "/espace", "dest": "/espace.html" },
     { "src": "/(.*)", "dest": "/index.html" }

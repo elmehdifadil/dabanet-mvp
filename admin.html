@@ -7,275 +7,273 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --purple-900:#3A0F45; --purple-800:#4F1359; --purple-700:#7E1F78; --purple-600:#9C2484;
-    --purple-200:#EFD9F0; --purple-100:#FAF3FB;
-    --gold-700:#B36C00; --gold-600:#D88400;
-    --green:#166534; --red:#dc2626;
-    --ink:#2A1733; --muted:#7C6B82; --border:#E8DEEC;
-  }
-  *{ box-sizing:border-box; }
-  body{ margin:0; font-family:'Tajawal',sans-serif; background:#F6F1F8; color:var(--ink); }
-  h1,h2,h3,h4{ font-family:'Cairo',sans-serif; }
+ :root{
+   --purple-900:#3A0F45; --purple-800:#4F1359; --purple-700:#7E1F78; --purple-600:#9C2484;
+   --purple-200:#EFD9F0; --purple-100:#FAF3FB;
+   --gold-700:#B36C00; --gold-600:#D88400;
+   --green:#166534; --red:#dc2626;
+   --ink:#2A1733; --muted:#7C6B82; --border:#E8DEEC;
+ }
+ *{ box-sizing:border-box; }
+ body{ margin:0; font-family:'Tajawal',sans-serif; background:#F6F1F8; color:var(--ink); }
+ h1,h2,h3,h4{ font-family:'Cairo',sans-serif; }
 
-  /* ── Login ── */
-  .login-wrap{ min-height:100vh; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,var(--purple-900),var(--purple-700)); padding:20px; }
-  .login-card{ background:#fff; border-radius:20px; padding:36px 32px; width:100%; max-width:420px; box-shadow:0 24px 60px rgba(0,0,0,0.3); }
-  .login-card h1{ margin:0 0 4px; font-size:1.4rem; color:var(--purple-900); text-align:center; }
-  .login-card .sub{ text-align:center; color:var(--muted); font-size:0.85rem; margin:0 0 24px; }
-  .role-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:18px; }
-  .role-btn{ border:2px solid var(--border); background:#fff; border-radius:14px; padding:18px 12px; cursor:pointer; text-align:center; transition:all .15s; }
-  .role-btn.active{ border-color:var(--purple-600); background:var(--purple-100); }
-  .role-btn .ic{ font-size:1.8rem; }
-  .role-btn .lb{ font-weight:700; font-size:0.88rem; margin-top:6px; color:var(--purple-900); }
-  .login-card input{ width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:10px; font-size:0.95rem; margin-bottom:14px; outline:none; }
-  .login-card input:focus{ border-color:var(--purple-600); }
-  .btn-login{ width:100%; padding:13px; background:linear-gradient(135deg,var(--purple-700),var(--purple-800)); color:#fff; border:none; border-radius:12px; font-family:'Cairo',sans-serif; font-size:1rem; font-weight:800; cursor:pointer; }
-  .login-err{ color:var(--red); font-size:0.82rem; text-align:center; min-height:18px; margin-top:10px; }
-  .demo-hint{ background:var(--purple-100); border-radius:10px; padding:10px 14px; font-size:0.75rem; color:var(--muted); margin-top:16px; line-height:1.6; }
+ /* ── Login ── */
+ .login-wrap{ min-height:100vh; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,var(--purple-900),var(--purple-700)); padding:20px; }
+ .login-card{ background:#fff; border-radius:20px; padding:36px 32px; width:100%; max-width:420px; box-shadow:0 24px 60px rgba(0,0,0,0.3); }
+ .login-card h1{ margin:0 0 4px; font-size:1.4rem; color:var(--purple-900); text-align:center; }
+ .login-card .sub{ text-align:center; color:var(--muted); font-size:0.85rem; margin:0 0 24px; }
+ .role-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:18px; }
+ .role-btn{ border:2px solid var(--border); background:#fff; border-radius:14px; padding:18px 12px; cursor:pointer; text-align:center; transition:all .15s; }
+ .role-btn.active{ border-color:var(--purple-600); background:var(--purple-100); }
+ .role-btn .ic{ font-size:1.8rem; }
+ .role-btn .lb{ font-weight:700; font-size:0.88rem; margin-top:6px; color:var(--purple-900); }
+ .login-card input{ width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:10px; font-size:0.95rem; margin-bottom:14px; outline:none; }
+ .login-card input:focus{ border-color:var(--purple-600); }
+ .btn-login{ width:100%; padding:13px; background:linear-gradient(135deg,var(--purple-700),var(--purple-800)); color:#fff; border:none; border-radius:12px; font-family:'Cairo',sans-serif; font-size:1rem; font-weight:800; cursor:pointer; }
+ .login-err{ color:var(--red); font-size:0.82rem; text-align:center; min-height:18px; margin-top:10px; }
+ .demo-hint{ background:var(--purple-100); border-radius:10px; padding:10px 14px; font-size:0.75rem; color:var(--muted); margin-top:16px; line-height:1.6; }
 
-  /* ── Dashboard ── */
-  .dash{ display:none; }
-  .topbar{ background:var(--purple-900); color:#fff; padding:14px 26px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
-  .topbar .brand{ font-family:'Cairo',sans-serif; font-weight:800; font-size:1.1rem; }
-  .topbar .brand span{ color:var(--gold-600); }
-  .topbar .who{ font-size:0.85rem; opacity:0.85; }
-  .topbar button{ background:rgba(255,255,255,0.12); color:#fff; border:none; border-radius:8px; padding:8px 14px; font-size:0.82rem; cursor:pointer; }
-  .container{ max-width:1100px; margin:0 auto; padding:26px 20px; }
+ /* ── Dashboard ── */
+ .dash{ display:none; }
+ .topbar{ background:var(--purple-900); color:#fff; padding:14px 26px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+ .topbar .brand{ font-family:'Cairo',sans-serif; font-weight:800; font-size:1.1rem; }
+ .topbar .brand span{ color:var(--gold-600); }
+ .topbar .who{ font-size:0.85rem; opacity:0.85; }
+ .topbar button{ background:rgba(255,255,255,0.12); color:#fff; border:none; border-radius:8px; padding:8px 14px; font-size:0.82rem; cursor:pointer; }
+ .container{ max-width:1100px; margin:0 auto; padding:26px 20px; }
 
-  .stats{ display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:16px; margin-bottom:26px; }
-  .stat{ background:#fff; border:1px solid var(--border); border-radius:16px; padding:18px 20px; }
-  .stat .n{ font-family:'Cairo',sans-serif; font-size:1.7rem; font-weight:800; color:var(--purple-800); }
-  .stat .l{ font-size:0.8rem; color:var(--muted); }
+ .stats{ display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:16px; margin-bottom:26px; }
+ .stat{ background:#fff; border:1px solid var(--border); border-radius:16px; padding:18px 20px; }
+ .stat .n{ font-family:'Cairo',sans-serif; font-size:1.7rem; font-weight:800; color:var(--purple-800); }
+ .stat .l{ font-size:0.8rem; color:var(--muted); }
 
-  .tabs{ display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
-  .tab{ background:#fff; border:1.5px solid var(--border); border-radius:10px; padding:9px 18px; font-weight:700; font-size:0.86rem; cursor:pointer; color:var(--muted); }
-  .tab.active{ background:var(--purple-700); border-color:var(--purple-700); color:#fff; }
-  .panel{ display:none; }
-  .panel.active{ display:block; }
+ .tabs{ display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+ .tab{ background:#fff; border:1.5px solid var(--border); border-radius:10px; padding:9px 18px; font-weight:700; font-size:0.86rem; cursor:pointer; color:var(--muted); }
+ .tab.active{ background:var(--purple-700); border-color:var(--purple-700); color:#fff; }
+ .panel{ display:none; }
+ .panel.active{ display:block; }
 
-  .card{ background:#fff; border:1px solid var(--border); border-radius:16px; padding:20px 22px; margin-bottom:16px; }
-  .card h3{ margin:0 0 14px; font-size:1rem; color:var(--purple-900); }
+ .card{ background:#fff; border:1px solid var(--border); border-radius:16px; padding:20px 22px; margin-bottom:16px; }
+ .card h3{ margin:0 0 14px; font-size:1rem; color:var(--purple-900); }
 
-  table{ width:100%; border-collapse:collapse; font-size:0.85rem; }
-  th{ text-align:left; padding:9px 10px; color:var(--muted); font-size:0.75rem; text-transform:uppercase; letter-spacing:0.4px; border-bottom:2px solid var(--border); }
-  td{ padding:11px 10px; border-bottom:1px solid var(--border); vertical-align:middle; }
-  tr:last-child td{ border-bottom:none; }
+ table{ width:100%; border-collapse:collapse; font-size:0.85rem; }
+ th{ text-align:left; padding:9px 10px; color:var(--muted); font-size:0.75rem; text-transform:uppercase; letter-spacing:0.4px; border-bottom:2px solid var(--border); }
+ td{ padding:11px 10px; border-bottom:1px solid var(--border); vertical-align:middle; }
+ tr:last-child td{ border-bottom:none; }
 
-  .badge{ display:inline-block; padding:3px 10px; border-radius:20px; font-size:0.72rem; font-weight:700; }
-  .badge.pending{ background:#FEF3C7; color:#92400E; }
-  .badge.accepted{ background:#DCFCE7; color:var(--green); }
-  .badge.refused{ background:#FEE2E2; color:var(--red); }
+ .badge{ display:inline-block; padding:3px 10px; border-radius:20px; font-size:0.72rem; font-weight:700; }
+ .badge.pending{ background:#FEF3C7; color:#92400E; }
+ .badge.accepted{ background:#DCFCE7; color:var(--green); }
+ .badge.refused{ background:#FEE2E2; color:var(--red); }
 
-  .act{ border:none; border-radius:8px; padding:6px 12px; font-size:0.76rem; font-weight:700; cursor:pointer; margin-right:6px; }
-  .act.ok{ background:var(--green); color:#fff; }
-  .act.no{ background:#fff; color:var(--red); border:1.5px solid var(--red); }
-  .act.del{ background:#fff; color:var(--muted); border:1.5px solid var(--border); }
+ .act{ border:none; border-radius:8px; padding:6px 12px; font-size:0.76rem; font-weight:700; cursor:pointer; margin-right:6px; }
+ .act.ok{ background:var(--green); color:#fff; }
+ .act.no{ background:#fff; color:var(--red); border:1.5px solid var(--red); }
+ .act.del{ background:#fff; color:var(--muted); border:1.5px solid var(--border); }
 
-  .form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px 14px; }
-  .form-grid .full{ grid-column:span 2; }
-  .form-grid label{ font-size:0.78rem; font-weight:700; color:var(--purple-800); display:block; margin-bottom:4px; }
-  .form-grid input, .form-grid select, .form-grid textarea{ width:100%; padding:10px 12px; border:1.5px solid var(--border); border-radius:10px; font-size:0.88rem; font-family:inherit; outline:none; }
-  .btn-add{ margin-top:14px; padding:11px 22px; background:linear-gradient(135deg,var(--gold-600),var(--gold-700)); color:#fff; border:none; border-radius:10px; font-family:'Cairo',sans-serif; font-weight:800; font-size:0.9rem; cursor:pointer; }
-  .empty{ text-align:center; color:var(--muted); padding:26px 0; font-size:0.88rem; }
-  .score-pill{ font-weight:800; color:var(--purple-800); }
-  @media (max-width:640px){ .form-grid{ grid-template-columns:1fr; } .form-grid .full{ grid-column:span 1; } }
+ .form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px 14px; }
+ .form-grid .full{ grid-column:span 2; }
+ .form-grid label{ font-size:0.78rem; font-weight:700; color:var(--purple-800); display:block; margin-bottom:4px; }
+ .form-grid input, .form-grid select, .form-grid textarea{ width:100%; padding:10px 12px; border:1.5px solid var(--border); border-radius:10px; font-size:0.88rem; font-family:inherit; outline:none; }
+ .btn-add{ margin-top:14px; padding:11px 22px; background:linear-gradient(135deg,var(--gold-600),var(--gold-700)); color:#fff; border:none; border-radius:10px; font-family:'Cairo',sans-serif; font-weight:800; font-size:0.9rem; cursor:pointer; }
+ .empty{ text-align:center; color:var(--muted); padding:26px 0; font-size:0.88rem; }
+ .score-pill{ font-weight:800; color:var(--purple-800); }
+ @media (max-width:640px){ .form-grid{ grid-template-columns:1fr; } .form-grid .full{ grid-column:span 1; } }
 </style>
 </head>
 <body>
 
 <!-- ═══════════ LOGIN ═══════════ -->
 <div class="login-wrap" id="loginView">
-  <div class="login-card">
-    <h1>PALUCA <span style="color:var(--gold-600);">Back Office</span></h1>
-    <p class="sub">Espace réservé aux conseillers et aux universités partenaires</p>
+ <div class="login-card">
+   <h1>PALUCA <span style="color:var(--gold-600);">Back Office</span></h1>
+   <p class="sub">Espace réservé aux conseillers et aux universités partenaires</p>
 
-    <input id="loginUser" type="text" placeholder="Nom d'utilisateur" autocomplete="username" onkeydown="if(event.key==='Enter')document.getElementById('loginPass').focus()">
-    <input id="loginPass" type="password" placeholder="Mot de passe" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
-    <button class="btn-login" onclick="doLogin()">Se connecter</button>
-    <div class="login-err" id="loginErr"></div>
+   <input id="loginUser" type="text" placeholder="Nom d'utilisateur" autocomplete="username" onkeydown="if(event.key==='Enter')document.getElementById('loginPass').focus()">
+   <input id="loginPass" type="password" placeholder="Mot de passe" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+   <button class="btn-login" onclick="doLogin()">Se connecter</button>
+   <div class="login-err" id="loginErr"></div>
 
-    <div class="demo-hint">
-      <b>Comptes de démonstration :</b><br>
-      🧑‍💼 Conseiller : <code>conseiller</code> / <code>anapec2026</code><br>
-      🎓 Université : <code>universite</code> / <code>univ2026</code>
-    </div>
-  </div>
+   <div class="demo-hint">
+     <b>Comptes de démonstration :</b><br>Conseiller : <code>conseiller</code> / <code>anapec2026</code><br>Université : <code>universite</code> / <code>univ2026</code>
+   </div>
+ </div>
 </div>
 
 <!-- ═══════════ DASHBOARD CONSEILLER ═══════════ -->
 <div class="dash" id="dashConseiller">
-  <div class="topbar">
-    <div class="brand">PALUCA <span>· Conseiller</span></div>
-    <div style="display:flex;align-items:center;gap:14px;">
-      <span class="who">🧑‍💼 Espace conseiller emploi</span>
-      <button onclick="location.href='/'">← Voir le site</button>
-      <button onclick="logout()">Déconnexion</button>
-    </div>
-  </div>
-  <div class="container">
-    <div class="stats" id="cStats"></div>
+ <div class="topbar">
+   <div class="brand">PALUCA <span>· Conseiller</span></div>
+   <div style="display:flex;align-items:center;gap:14px;">
+     <span class="who">Espace conseiller emploi</span>
+     <button onclick="location.href='/'">← Voir le site</button>
+     <button onclick="logout()">Déconnexion</button>
+   </div>
+ </div>
+ <div class="container">
+   <div class="stats" id="cStats"></div>
 
-    <div class="tabs">
-      <div class="tab active" data-panel="pRdv" onclick="switchTab(this)">📅 Rendez-vous</div>
-      <div class="tab" data-panel="pCreneaux" onclick="switchTab(this)">🗓 Créneaux</div>
-      <div class="tab" data-panel="pValidation" onclick="switchTab(this)">✅ Nouveaux inscrits</div>
-      <div class="tab" data-panel="pAteliers" onclick="switchTab(this)">🎓 Ateliers</div>
-      <div class="tab" data-panel="pNews" onclick="switchTab(this)">📰 Actualités</div>
-      <div class="tab" data-panel="pInscriptions" onclick="switchTab(this)">📋 Inscriptions ateliers</div>
-    </div>
+   <div class="tabs">
+     <div class="tab active" data-panel="pRdv" onclick="switchTab(this)">Rendez-vous</div>
+     <div class="tab" data-panel="pCreneaux" onclick="switchTab(this)">Créneaux</div>
+     <div class="tab" data-panel="pValidation" onclick="switchTab(this)">Nouveaux inscrits</div>
+     <div class="tab" data-panel="pAteliers" onclick="switchTab(this)">Ateliers</div>
+     <div class="tab" data-panel="pNews" onclick="switchTab(this)">Actualités</div>
+     <div class="tab" data-panel="pInscriptions" onclick="switchTab(this)">Inscriptions ateliers</div>
+   </div>
 
-    <!-- Créneaux disponibles -->
-    <div class="panel" id="pCreneaux">
-      <div class="card">
-        <h3>➕ Ajouter un créneau de disponibilité</h3>
-        <p style="color:var(--muted);font-size:0.82rem;margin:0 0 14px;">Les candidats verront ces créneaux dans leur espace et pourront réserver directement.</p>
-        <div class="form-grid">
-          <div><label>Date *</label><input id="cr-date" type="date"></div>
-          <div><label>Heure *</label><input id="cr-heure" type="time" value="10:00"></div>
-          <div class="full"><label>Type d'entretien</label>
-            <select id="cr-type">
-              <option>Par téléphone</option><option>En agence (ANAPEC)</option><option>Par visioconférence</option>
-            </select></div>
-        </div>
-        <button class="btn-add" onclick="addCreneau()">Publier le créneau</button>
-      </div>
-      <div class="card">
-        <h3>🗓 Calendrier des créneaux</h3>
-        <div id="creneauxTable"></div>
-      </div>
-    </div>
+   <!-- Créneaux disponibles -->
+   <div class="panel" id="pCreneaux">
+     <div class="card">
+       <h3> Ajouter un créneau de disponibilité</h3>
+       <p style="color:var(--muted);font-size:0.82rem;margin:0 0 14px;">Les candidats verront ces créneaux dans leur espace et pourront réserver directement.</p>
+       <div class="form-grid">
+         <div><label>Date *</label><input id="cr-date" type="date"></div>
+         <div><label>Heure *</label><input id="cr-heure" type="time" value="10:00"></div>
+         <div class="full"><label>Type d'entretien</label>
+           <select id="cr-type">
+             <option>Par téléphone</option><option>En agence (ANAPEC)</option><option>Par visioconférence</option>
+           </select></div>
+       </div>
+       <button class="btn-add" onclick="addCreneau()">Publier le créneau</button>
+     </div>
+     <div class="card">
+       <h3> Calendrier des créneaux</h3>
+       <div id="creneauxTable"></div>
+     </div>
+   </div>
 
-    <!-- Validation des nouveaux inscrits -->
-    <div class="panel" id="pValidation">
-      <div class="card">
-        <h3>✅ Validation des nouveaux inscrits</h3>
-        <p style="color:var(--muted);font-size:0.82rem;margin:0 0 14px;">Vérifiez les informations des lauréats avant de valider leur compte. Un compte validé reçoit une confirmation WhatsApp.</p>
-        <div id="validationTable"></div>
-      </div>
-    </div>
+   <!-- Validation des nouveaux inscrits -->
+   <div class="panel" id="pValidation">
+     <div class="card">
+       <h3> Validation des nouveaux inscrits</h3>
+       <p style="color:var(--muted);font-size:0.82rem;margin:0 0 14px;">Vérifiez les informations des lauréats avant de valider leur compte. Un compte validé reçoit une confirmation WhatsApp.</p>
+       <div id="validationTable"></div>
+     </div>
+   </div>
 
-    <!-- RDV -->
-    <div class="panel active" id="pRdv">
-      <div class="card">
-        <h3>📅 Demandes de rendez-vous</h3>
-        <div id="rdvTable"></div>
-      </div>
-    </div>
+   <!-- RDV -->
+   <div class="panel active" id="pRdv">
+     <div class="card">
+       <h3> Demandes de rendez-vous</h3>
+       <div id="rdvTable"></div>
+     </div>
+   </div>
 
-    <!-- Ateliers -->
-    <div class="panel" id="pAteliers">
-      <div class="card">
-        <h3>➕ Planifier un nouvel atelier</h3>
-        <div class="form-grid">
-          <div class="full"><label>Titre de l'atelier *</label><input id="at-titre" placeholder="Ex : Atelier LinkedIn et personal branding"></div>
-          <div><label>Date & heure *</label><input id="at-date" placeholder="Ex : Lundi 3 août · 10h00"></div>
-          <div><label>Lieu *</label><input id="at-lieu" placeholder="Ex : Agence ANAPEC Rabat / Zoom"></div>
-          <div><label>Places disponibles</label><input id="at-places" placeholder="Ex : 15 places restantes"></div>
-        </div>
-        <button class="btn-add" onclick="addAtelier()">Publier l'atelier</button>
-      </div>
-      <div class="card">
-        <h3>🎓 Ateliers publiés (visibles sur le site)</h3>
-        <div id="atelierTable"></div>
-      </div>
-    </div>
+   <!-- Ateliers -->
+   <div class="panel" id="pAteliers">
+     <div class="card">
+       <h3> Planifier un nouvel atelier</h3>
+       <div class="form-grid">
+         <div class="full"><label>Titre de l'atelier *</label><input id="at-titre" placeholder="Ex : Atelier LinkedIn et personal branding"></div>
+         <div><label>Date & heure *</label><input id="at-date" placeholder="Ex : Lundi 3 août · 10h00"></div>
+         <div><label>Lieu *</label><input id="at-lieu" placeholder="Ex : Agence ANAPEC Rabat / Zoom"></div>
+         <div><label>Places disponibles</label><input id="at-places" placeholder="Ex : 15 places restantes"></div>
+       </div>
+       <button class="btn-add" onclick="addAtelier()">Publier l'atelier</button>
+     </div>
+     <div class="card">
+       <h3> Ateliers publiés (visibles sur le site)</h3>
+       <div id="atelierTable"></div>
+     </div>
+   </div>
 
-    <!-- News -->
-    <div class="panel" id="pNews">
-      <div class="card">
-        <h3>➕ Publier une actualité</h3>
-        <div class="form-grid">
-          <div class="full"><label>Titre *</label><input id="nw-titre" placeholder="Ex : Nouveau salon de l'emploi à Rabat"></div>
-          <div class="full"><label>Description *</label><textarea id="nw-desc" rows="2" placeholder="Résumé de l'actualité..."></textarea></div>
-          <div><label>Catégorie</label>
-            <select id="nw-tag">
-              <option>Recrutement</option><option>Formation</option><option>Salon emploi</option>
-              <option>Atelier</option><option>Opportunité</option>
-            </select></div>
-          <div><label>Date affichée</label><input id="nw-date" placeholder="Ex : 12 août 2026"></div>
-          <div class="full"><label>Lien (optionnel)</label><input id="nw-link" placeholder="https://..."></div>
-        </div>
-        <button class="btn-add" onclick="addNews()">Publier l'actualité</button>
-      </div>
-      <div class="card">
-        <h3>📰 Actualités publiées (affichées en tête du site)</h3>
-        <div id="newsTable"></div>
-      </div>
-    </div>
+   <!-- News -->
+   <div class="panel" id="pNews">
+     <div class="card">
+       <h3> Publier une actualité</h3>
+       <div class="form-grid">
+         <div class="full"><label>Titre *</label><input id="nw-titre" placeholder="Ex : Nouveau salon de l'emploi à Rabat"></div>
+         <div class="full"><label>Description *</label><textarea id="nw-desc" rows="2" placeholder="Résumé de l'actualité..."></textarea></div>
+         <div><label>Catégorie</label>
+           <select id="nw-tag">
+             <option>Recrutement</option><option>Formation</option><option>Salon emploi</option>
+             <option>Atelier</option><option>Opportunité</option>
+           </select></div>
+         <div><label>Date affichée</label><input id="nw-date" placeholder="Ex : 12 août 2026"></div>
+         <div class="full"><label>Lien (optionnel)</label><input id="nw-link" placeholder="https://..."></div>
+       </div>
+       <button class="btn-add" onclick="addNews()">Publier l'actualité</button>
+     </div>
+     <div class="card">
+       <h3> Actualités publiées (affichées en tête du site)</h3>
+       <div id="newsTable"></div>
+     </div>
+   </div>
 
-    <!-- Inscriptions -->
-    <div class="panel" id="pInscriptions">
-      <div class="card">
-        <h3>📋 Inscriptions aux ateliers</h3>
-        <div id="inscTable"></div>
-      </div>
-    </div>
-  </div>
+   <!-- Inscriptions -->
+   <div class="panel" id="pInscriptions">
+     <div class="card">
+       <h3> Inscriptions aux ateliers</h3>
+       <div id="inscTable"></div>
+     </div>
+   </div>
+ </div>
 </div>
 
 <!-- ═══════════ DASHBOARD UNIVERSITÉ ═══════════ -->
 <div class="dash" id="dashUniv">
-  <div class="topbar">
-    <div class="brand">PALUCA <span>· Université</span></div>
-    <div style="display:flex;align-items:center;gap:14px;">
-      <span class="who">🎓 Suivi des lauréats</span>
-      <button onclick="location.href='/'">← Voir le site</button>
-      <button onclick="logout()">Déconnexion</button>
-    </div>
-  </div>
-  <div class="container">
-    <div class="stats" id="uStats"></div>
+ <div class="topbar">
+   <div class="brand">PALUCA <span>· Université</span></div>
+   <div style="display:flex;align-items:center;gap:14px;">
+     <span class="who">Suivi des lauréats</span>
+     <button onclick="location.href='/'">← Voir le site</button>
+     <button onclick="logout()">Déconnexion</button>
+   </div>
+ </div>
+ <div class="container">
+   <div class="stats" id="uStats"></div>
 
-    <div class="card">
-      <h3>🎓 Lauréats inscrits sur la plateforme</h3>
-      <div id="profilTable"></div>
-    </div>
+   <div class="card">
+     <h3> Lauréats inscrits sur la plateforme</h3>
+     <div id="profilTable"></div>
+   </div>
 
-    <div class="card">
-      <h3>📅 Rendez-vous conseiller demandés par les lauréats</h3>
-      <div id="uRdvTable"></div>
-    </div>
+   <div class="card">
+     <h3> Rendez-vous conseiller demandés par les lauréats</h3>
+     <div id="uRdvTable"></div>
+   </div>
 
-    <div class="card">
-      <h3>📋 Participation aux ateliers</h3>
-      <div id="uInscTable"></div>
-    </div>
-  </div>
+   <div class="card">
+     <h3> Participation aux ateliers</h3>
+     <div id="uInscTable"></div>
+   </div>
+ </div>
 </div>
 
 <!-- Modal profil candidat (aperçu + modification) -->
 <div id="profilModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;align-items:center;justify-content:center;">
-  <div style="background:#fff;border-radius:16px;width:min(620px,94vw);max-height:90vh;overflow-y:auto;padding:24px 28px;position:relative;">
-    <button onclick="document.getElementById('profilModal').style.display='none'" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);">✕</button>
-    <h3 id="profilTitle" style="color:var(--purple-900);margin:0 0 4px;font-size:1.02rem;">👤 Profil candidat</h3>
-    <p style="color:var(--muted);font-size:0.76rem;margin:0 0 16px;">Aperçu du profil — vous pouvez corriger les informations puis enregistrer.</p>
-    <div class="form-grid">
-      <div><label>Nom</label><input id="pf-nomfamille"></div>
-      <div><label>Prénom</label><input id="pf-prenom"></div>
-      <div><label>Date de naissance</label><input id="pf-naissance" type="date"></div>
-      <div><label>Ville</label><input id="pf-ville"></div>
-      <div><label>Email (identifiant)</label><input id="pf-email" disabled style="background:#F6F1F8;color:var(--muted);"></div>
-      <div><label>Téléphone WhatsApp</label><input id="pf-tel"></div>
-      <div><label>Niveau d'études</label><input id="pf-niveau"></div>
-      <div><label>Diplôme / Spécialité</label><input id="pf-filiere"></div>
-      <div><label>Expérience</label><input id="pf-experience"></div>
-      <div><label>Langues</label><input id="pf-langues"></div>
-      <div class="full"><label>Compétences</label><input id="pf-competences"></div>
-      <div class="full"><label>Objectif professionnel</label><textarea id="pf-objectif" rows="2"></textarea></div>
-    </div>
-    <button class="btn-add" style="width:100%;margin-top:16px;" onclick="saveProfil()">💾 Enregistrer les modifications</button>
-    <p id="pf-msg" style="text-align:center;font-size:0.8rem;margin:8px 0 0;min-height:16px;"></p>
-  </div>
+ <div style="background:#fff;border-radius:16px;width:min(620px,94vw);max-height:90vh;overflow-y:auto;padding:24px 28px;position:relative;">
+   <button onclick="document.getElementById('profilModal').style.display='none'" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);">✕</button>
+   <h3 id="profilTitle" style="color:var(--purple-900);margin:0 0 4px;font-size:1.02rem;">Profil candidat</h3>
+   <p style="color:var(--muted);font-size:0.76rem;margin:0 0 16px;">Aperçu du profil — vous pouvez corriger les informations puis enregistrer.</p>
+   <div class="form-grid">
+     <div><label>Nom</label><input id="pf-nomfamille"></div>
+     <div><label>Prénom</label><input id="pf-prenom"></div>
+     <div><label>Date de naissance</label><input id="pf-naissance" type="date"></div>
+     <div><label>Ville</label><input id="pf-ville"></div>
+     <div><label>Email (identifiant)</label><input id="pf-email" disabled style="background:#F6F1F8;color:var(--muted);"></div>
+     <div><label>Téléphone WhatsApp</label><input id="pf-tel"></div>
+     <div><label>Niveau d'études</label><input id="pf-niveau"></div>
+     <div><label>Diplôme / Spécialité</label><input id="pf-filiere"></div>
+     <div><label>Expérience</label><input id="pf-experience"></div>
+     <div><label>Langues</label><input id="pf-langues"></div>
+     <div class="full"><label>Compétences</label><input id="pf-competences"></div>
+     <div class="full"><label>Objectif professionnel</label><textarea id="pf-objectif" rows="2"></textarea></div>
+   </div>
+   <button class="btn-add" style="width:100%;margin-top:16px;" onclick="saveProfil()">Enregistrer les modifications</button>
+   <p id="pf-msg" style="text-align:center;font-size:0.8rem;margin:8px 0 0;min-height:16px;"></p>
+ </div>
 </div>
 
 <!-- Modal diagnostic conseiller -->
 <div id="diagModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;align-items:center;justify-content:center;">
-  <div style="background:#fff;border-radius:16px;width:min(680px,94vw);max-height:88vh;overflow-y:auto;padding:24px 28px;position:relative;">
-    <button onclick="document.getElementById('diagModal').style.display='none'" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);">✕</button>
-    <h3 id="diagTitle" style="color:var(--purple-900);margin:0 0 14px;font-size:1.02rem;">Diagnostic</h3>
-    <div id="diagBody"></div>
-  </div>
+ <div style="background:#fff;border-radius:16px;width:min(680px,94vw);max-height:88vh;overflow-y:auto;padding:24px 28px;position:relative;">
+   <button onclick="document.getElementById('diagModal').style.display='none'" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);">✕</button>
+   <h3 id="diagTitle" style="color:var(--purple-900);margin:0 0 14px;font-size:1.02rem;">Diagnostic</h3>
+   <div id="diagBody"></div>
+ </div>
 </div>
 
 <script>
@@ -283,31 +281,31 @@
 window.DB = { rdvs:null, profils:null, news:null, ateliers:null, inscriptions:null };
 function shortKey(k){ return k.replace(/^dabanet_/, ''); }
 function store(k){
-  var key = shortKey(k);
-  if (window.DB[key]) return window.DB[key];
-  try { return JSON.parse(localStorage.getItem('dabanet_' + key) || '[]'); } catch(e){ return []; }
+ var key = shortKey(k);
+ if (window.DB[key]) return window.DB[key];
+ try { return JSON.parse(localStorage.getItem('dabanet_'+ key) || '[]'); } catch(e){ return []; }
 }
 function save(k,v){
-  var key = shortKey(k);
-  window.DB[key] = v;
-  try { localStorage.setItem('dabanet_' + key, JSON.stringify(v)); } catch(e){}
-  fetch('/api/data', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ key: key, value: v })
-  }).catch(function(){});
+ var key = shortKey(k);
+ window.DB[key] = v;
+ try { localStorage.setItem('dabanet_'+ key, JSON.stringify(v)); } catch(e){}
+ fetch('/api/data', {
+   method:'POST', headers:{'Content-Type':'application/json'},
+   body: JSON.stringify({ key: key, value: v })
+ }).catch(function(){});
 }
 function dbSync(onDone){
-  fetch('/api/data').then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
-    if (d) {
-      ['rdvs','profils','news','ateliers','inscriptions','creneaux'].forEach(function(k){
-        if (Array.isArray(d[k])) {
-          window.DB[k] = d[k];
-          try { localStorage.setItem('dabanet_' + k, JSON.stringify(d[k])); } catch(e){}
-        }
-      });
-    }
-    if (onDone) onDone();
-  }).catch(function(){ if (onDone) onDone(); });
+ fetch('/api/data').then(function(r){ return r.ok ? r.json() : null; }).then(function(d){
+   if (d) {
+     ['rdvs','profils','news','ateliers','inscriptions','creneaux'].forEach(function(k){
+       if (Array.isArray(d[k])) {
+         window.DB[k] = d[k];
+         try { localStorage.setItem('dabanet_'+ k, JSON.stringify(d[k])); } catch(e){}
+       }
+     });
+   }
+   if (onDone) onDone();
+ }).catch(function(){ if (onDone) onDone(); });
 }
 function esc(s){ var d=document.createElement('div'); d.textContent=String(s==null?'':s); return d.innerHTML; }
 
@@ -316,458 +314,458 @@ var PF_FIELDS = ['nomfamille','prenom','naissance','ville','email','tel','niveau
 var pfCurrentEmail = null;
 
 function voirProfil(email){
-  var p = store('dabanet_profils').find(function(x){ return x.email === email; });
-  if (!p) return;
-  pfCurrentEmail = email;
-  document.getElementById('profilTitle').textContent = '👤 Profil candidat — ' + p.nom;
-  PF_FIELDS.forEach(function(f){
-    var el = document.getElementById('pf-' + f);
-    if (el) el.value = p[f] || '';
-  });
-  document.getElementById('pf-msg').textContent = '';
-  document.getElementById('profilModal').style.display = 'flex';
+ var p = store('dabanet_profils').find(function(x){ return x.email === email; });
+ if (!p) return;
+ pfCurrentEmail = email;
+ document.getElementById('profilTitle').textContent = 'Profil candidat — '+ p.nom;
+ PF_FIELDS.forEach(function(f){
+   var el = document.getElementById('pf-'+ f);
+   if (el) el.value = p[f] || '';
+ });
+ document.getElementById('pf-msg').textContent = '';
+ document.getElementById('profilModal').style.display = 'flex';
 }
 
 function saveProfil(){
-  var profils = store('dabanet_profils');
-  var p = profils.find(function(x){ return x.email === pfCurrentEmail; });
-  if (!p) return;
-  PF_FIELDS.forEach(function(f){
-    if (f === 'email') return; // identifier stays unchanged
-    var el = document.getElementById('pf-' + f);
-    if (el) p[f] = el.value.trim();
-  });
-  p.nom = (p.prenom + ' ' + p.nomfamille).trim() || p.nom;
-  p.modifieParConseiller = new Date().toISOString();
-  save('dabanet_profils', profils);
-  var msg = document.getElementById('pf-msg');
-  msg.textContent = '✅ Profil mis à jour.';
-  msg.style.color = 'var(--green)';
-  renderConseiller();
+ var profils = store('dabanet_profils');
+ var p = profils.find(function(x){ return x.email === pfCurrentEmail; });
+ if (!p) return;
+ PF_FIELDS.forEach(function(f){
+   if (f === 'email') return; // identifier stays unchanged
+   var el = document.getElementById('pf-'+ f);
+   if (el) p[f] = el.value.trim();
+ });
+ p.nom = (p.prenom + ''+ p.nomfamille).trim() || p.nom;
+ p.modifieParConseiller = new Date().toISOString();
+ save('dabanet_profils', profils);
+ var msg = document.getElementById('pf-msg');
+ msg.textContent = 'Profil mis à jour.';
+ msg.style.color = 'var(--green)';
+ renderConseiller();
 }
 
 /* ══════════ Diagnostic conseiller (modal) ══════════ */
 function voirDiagnostic(email){
-  var p = store('dabanet_profils').find(function(x){ return x.email === email; });
-  if (!p || !p.positionnement) return;
-  var s = p.positionnement.scores || {};
-  var date = p.positionnement.date ? new Date(p.positionnement.date).toLocaleDateString('fr-MA') : '—';
+ var p = store('dabanet_profils').find(function(x){ return x.email === email; });
+ if (!p || !p.positionnement) return;
+ var s = p.positionnement.scores || {};
+ var date = p.positionnement.date ? new Date(p.positionnement.date).toLocaleDateString('fr-MA') : '—';
 
-  // Compact scoring bars per dimension
-  var DIMS = [
-    { k:'soi',        l:'SOI — Connaissance de son profil',      c:'#9C2484' },
-    { k:'projet',     l:'PROJET — Projet professionnel',          c:'#7E1F78' },
-    { k:'territoire', l:'TERRITOIRE — Marché de l\'emploi',       c:'#B36C00' },
-    { k:'methode',    l:'MÉTHODE — Techniques de recherche',      c:'#166534' },
-  ];
-  var barsHtml = DIMS.map(function(d){
-    var v = s[d.k] || 0;
-    return '<div style="margin-bottom:9px;">' +
-      '<div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:3px;"><b style="color:'+d.c+';">'+d.l+'</b><b>'+v+'/100</b></div>' +
-      '<div style="background:#E8DEEC;border-radius:20px;height:8px;overflow:hidden;"><div style="width:'+v+'%;height:100%;background:'+d.c+';"></div></div></div>';
-  }).join('');
+ // Compact scoring bars per dimension
+ var DIMS = [
+   { k:'soi',        l:'SOI — Connaissance de son profil',      c:'#9C2484'},
+   { k:'projet',     l:'PROJET — Projet professionnel',          c:'#7E1F78'},
+   { k:'territoire', l:'TERRITOIRE — Marché de l\'emploi',       c:'#B36C00'},
+   { k:'methode',    l:'MÉTHODE — Techniques de recherche',      c:'#166534'},
+ ];
+ var barsHtml = DIMS.map(function(d){
+   var v = s[d.k] || 0;
+   return '<div style="margin-bottom:9px;">'+
+     '<div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:3px;"><b style="color:'+d.c+';">'+d.l+'</b><b>'+v+'/100</b></div>'+
+     '<div style="background:#E8DEEC;border-radius:20px;height:8px;overflow:hidden;"><div style="width:'+v+'%;height:100%;background:'+d.c+';"></div></div></div>';
+ }).join('');
 
-  // Commentaire adressé au conseiller (concis), clamped to a few lines
-  var resume = (p.positionnement.diagnosticConseiller || p.positionnement.diagnostic || '').trim();
-  if (!resume) resume = 'Résultat chiffré uniquement — commentaire IA non disponible.';
-  var lignes = resume.split('\n').filter(function(l){ return l.trim() && !/^[\s*#:—-]+$/.test(l); }).slice(0, 7);
-  resume = lignes.join('\n');
+ // Commentaire adressé au conseiller (concis), clamped to a few lines
+ var resume = (p.positionnement.diagnosticConseiller || p.positionnement.diagnostic || '').trim();
+ if (!resume) resume = 'Résultat chiffré uniquement — commentaire IA non disponible.';
+ var lignes = resume.split('\n').filter(function(l){ return l.trim() && !/^[\s*#:—-]+$/.test(l); }).slice(0, 7);
+ resume = lignes.join('\n');
 
-  // Recommended prestations from weak dimensions (deterministic, compact)
-  var recos = [];
-  if ((s.projet||0)     < 60) recos.push('Atelier élaboration du projet professionnel');
-  if ((s.soi||0)        < 60) recos.push('Atelier bilan personnel et professionnel');
-  if ((s.territoire||0) < 60) recos.push('Atelier information sur le marché du travail');
-  if ((s.methode||0)    < 60) recos.push('Techniques de Recherche d\'Emploi (CV, candidatures, entretiens)');
+ // Recommended prestations from weak dimensions (deterministic, compact)
+ var recos = [];
+ if ((s.projet||0)     < 60) recos.push('Atelier élaboration du projet professionnel');
+ if ((s.soi||0)        < 60) recos.push('Atelier bilan personnel et professionnel');
+ if ((s.territoire||0) < 60) recos.push('Atelier information sur le marché du travail');
+ if ((s.methode||0)    < 60) recos.push('Techniques de Recherche d\'Emploi (CV, candidatures, entretiens)');
 
-  var col = (s.global||0) >= 70 ? 'var(--green)' : (s.global||0) >= 45 ? 'var(--gold-700)' : 'var(--red)';
-  document.getElementById('diagTitle').textContent = '📋 Rapport de diagnostic — ' + p.nom;
-  document.getElementById('diagBody').innerHTML =
-    '<div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">' +
-      '<div style="font-family:\'Cairo\',sans-serif;font-size:1.9rem;font-weight:800;color:'+col+';">'+(s.global||0)+'<span style="font-size:0.85rem;color:var(--muted);">/100</span></div>' +
-      '<div style="font-size:0.74rem;color:var(--muted);">Score général de positionnement<br>Réalisé le '+date+'</div>' +
-    '</div>' +
-    barsHtml +
-    '<div style="margin-top:12px;background:var(--purple-100);border-radius:10px;padding:11px 14px;font-size:0.8rem;line-height:1.6;white-space:pre-wrap;"><b style="color:var(--purple-900);">💬 Commentaire pour le conseiller :</b>\n'+esc(resume)+'</div>' +
-    (recos.length
-      ? '<div style="margin-top:10px;font-size:0.78rem;"><b style="color:var(--purple-900);">🎯 Prestations recommandées :</b><ul style="margin:6px 0 0;padding-right:18px;padding-left:18px;">'+recos.map(function(r){ return '<li>'+r+'</li>'; }).join('')+'</ul></div>'
-      : '<div style="margin-top:10px;font-size:0.78rem;color:var(--green);"><b>✅ Aucune prestation urgente — les 4 dimensions sont satisfaisantes.</b></div>');
-  document.getElementById('diagModal').style.display = 'flex';
+ var col = (s.global||0) >= 70 ? 'var(--green)': (s.global||0) >= 45 ? 'var(--gold-700)': 'var(--red)';
+ document.getElementById('diagTitle').textContent = 'Rapport de diagnostic — '+ p.nom;
+ document.getElementById('diagBody').innerHTML =
+   '<div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">'+
+     '<div style="font-family:\'Cairo\',sans-serif;font-size:1.9rem;font-weight:800;color:'+col+';">'+(s.global||0)+'<span style="font-size:0.85rem;color:var(--muted);">/100</span></div>'+
+     '<div style="font-size:0.74rem;color:var(--muted);">Score général de positionnement<br>Réalisé le '+date+'</div>'+
+   '</div>'+
+   barsHtml +
+   '<div style="margin-top:12px;background:var(--purple-100);border-radius:10px;padding:11px 14px;font-size:0.8rem;line-height:1.6;white-space:pre-wrap;"><b style="color:var(--purple-900);">Commentaire pour le conseiller :</b>\n'+esc(resume)+'</div>'+
+   (recos.length
+     ? '<div style="margin-top:10px;font-size:0.78rem;"><b style="color:var(--purple-900);">Prestations recommandées :</b><ul style="margin:6px 0 0;padding-right:18px;padding-left:18px;">'+recos.map(function(r){ return '<li>'+r+'</li>'; }).join('')+'</ul></div>'
+     : '<div style="margin-top:10px;font-size:0.78rem;color:var(--green);"><b> Aucune prestation urgente — les 4 dimensions sont satisfaisantes.</b></div>');
+ document.getElementById('diagModal').style.display = 'flex';
 }
 
 /* ══════════ Automatic WhatsApp notifications ══════════ */
 function notifyWA(phoneOrPhones, type, data){
-  var payload = Array.isArray(phoneOrPhones)
-    ? { phones: phoneOrPhones, type: type, data: data }
-    : { phone: phoneOrPhones, type: type, data: data };
-  return fetch('/api/notify', {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  }).then(function(r){ return r.json(); }).catch(function(){ return { success:false }; });
+ var payload = Array.isArray(phoneOrPhones)
+   ? { phones: phoneOrPhones, type: type, data: data }
+   : { phone: phoneOrPhones, type: type, data: data };
+ return fetch('/api/notify', {
+   method: 'POST', headers: { 'Content-Type': 'application/json'},
+   body: JSON.stringify(payload)
+ }).then(function(r){ return r.json(); }).catch(function(){ return { success:false }; });
 }
 // Phone of a laureate: from the RDV record, else from their profile (matched by email)
 function phoneFor(rdv){
-  if (rdv.tel) return rdv.tel;
-  var prof = store('dabanet_profils').find(function(p){
-    return p.email && rdv.email && p.email.toLowerCase() === rdv.email.toLowerCase();
-  });
-  return prof && prof.tel ? prof.tel : null;
+ if (rdv.tel) return rdv.tel;
+ var prof = store('dabanet_profils').find(function(p){
+   return p.email && rdv.email && p.email.toLowerCase() === rdv.email.toLowerCase();
+ });
+ return prof && prof.tel ? prof.tel : null;
 }
 // All laureates who gave a WhatsApp number
 function allPhones(){
-  return store('dabanet_profils').map(function(p){ return p.tel; }).filter(Boolean);
+ return store('dabanet_profils').map(function(p){ return p.tel; }).filter(Boolean);
 }
 
 /* ══════════ Auth (demo accounts: username + password) ══════════ */
 var ACCOUNTS = {
-  'conseiller':  { pass: 'anapec2026', role: 'conseiller' },
-  'universite':  { pass: 'univ2026',   role: 'universite' }
+ 'conseiller':  { pass: 'anapec2026', role: 'conseiller'},
+ 'universite':  { pass: 'univ2026',   role: 'universite'}
 };
 
 function doLogin(){
-  var user = document.getElementById('loginUser').value.trim().toLowerCase();
-  var pass = document.getElementById('loginPass').value;
-  var acc = ACCOUNTS[user];
-  if (!user || !pass) {
-    document.getElementById('loginErr').textContent = '⚠️ Entrez le nom d\'utilisateur et le mot de passe.';
-    return;
-  }
-  if (!acc || acc.pass !== pass) {
-    document.getElementById('loginErr').textContent = '❌ Identifiants incorrects.';
-    return;
-  }
-  sessionStorage.setItem('dabanet_admin_role', acc.role);
-  showDash();
+ var user = document.getElementById('loginUser').value.trim().toLowerCase();
+ var pass = document.getElementById('loginPass').value;
+ var acc = ACCOUNTS[user];
+ if (!user || !pass) {
+   document.getElementById('loginErr').textContent = 'Entrez le nom d\'utilisateur et le mot de passe.';
+   return;
+ }
+ if (!acc || acc.pass !== pass) {
+   document.getElementById('loginErr').textContent = 'Identifiants incorrects.';
+   return;
+ }
+ sessionStorage.setItem('dabanet_admin_role', acc.role);
+ showDash();
 }
 function logout(){
-  sessionStorage.removeItem('dabanet_admin_role');
-  location.reload();
+ sessionStorage.removeItem('dabanet_admin_role');
+ location.reload();
 }
 function showDash(){
-  var r = sessionStorage.getItem('dabanet_admin_role');
-  if (!r) return;
-  document.getElementById('loginView').style.display = 'none';
-  if (r === 'conseiller') {
-    document.getElementById('dashConseiller').style.display = 'block';
-    renderConseiller();
-  } else {
-    document.getElementById('dashUniv').style.display = 'block';
-    renderUniv();
-  }
+ var r = sessionStorage.getItem('dabanet_admin_role');
+ if (!r) return;
+ document.getElementById('loginView').style.display = 'none';
+ if (r === 'conseiller') {
+   document.getElementById('dashConseiller').style.display = 'block';
+   renderConseiller();
+ } else {
+   document.getElementById('dashUniv').style.display = 'block';
+   renderUniv();
+ }
 }
 
 /* ══════════ Tabs ══════════ */
 function switchTab(el){
-  document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
-  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
-  el.classList.add('active');
-  document.getElementById(el.getAttribute('data-panel')).classList.add('active');
+ document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+ document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+ el.classList.add('active');
+ document.getElementById(el.getAttribute('data-panel')).classList.add('active');
 }
 
 /* ══════════ CONSEILLER ══════════ */
 function renderConseiller(){
-  var rdvs = store('dabanet_rdvs');
-  var ateliers = store('dabanet_ateliers');
-  var news = store('dabanet_news');
-  var insc = store('dabanet_inscriptions');
-  var profils = store('dabanet_profils');
-  var creneaux = store('dabanet_creneaux');
-  var pending = rdvs.filter(function(r){ return r.status==='pending'; }).length;
-  var aValider = profils.filter(function(p){ return !p.verifie; }).length;
-  var libres = creneaux.filter(function(c){ return c.status==='libre'; }).length;
+ var rdvs = store('dabanet_rdvs');
+ var ateliers = store('dabanet_ateliers');
+ var news = store('dabanet_news');
+ var insc = store('dabanet_inscriptions');
+ var profils = store('dabanet_profils');
+ var creneaux = store('dabanet_creneaux');
+ var pending = rdvs.filter(function(r){ return r.status==='pending'; }).length;
+ var aValider = profils.filter(function(p){ return !p.verifie; }).length;
+ var libres = creneaux.filter(function(c){ return c.status==='libre'; }).length;
 
-  document.getElementById('cStats').innerHTML =
-    stat(pending, 'RDV en attente') + stat(aValider, 'Inscrits à valider') +
-    stat(libres, 'Créneaux libres') + stat(ateliers.length, 'Ateliers publiés') +
-    stat(news.length, 'Actualités publiées') + stat(insc.length, 'Inscriptions ateliers');
+ document.getElementById('cStats').innerHTML =
+   stat(pending, 'RDV en attente') + stat(aValider, 'Inscrits à valider') +
+   stat(libres, 'Créneaux libres') + stat(ateliers.length, 'Ateliers publiés') +
+   stat(news.length, 'Actualités publiées') + stat(insc.length, 'Inscriptions ateliers');
 
-  renderRdvTable();
-  renderCreneauxTable();
-  renderValidationTable();
-  renderAtelierTable();
-  renderNewsTable();
-  renderInscTable('inscTable');
+ renderRdvTable();
+ renderCreneauxTable();
+ renderValidationTable();
+ renderAtelierTable();
+ renderNewsTable();
+ renderInscTable('inscTable');
 }
 
 /* ── Créneaux (calendrier de disponibilités) ── */
 function addCreneau(){
-  var date = document.getElementById('cr-date').value;
-  var heure = document.getElementById('cr-heure').value;
-  var type = document.getElementById('cr-type').value;
-  if (!date || !heure) { alert('⚠️ Choisissez une date et une heure.'); return; }
-  var creneaux = store('dabanet_creneaux');
-  creneaux.push({ id: Date.now(), date: date, heure: heure, type: type, status: 'libre', reservePar: '' });
-  creneaux.sort(function(a,b){ return (a.date+a.heure) < (b.date+b.heure) ? -1 : 1; });
-  save('dabanet_creneaux', creneaux);
-  document.getElementById('cr-date').value='';
-  renderConseiller();
-  alert('✅ Créneau publié ! Les candidats peuvent maintenant le réserver.');
+ var date = document.getElementById('cr-date').value;
+ var heure = document.getElementById('cr-heure').value;
+ var type = document.getElementById('cr-type').value;
+ if (!date || !heure) { alert('Choisissez une date et une heure.'); return; }
+ var creneaux = store('dabanet_creneaux');
+ creneaux.push({ id: Date.now(), date: date, heure: heure, type: type, status: 'libre', reservePar: ''});
+ creneaux.sort(function(a,b){ return (a.date+a.heure) < (b.date+b.heure) ? -1 : 1; });
+ save('dabanet_creneaux', creneaux);
+ document.getElementById('cr-date').value='';
+ renderConseiller();
+ alert('Créneau publié ! Les candidats peuvent maintenant le réserver.');
 }
 function delCreneau(id){
-  save('dabanet_creneaux', store('dabanet_creneaux').filter(function(c){ return c.id!==id; }));
-  renderConseiller();
+ save('dabanet_creneaux', store('dabanet_creneaux').filter(function(c){ return c.id!==id; }));
+ renderConseiller();
 }
 function renderCreneauxTable(){
-  var creneaux = store('dabanet_creneaux');
-  var el = document.getElementById('creneauxTable');
-  if (!creneaux.length) { el.innerHTML = '<div class="empty">Aucun créneau publié. Ajoutez vos disponibilités ci-dessus.</div>'; return; }
-  // Group by date
-  var byDate = {};
-  creneaux.forEach(function(c){ (byDate[c.date] = byDate[c.date] || []).push(c); });
-  el.innerHTML = Object.keys(byDate).sort().map(function(d){
-    var jour = new Date(d + 'T00:00:00');
-    var jours = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
-    var label = jours[jour.getDay()] + ' ' + jour.toLocaleDateString('fr-MA');
-    return '<div style="margin-bottom:14px;">' +
-      '<div style="font-weight:800;color:var(--purple-900);font-size:0.88rem;margin-bottom:8px;">📆 ' + label + '</div>' +
-      '<div style="display:flex;flex-wrap:wrap;gap:8px;">' +
-      byDate[d].map(function(c){
-        var libre = c.status === 'libre';
-        return '<div style="border:1.5px solid ' + (libre ? '#bbf7d0' : '#fecaca') + ';background:' + (libre ? '#f0fdf4' : '#fef2f2') + ';border-radius:10px;padding:8px 12px;font-size:0.8rem;">' +
-          '<b>' + esc(c.heure) + '</b> · ' + esc(c.type) +
-          (libre ? ' <span class="badge accepted">Libre</span>'
-                 : ' <span class="badge refused">Réservé' + (c.reservePar ? ' — ' + esc(c.reservePar) : '') + '</span>') +
-          ' <button class="act del" style="margin-left:6px;padding:2px 8px;" onclick="delCreneau(' + c.id + ')">🗑</button>' +
-          '</div>';
-      }).join('') +
-      '</div></div>';
-  }).join('');
+ var creneaux = store('dabanet_creneaux');
+ var el = document.getElementById('creneauxTable');
+ if (!creneaux.length) { el.innerHTML = '<div class="empty">Aucun créneau publié. Ajoutez vos disponibilités ci-dessus.</div>'; return; }
+ // Group by date
+ var byDate = {};
+ creneaux.forEach(function(c){ (byDate[c.date] = byDate[c.date] || []).push(c); });
+ el.innerHTML = Object.keys(byDate).sort().map(function(d){
+   var jour = new Date(d + 'T00:00:00');
+   var jours = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+   var label = jours[jour.getDay()] + ''+ jour.toLocaleDateString('fr-MA');
+   return '<div style="margin-bottom:14px;">'+
+     '<div style="font-weight:800;color:var(--purple-900);font-size:0.88rem;margin-bottom:8px;">'+ label + '</div>'+
+     '<div style="display:flex;flex-wrap:wrap;gap:8px;">'+
+     byDate[d].map(function(c){
+       var libre = c.status === 'libre';
+       return '<div style="border:1.5px solid '+ (libre ? '#bbf7d0': '#fecaca') + ';background:'+ (libre ? '#f0fdf4': '#fef2f2') + ';border-radius:10px;padding:8px 12px;font-size:0.8rem;">'+
+         '<b>'+ esc(c.heure) + '</b> · '+ esc(c.type) +
+         (libre ? '<span class="badge accepted">Libre</span>'
+                : '<span class="badge refused">Réservé'+ (c.reservePar ? '— '+ esc(c.reservePar) : '') + '</span>') +
+         '<button class="act del" style="margin-left:6px;padding:2px 8px;" onclick="delCreneau('+ c.id + ')"></button>'+
+         '</div>';
+     }).join('') +
+     '</div></div>';
+ }).join('');
 }
 
 /* ── Validation des nouveaux inscrits ── */
 function validerInscrit(email){
-  var profils = store('dabanet_profils');
-  var p = profils.find(function(x){ return x.email === email; });
-  if (!p) return;
-  p.verifie = true;
-  p.verifieLe = new Date().toISOString();
-  save('dabanet_profils', profils);
-  if (p.tel) {
-    notifyWA(p.tel, 'welcome_registration', { nom: p.nom }).then(function(res){
-      if (res.success) alert('✅ Compte validé + 📱 confirmation WhatsApp envoyée à ' + p.nom);
-      else alert('✅ Compte de ' + p.nom + ' validé.');
-      renderConseiller();
-    });
-  } else {
-    alert('✅ Compte de ' + p.nom + ' validé.');
-    renderConseiller();
-  }
+ var profils = store('dabanet_profils');
+ var p = profils.find(function(x){ return x.email === email; });
+ if (!p) return;
+ p.verifie = true;
+ p.verifieLe = new Date().toISOString();
+ save('dabanet_profils', profils);
+ if (p.tel) {
+   notifyWA(p.tel, 'welcome_registration', { nom: p.nom }).then(function(res){
+     if (res.success) alert('Compte validé +  confirmation WhatsApp envoyée à '+ p.nom);
+     else alert('Compte de '+ p.nom + 'validé.');
+     renderConseiller();
+   });
+ } else {
+   alert('Compte de '+ p.nom + 'validé.');
+   renderConseiller();
+ }
 }
 function rejeterInscrit(email){
-  if (!confirm('Supprimer définitivement ce profil ?')) return;
-  save('dabanet_profils', store('dabanet_profils').filter(function(x){ return x.email !== email; }));
-  renderConseiller();
+ if (!confirm('Supprimer définitivement ce profil ?')) return;
+ save('dabanet_profils', store('dabanet_profils').filter(function(x){ return x.email !== email; }));
+ renderConseiller();
 }
 function renderValidationTable(){
-  var profils = store('dabanet_profils');
-  var el = document.getElementById('validationTable');
-  if (!profils.length) { el.innerHTML = '<div class="empty">Aucun inscrit pour le moment.</div>'; return; }
-  el.innerHTML = '<table><tr><th>Lauréat</th><th>Naissance</th><th>Ville</th><th>Diplôme</th><th>Tél WhatsApp</th><th>🍀 Positionnement</th><th>Statut</th><th>Actions</th></tr>' +
-    profils.slice().reverse().map(function(p){
-      var badge = p.verifie ? '<span class="badge accepted">✓ Validé</span>' : '<span class="badge pending">En attente</span>';
-      var trefle = '—';
-      if (p.positionnement && p.positionnement.scores) {
-        var s = p.positionnement.scores;
-        var col = s.global >= 70 ? 'var(--green)' : s.global >= 45 ? 'var(--gold-700)' : 'var(--red)';
-        trefle = '<b style="color:'+col+';font-size:0.95rem;">'+s.global+'/100</b><br>' +
-          '<span style="font-size:0.68rem;color:var(--muted);">S:'+s.soi+' · P:'+s.projet+' · T:'+s.territoire+' · M:'+s.methode+'</span><br>' +
-          '<button class="act del" style="margin-top:4px;padding:3px 10px;" onclick="voirDiagnostic(\''+esc(p.email)+'\')">📋 Rapport de diagnostic</button>';
-      } else {
-        trefle = '<span style="color:var(--muted);font-size:0.75rem;">Non réalisé</span>';
-      }
-      var actions = '<button class="act del" style="margin-bottom:4px;" onclick="voirProfil(\'' + esc(p.email) + '\')">👤 Profil</button><br>' +
-        (p.verifie
-        ? '<span style="color:var(--muted);font-size:0.75rem;">Validé le ' + (p.verifieLe ? new Date(p.verifieLe).toLocaleDateString('fr-MA') : '—') + '</span>'
-        : '<button class="act ok" onclick="validerInscrit(\'' + esc(p.email) + '\')">✓ Valider</button>' +
-          '<button class="act no" onclick="rejeterInscrit(\'' + esc(p.email) + '\')">✕ Rejeter</button>');
-      return '<tr><td><b>' + esc(p.nom) + '</b><br><span style="color:var(--muted);font-size:0.76rem;">' + esc(p.email||'') + '</span></td>' +
-        '<td>' + esc(p.naissance||'—') + '</td><td>' + esc(p.ville) + '</td>' +
-        '<td>' + esc(p.niveau||'') + '<br><span style="color:var(--muted);font-size:0.76rem;">' + esc(p.filiere||'') + '</span></td>' +
-        '<td>' + esc(p.tel||'—') + '</td><td>' + trefle + '</td><td>' + badge + '</td><td>' + actions + '</td></tr>';
-    }).join('') + '</table>';
+ var profils = store('dabanet_profils');
+ var el = document.getElementById('validationTable');
+ if (!profils.length) { el.innerHTML = '<div class="empty">Aucun inscrit pour le moment.</div>'; return; }
+ el.innerHTML = '<table><tr><th>Lauréat</th><th>Naissance</th><th>Ville</th><th>Diplôme</th><th>Tél WhatsApp</th><th> Positionnement</th><th>Statut</th><th>Actions</th></tr>'+
+   profils.slice().reverse().map(function(p){
+     var badge = p.verifie ? '<span class="badge accepted">✓ Validé</span>': '<span class="badge pending">En attente</span>';
+     var trefle = '—';
+     if (p.positionnement && p.positionnement.scores) {
+       var s = p.positionnement.scores;
+       var col = s.global >= 70 ? 'var(--green)': s.global >= 45 ? 'var(--gold-700)': 'var(--red)';
+       trefle = '<b style="color:'+col+';font-size:0.95rem;">'+s.global+'/100</b><br>'+
+         '<span style="font-size:0.68rem;color:var(--muted);">S:'+s.soi+'· P:'+s.projet+'· T:'+s.territoire+'· M:'+s.methode+'</span><br>'+
+         '<button class="act del" style="margin-top:4px;padding:3px 10px;" onclick="voirDiagnostic(\''+esc(p.email)+'\')">Rapport de diagnostic</button>';
+     } else {
+       trefle = '<span style="color:var(--muted);font-size:0.75rem;">Non réalisé</span>';
+     }
+     var actions = '<button class="act del" style="margin-bottom:4px;" onclick="voirProfil(\''+ esc(p.email) + '\')">Profil</button><br>'+
+       (p.verifie
+       ? '<span style="color:var(--muted);font-size:0.75rem;">Validé le '+ (p.verifieLe ? new Date(p.verifieLe).toLocaleDateString('fr-MA') : '—') + '</span>'
+       : '<button class="act ok" onclick="validerInscrit(\''+ esc(p.email) + '\')">✓ Valider</button>'+
+         '<button class="act no" onclick="rejeterInscrit(\''+ esc(p.email) + '\')">✕ Rejeter</button>');
+     return '<tr><td><b>'+ esc(p.nom) + '</b><br><span style="color:var(--muted);font-size:0.76rem;">'+ esc(p.email||'') + '</span></td>'+
+       '<td>'+ esc(p.naissance||'—') + '</td><td>'+ esc(p.ville) + '</td>'+
+       '<td>'+ esc(p.niveau||'') + '<br><span style="color:var(--muted);font-size:0.76rem;">'+ esc(p.filiere||'') + '</span></td>'+
+       '<td>'+ esc(p.tel||'—') + '</td><td>'+ trefle + '</td><td>'+ badge + '</td><td>'+ actions + '</td></tr>';
+   }).join('') + '</table>';
 }
 function stat(n,l){ return '<div class="stat"><div class="n">'+n+'</div><div class="l">'+l+'</div></div>'; }
 
 function renderRdvTable(){
-  var rdvs = store('dabanet_rdvs');
-  var el = document.getElementById('rdvTable');
-  if (!rdvs.length) { el.innerHTML = '<div class="empty">Aucune demande de rendez-vous pour le moment.</div>'; return; }
-  el.innerHTML = '<table><tr><th>Lauréat</th><th>Filière</th><th>Date</th><th>Type</th><th>Sujet</th><th>Statut</th><th>Actions</th></tr>' +
-    rdvs.slice().reverse().map(function(r){
-      var badge = r.status==='accepted' ? '<span class="badge accepted">Accepté</span>'
-                : r.status==='refused'  ? '<span class="badge refused">Refusé</span>'
-                : '<span class="badge pending">En attente</span>';
-      var actions = r.status==='pending'
-        ? '<button class="act ok" onclick="setRdv('+r.id+',\'accepted\')">✓ Accepter</button><button class="act no" onclick="setRdv('+r.id+',\'refused\')">✕ Refuser</button>'
-        : '<button class="act del" onclick="setRdv('+r.id+',\'pending\')">↩ Rouvrir</button>';
-      return '<tr><td><b>'+esc(r.nom)+'</b><br><span style="color:var(--muted);font-size:0.76rem;">'+esc(r.email||'')+'</span></td>'+
-        '<td>'+esc(r.filiere||'—')+'</td><td>'+esc(r.date)+'</td><td>'+esc(r.type)+'</td>'+
-        '<td style="max-width:180px;">'+esc(r.sujet||'—')+'</td><td>'+badge+'</td><td>'+actions+'</td></tr>';
-    }).join('') + '</table>';
+ var rdvs = store('dabanet_rdvs');
+ var el = document.getElementById('rdvTable');
+ if (!rdvs.length) { el.innerHTML = '<div class="empty">Aucune demande de rendez-vous pour le moment.</div>'; return; }
+ el.innerHTML = '<table><tr><th>Lauréat</th><th>Filière</th><th>Date</th><th>Type</th><th>Sujet</th><th>Statut</th><th>Actions</th></tr>'+
+   rdvs.slice().reverse().map(function(r){
+     var badge = r.status==='accepted'? '<span class="badge accepted">Accepté</span>'
+               : r.status==='refused'? '<span class="badge refused">Refusé</span>'
+               : '<span class="badge pending">En attente</span>';
+     var actions = r.status==='pending'
+       ? '<button class="act ok" onclick="setRdv('+r.id+',\'accepted\')">✓ Accepter</button><button class="act no" onclick="setRdv('+r.id+',\'refused\')">✕ Refuser</button>'
+       : '<button class="act del" onclick="setRdv('+r.id+',\'pending\')">↩ Rouvrir</button>';
+     return '<tr><td><b>'+esc(r.nom)+'</b><br><span style="color:var(--muted);font-size:0.76rem;">'+esc(r.email||'')+'</span></td>'+
+       '<td>'+esc(r.filiere||'—')+'</td><td>'+esc(r.date)+'</td><td>'+esc(r.type)+'</td>'+
+       '<td style="max-width:180px;">'+esc(r.sujet||'—')+'</td><td>'+badge+'</td><td>'+actions+'</td></tr>';
+   }).join('') + '</table>';
 }
 function setRdv(id, status){
-  var rdvs = store('dabanet_rdvs');
-  var r = rdvs.find(function(x){ return x.id===id; });
-  if (r) {
-    r.status = status;
-    save('dabanet_rdvs', rdvs);
-    // Automatic WhatsApp notification to the laureate
-    var tel = phoneFor(r);
-    if (tel && (status === 'accepted' || status === 'refused')) {
-      notifyWA(tel, status === 'accepted' ? 'rdv_accepted' : 'rdv_refused',
-        { nom: r.nom, date: r.date, typeRdv: r.type }
-      ).then(function(res){
-        if (res.success) alert('📱 Notification WhatsApp envoyée à ' + r.nom);
-        else if (res.skipped) console.log('WhatsApp non configuré — notification ignorée');
-      });
-    }
-  }
-  renderConseiller();
+ var rdvs = store('dabanet_rdvs');
+ var r = rdvs.find(function(x){ return x.id===id; });
+ if (r) {
+   r.status = status;
+   save('dabanet_rdvs', rdvs);
+   // Automatic WhatsApp notification to the laureate
+   var tel = phoneFor(r);
+   if (tel && (status === 'accepted'|| status === 'refused')) {
+     notifyWA(tel, status === 'accepted'? 'rdv_accepted': 'rdv_refused',
+       { nom: r.nom, date: r.date, typeRdv: r.type }
+     ).then(function(res){
+       if (res.success) alert('Notification WhatsApp envoyée à '+ r.nom);
+       else if (res.skipped) console.log('WhatsApp non configuré — notification ignorée');
+     });
+   }
+ }
+ renderConseiller();
 }
 
 function addAtelier(){
-  var t = document.getElementById('at-titre').value.trim();
-  var d = document.getElementById('at-date').value.trim();
-  var lieu = document.getElementById('at-lieu').value.trim();
-  var places = document.getElementById('at-places').value.trim() || 'Places disponibles';
-  if (!t || !d || !lieu) { alert('⚠️ Remplissez le titre, la date et le lieu.'); return; }
-  var ateliers = store('dabanet_ateliers');
-  ateliers.unshift({ id: Date.now(), t:t, d:d, lieu:lieu, places:places });
-  save('dabanet_ateliers', ateliers);
-  document.getElementById('at-titre').value=''; document.getElementById('at-date').value='';
-  document.getElementById('at-lieu').value=''; document.getElementById('at-places').value='';
-  renderConseiller();
-  // Automatic WhatsApp broadcast to all laureates
-  var phones = allPhones();
-  if (phones.length) {
-    notifyWA(phones, 'atelier_new', { t:t, d:d, lieu:lieu, places:places }).then(function(res){
-      if (res.success) alert('✅ Atelier publié + 📱 notification WhatsApp envoyée à ' + res.sent + ' lauréat(s).');
-      else alert('✅ Atelier publié ! (WhatsApp : ' + (res.reason || 'non envoyé') + ')');
-    });
-  } else {
-    alert('✅ Atelier publié ! Il est maintenant visible sur le site.');
-  }
+ var t = document.getElementById('at-titre').value.trim();
+ var d = document.getElementById('at-date').value.trim();
+ var lieu = document.getElementById('at-lieu').value.trim();
+ var places = document.getElementById('at-places').value.trim() || 'Places disponibles';
+ if (!t || !d || !lieu) { alert('Remplissez le titre, la date et le lieu.'); return; }
+ var ateliers = store('dabanet_ateliers');
+ ateliers.unshift({ id: Date.now(), t:t, d:d, lieu:lieu, places:places });
+ save('dabanet_ateliers', ateliers);
+ document.getElementById('at-titre').value=''; document.getElementById('at-date').value='';
+ document.getElementById('at-lieu').value=''; document.getElementById('at-places').value='';
+ renderConseiller();
+ // Automatic WhatsApp broadcast to all laureates
+ var phones = allPhones();
+ if (phones.length) {
+   notifyWA(phones, 'atelier_new', { t:t, d:d, lieu:lieu, places:places }).then(function(res){
+     if (res.success) alert('Atelier publié +  notification WhatsApp envoyée à '+ res.sent + 'lauréat(s).');
+     else alert('Atelier publié ! (WhatsApp : '+ (res.reason || 'non envoyé') + ')');
+   });
+ } else {
+   alert('Atelier publié ! Il est maintenant visible sur le site.');
+ }
 }
 function delAtelier(id){
-  save('dabanet_ateliers', store('dabanet_ateliers').filter(function(a){ return a.id!==id; }));
-  renderConseiller();
+ save('dabanet_ateliers', store('dabanet_ateliers').filter(function(a){ return a.id!==id; }));
+ renderConseiller();
 }
 function renderAtelierTable(){
-  var ateliers = store('dabanet_ateliers');
-  var el = document.getElementById('atelierTable');
-  if (!ateliers.length) { el.innerHTML = '<div class="empty">Aucun atelier publié. Les 4 ateliers par défaut du site restent affichés.</div>'; return; }
-  el.innerHTML = '<table><tr><th>Titre</th><th>Date</th><th>Lieu</th><th>Places</th><th></th></tr>' +
-    ateliers.map(function(a){
-      return '<tr><td><b>'+esc(a.t)+'</b></td><td>'+esc(a.d)+'</td><td>'+esc(a.lieu)+'</td><td>'+esc(a.places)+'</td>'+
-        '<td><button class="act del" onclick="delAtelier('+a.id+')">🗑 Supprimer</button></td></tr>';
-    }).join('') + '</table>';
+ var ateliers = store('dabanet_ateliers');
+ var el = document.getElementById('atelierTable');
+ if (!ateliers.length) { el.innerHTML = '<div class="empty">Aucun atelier publié. Les 4 ateliers par défaut du site restent affichés.</div>'; return; }
+ el.innerHTML = '<table><tr><th>Titre</th><th>Date</th><th>Lieu</th><th>Places</th><th></th></tr>'+
+   ateliers.map(function(a){
+     return '<tr><td><b>'+esc(a.t)+'</b></td><td>'+esc(a.d)+'</td><td>'+esc(a.lieu)+'</td><td>'+esc(a.places)+'</td>'+
+       '<td><button class="act del" onclick="delAtelier('+a.id+')">Supprimer</button></td></tr>';
+   }).join('') + '</table>';
 }
 
-var TAG_COLORS = { 'Recrutement':'#9C2484','Formation':'#166534','Salon emploi':'#7E1F78','Atelier':'#4F1359','Opportunité':'#B36C00' };
+var TAG_COLORS = { 'Recrutement':'#9C2484','Formation':'#166534','Salon emploi':'#7E1F78','Atelier':'#4F1359','Opportunité':'#B36C00'};
 function addNews(){
-  var t = document.getElementById('nw-titre').value.trim();
-  var desc = document.getElementById('nw-desc').value.trim();
-  var tag = document.getElementById('nw-tag').value;
-  var date = document.getElementById('nw-date').value.trim() || new Date().toLocaleDateString('fr-MA');
-  var link = document.getElementById('nw-link').value.trim() || '#';
-  if (!t || !desc) { alert('⚠️ Remplissez le titre et la description.'); return; }
-  var news = store('dabanet_news');
-  news.unshift({ id: Date.now(), title:t, desc:desc, tag:tag, date:date, link:link, color: TAG_COLORS[tag] || '#7E1F78' });
-  save('dabanet_news', news);
-  document.getElementById('nw-titre').value=''; document.getElementById('nw-desc').value='';
-  document.getElementById('nw-date').value=''; document.getElementById('nw-link').value='';
-  renderConseiller();
-  // Automatic WhatsApp broadcast to all laureates
-  var phones = allPhones();
-  if (phones.length) {
-    notifyWA(phones, 'news_new', { title:t, desc:desc }).then(function(res){
-      if (res.success) alert('✅ Actualité publiée + 📱 notification WhatsApp envoyée à ' + res.sent + ' lauréat(s).');
-      else alert('✅ Actualité publiée ! (WhatsApp : ' + (res.reason || 'non envoyé') + ')');
-    });
-  } else {
-    alert('✅ Actualité publiée ! Elle apparaît en tête de la page d\'accueil.');
-  }
+ var t = document.getElementById('nw-titre').value.trim();
+ var desc = document.getElementById('nw-desc').value.trim();
+ var tag = document.getElementById('nw-tag').value;
+ var date = document.getElementById('nw-date').value.trim() || new Date().toLocaleDateString('fr-MA');
+ var link = document.getElementById('nw-link').value.trim() || '#';
+ if (!t || !desc) { alert('Remplissez le titre et la description.'); return; }
+ var news = store('dabanet_news');
+ news.unshift({ id: Date.now(), title:t, desc:desc, tag:tag, date:date, link:link, color: TAG_COLORS[tag] || '#7E1F78'});
+ save('dabanet_news', news);
+ document.getElementById('nw-titre').value=''; document.getElementById('nw-desc').value='';
+ document.getElementById('nw-date').value=''; document.getElementById('nw-link').value='';
+ renderConseiller();
+ // Automatic WhatsApp broadcast to all laureates
+ var phones = allPhones();
+ if (phones.length) {
+   notifyWA(phones, 'news_new', { title:t, desc:desc }).then(function(res){
+     if (res.success) alert('Actualité publiée +  notification WhatsApp envoyée à '+ res.sent + 'lauréat(s).');
+     else alert('Actualité publiée ! (WhatsApp : '+ (res.reason || 'non envoyé') + ')');
+   });
+ } else {
+   alert('Actualité publiée ! Elle apparaît en tête de la page d\'accueil.');
+ }
 }
 function delNews(id){
-  save('dabanet_news', store('dabanet_news').filter(function(n){ return n.id!==id; }));
-  renderConseiller();
+ save('dabanet_news', store('dabanet_news').filter(function(n){ return n.id!==id; }));
+ renderConseiller();
 }
 function renderNewsTable(){
-  var news = store('dabanet_news');
-  var el = document.getElementById('newsTable');
-  if (!news.length) { el.innerHTML = '<div class="empty">Aucune actualité publiée depuis le back office.</div>'; return; }
-  el.innerHTML = '<table><tr><th>Titre</th><th>Catégorie</th><th>Date</th><th></th></tr>' +
-    news.map(function(n){
-      return '<tr><td><b>'+esc(n.title)+'</b><br><span style="color:var(--muted);font-size:0.76rem;">'+esc(n.desc.slice(0,80))+'…</span></td>'+
-        '<td><span class="badge" style="background:'+n.color+'22;color:'+n.color+';">'+esc(n.tag)+'</span></td>'+
-        '<td>'+esc(n.date)+'</td><td><button class="act del" onclick="delNews('+n.id+')">🗑 Supprimer</button></td></tr>';
-    }).join('') + '</table>';
+ var news = store('dabanet_news');
+ var el = document.getElementById('newsTable');
+ if (!news.length) { el.innerHTML = '<div class="empty">Aucune actualité publiée depuis le back office.</div>'; return; }
+ el.innerHTML = '<table><tr><th>Titre</th><th>Catégorie</th><th>Date</th><th></th></tr>'+
+   news.map(function(n){
+     return '<tr><td><b>'+esc(n.title)+'</b><br><span style="color:var(--muted);font-size:0.76rem;">'+esc(n.desc.slice(0,80))+'…</span></td>'+
+       '<td><span class="badge" style="background:'+n.color+'22;color:'+n.color+';">'+esc(n.tag)+'</span></td>'+
+       '<td>'+esc(n.date)+'</td><td><button class="act del" onclick="delNews('+n.id+')">Supprimer</button></td></tr>';
+   }).join('') + '</table>';
 }
 
 function renderInscTable(targetId){
-  var insc = store('dabanet_inscriptions');
-  var el = document.getElementById(targetId);
-  if (!insc.length) { el.innerHTML = '<div class="empty">Aucune inscription aux ateliers pour le moment.</div>'; return; }
-  el.innerHTML = '<table><tr><th>Lauréat</th><th>Email</th><th>Atelier</th><th>Date d\'inscription</th></tr>' +
-    insc.slice().reverse().map(function(i){
-      return '<tr><td><b>'+esc(i.nom)+'</b></td><td>'+esc(i.email||'—')+'</td><td>'+esc(i.atelier)+'</td>'+
-        '<td>'+new Date(i.date).toLocaleDateString('fr-MA')+'</td></tr>';
-    }).join('') + '</table>';
+ var insc = store('dabanet_inscriptions');
+ var el = document.getElementById(targetId);
+ if (!insc.length) { el.innerHTML = '<div class="empty">Aucune inscription aux ateliers pour le moment.</div>'; return; }
+ el.innerHTML = '<table><tr><th>Lauréat</th><th>Email</th><th>Atelier</th><th>Date d\'inscription</th></tr>'+
+   insc.slice().reverse().map(function(i){
+     return '<tr><td><b>'+esc(i.nom)+'</b></td><td>'+esc(i.email||'—')+'</td><td>'+esc(i.atelier)+'</td>'+
+       '<td>'+new Date(i.date).toLocaleDateString('fr-MA')+'</td></tr>';
+   }).join('') + '</table>';
 }
 
 /* ══════════ UNIVERSITÉ ══════════ */
 function renderUniv(){
-  var profils = store('dabanet_profils');
-  var rdvs = store('dabanet_rdvs');
-  var insc = store('dabanet_inscriptions');
-  var avg = profils.length ? Math.round(profils.reduce(function(s,p){ return s+(p.score||0); },0)/profils.length) : 0;
-  var accepted = rdvs.filter(function(r){ return r.status==='accepted'; }).length;
+ var profils = store('dabanet_profils');
+ var rdvs = store('dabanet_rdvs');
+ var insc = store('dabanet_inscriptions');
+ var avg = profils.length ? Math.round(profils.reduce(function(s,p){ return s+(p.score||0); },0)/profils.length) : 0;
+ var accepted = rdvs.filter(function(r){ return r.status==='accepted'; }).length;
 
-  document.getElementById('uStats').innerHTML =
-    stat(profils.length, 'Lauréats inscrits') + stat(avg+'%', 'Complétion moyenne des profils') +
-    stat(rdvs.length, 'RDV demandés') + stat(accepted, 'RDV acceptés') + stat(insc.length, 'Participations ateliers');
+ document.getElementById('uStats').innerHTML =
+   stat(profils.length, 'Lauréats inscrits') + stat(avg+'%', 'Complétion moyenne des profils') +
+   stat(rdvs.length, 'RDV demandés') + stat(accepted, 'RDV acceptés') + stat(insc.length, 'Participations ateliers');
 
-  var el = document.getElementById('profilTable');
-  if (!profils.length) { el.innerHTML = '<div class="empty">Aucun lauréat inscrit pour le moment.</div>'; }
-  else {
-    el.innerHTML = '<table><tr><th>Nom</th><th>Âge</th><th>Ville</th><th>Niveau</th><th>Filière</th><th>Expérience</th><th>Score profil</th><th>Inscrit le</th></tr>' +
-      profils.slice().reverse().map(function(p){
-        return '<tr><td><b>'+esc(p.nom)+'</b><br><span style="color:var(--muted);font-size:0.76rem;">'+esc(p.email||'')+'</span></td>'+
-          '<td>'+esc(p.age)+'</td><td>'+esc(p.ville)+'</td><td>'+esc(p.niveau)+'</td><td>'+esc(p.filiere)+'</td>'+
-          '<td>'+esc(p.experience||'—')+'</td><td><span class="score-pill">'+(p.score||0)+'/100</span></td>'+
-          '<td>'+(p.createdAt ? new Date(p.createdAt).toLocaleDateString('fr-MA') : '—')+'</td></tr>';
-      }).join('') + '</table>';
-  }
+ var el = document.getElementById('profilTable');
+ if (!profils.length) { el.innerHTML = '<div class="empty">Aucun lauréat inscrit pour le moment.</div>'; }
+ else {
+   el.innerHTML = '<table><tr><th>Nom</th><th>Âge</th><th>Ville</th><th>Niveau</th><th>Filière</th><th>Expérience</th><th>Score profil</th><th>Inscrit le</th></tr>'+
+     profils.slice().reverse().map(function(p){
+       return '<tr><td><b>'+esc(p.nom)+'</b><br><span style="color:var(--muted);font-size:0.76rem;">'+esc(p.email||'')+'</span></td>'+
+         '<td>'+esc(p.age)+'</td><td>'+esc(p.ville)+'</td><td>'+esc(p.niveau)+'</td><td>'+esc(p.filiere)+'</td>'+
+         '<td>'+esc(p.experience||'—')+'</td><td><span class="score-pill">'+(p.score||0)+'/100</span></td>'+
+         '<td>'+(p.createdAt ? new Date(p.createdAt).toLocaleDateString('fr-MA') : '—')+'</td></tr>';
+     }).join('') + '</table>';
+ }
 
-  var rdvEl = document.getElementById('uRdvTable');
-  if (!rdvs.length) { rdvEl.innerHTML = '<div class="empty">Aucune demande de rendez-vous.</div>'; }
-  else {
-    rdvEl.innerHTML = '<table><tr><th>Lauréat</th><th>Date</th><th>Type</th><th>Statut</th></tr>' +
-      rdvs.slice().reverse().map(function(r){
-        var badge = r.status==='accepted' ? '<span class="badge accepted">Accepté</span>'
-                  : r.status==='refused'  ? '<span class="badge refused">Refusé</span>'
-                  : '<span class="badge pending">En attente</span>';
-        return '<tr><td><b>'+esc(r.nom)+'</b></td><td>'+esc(r.date)+'</td><td>'+esc(r.type)+'</td><td>'+badge+'</td></tr>';
-      }).join('') + '</table>';
-  }
+ var rdvEl = document.getElementById('uRdvTable');
+ if (!rdvs.length) { rdvEl.innerHTML = '<div class="empty">Aucune demande de rendez-vous.</div>'; }
+ else {
+   rdvEl.innerHTML = '<table><tr><th>Lauréat</th><th>Date</th><th>Type</th><th>Statut</th></tr>'+
+     rdvs.slice().reverse().map(function(r){
+       var badge = r.status==='accepted'? '<span class="badge accepted">Accepté</span>'
+                 : r.status==='refused'? '<span class="badge refused">Refusé</span>'
+                 : '<span class="badge pending">En attente</span>';
+       return '<tr><td><b>'+esc(r.nom)+'</b></td><td>'+esc(r.date)+'</td><td>'+esc(r.type)+'</td><td>'+badge+'</td></tr>';
+     }).join('') + '</table>';
+ }
 
-  var inscEl = document.getElementById('uInscTable');
-  var insc2 = store('dabanet_inscriptions');
-  if (!insc2.length) { inscEl.innerHTML = '<div class="empty">Aucune participation enregistrée.</div>'; }
-  else {
-    inscEl.innerHTML = '<table><tr><th>Lauréat</th><th>Atelier</th><th>Date</th></tr>' +
-      insc2.slice().reverse().map(function(i){
-        return '<tr><td><b>'+esc(i.nom)+'</b></td><td>'+esc(i.atelier)+'</td><td>'+new Date(i.date).toLocaleDateString('fr-MA')+'</td></tr>';
-      }).join('') + '</table>';
-  }
+ var inscEl = document.getElementById('uInscTable');
+ var insc2 = store('dabanet_inscriptions');
+ if (!insc2.length) { inscEl.innerHTML = '<div class="empty">Aucune participation enregistrée.</div>'; }
+ else {
+   inscEl.innerHTML = '<table><tr><th>Lauréat</th><th>Atelier</th><th>Date</th></tr>'+
+     insc2.slice().reverse().map(function(i){
+       return '<tr><td><b>'+esc(i.nom)+'</b></td><td>'+esc(i.atelier)+'</td><td>'+new Date(i.date).toLocaleDateString('fr-MA')+'</td></tr>';
+     }).join('') + '</table>';
+ }
 }
 
 /* Auto-login if session exists; load shared data first, refresh views after sync */
 showDash();
 dbSync(function(){
-  var r = sessionStorage.getItem('dabanet_admin_role');
-  if (r === 'conseiller') renderConseiller();
-  else if (r === 'universite') renderUniv();
+ var r = sessionStorage.getItem('dabanet_admin_role');
+ if (r === 'conseiller') renderConseiller();
+ else if (r === 'universite') renderUniv();
 });
 </script>
 </body>
