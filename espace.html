@@ -78,20 +78,6 @@
       <h3 id="esp-nom" style="color:var(--purple-900);margin:0 0 4px;font-size:1.15rem;">—</h3>
       <p id="esp-meta" style="color:var(--muted);margin:0;font-size:0.85rem;">—</p>
     </div>
-    <!-- Score -->
-    <div style="text-align:center;">
-      <div style="position:relative;width:92px;height:92px;">
-        <svg width="92" height="92" viewBox="0 0 92 92" style="transform:rotate(-90deg);">
-          <circle cx="46" cy="46" r="39" fill="none" stroke="#E8DEEC" stroke-width="10"/>
-          <circle id="esp-gauge" cx="46" cy="46" r="39" fill="none" stroke="#9C2484" stroke-width="10" stroke-linecap="round" stroke-dasharray="245.04" stroke-dashoffset="245.04" style="transition:stroke-dashoffset 1s ease;"/>
-        </svg>
-        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-          <b id="esp-score" style="font-family:'Cairo',sans-serif;font-size:1.35rem;color:var(--purple-900);">0</b>
-          <span style="font-size:0.6rem;color:var(--muted);">/100</span>
-        </div>
-      </div>
-      <div style="font-size:0.7rem;color:var(--muted);margin-top:2px;">اكتمال الملف / Profil</div>
-    </div>
   </div>
 
   <!-- ═══ Diagnostic de positionnement (Trèfle chanceux) ═══ -->
@@ -281,9 +267,6 @@ function renderEspace(){
   document.getElementById('esp-avatar').textContent = initials;
   document.getElementById('esp-nom').textContent = p.nom;
   document.getElementById('esp-meta').textContent = [p.niveau, p.filiere, p.ville].filter(Boolean).join(' · ');
-  var score = computeScore(p), circ = 245.04;
-  document.getElementById('esp-score').textContent = score;
-  document.getElementById('esp-gauge').style.strokeDashoffset = circ - (circ*score/100);
 
   document.getElementById(p.verifie ? 'verifOk' : 'verifBanner').style.display = 'block';
   document.getElementById(p.verifie ? 'verifBanner' : 'verifOk').style.display = 'none';
@@ -550,19 +533,30 @@ window.submitTrefle = async function(){
   }); });
   var prompt = 'DIAGNOSTIC DE POSITIONNEMENT (fiche ANAPEC — trèfle chanceux).\n' +
     'Scores calculés : Général ' + scores.global + '/100 | SOI ' + scores.soi + ' | PROJET ' + scores.projet + ' | TERRITOIRE ' + scores.territoire + ' | MÉTHODE ' + scores.methode + '\n\nMes réponses :\n' + lignes.join('\n') +
-    '\n\nProduis mon diagnostic complet selon le modèle du trèfle chanceux (analyse par dimension, difficultés principales, plan d\'action priorisé avec les ateliers ANAPEC adaptés). Réponds en français.';
+    '\n\nProduis le diagnostic en DEUX parties séparées par ces marqueurs EXACTS :\n' +
+    '[POUR_LE_CANDIDAT]\n(version courte pour le chercheur d\'emploi : maximum 70 mots, langage simple et encourageant, sans jargon ni détails techniques — 2 constats principaux puis 3 actions concrètes en liste)\n' +
+    '[POUR_LE_CONSEILLER]\n(version professionnelle détaillée pour le conseiller ANAPEC : analyse par dimension du trèfle, difficultés identifiées parmi les 7 types, prestations/ateliers ANAPEC recommandés, points de vigilance pour l\'entretien de positionnement)\n' +
+    'Réponds en français.';
   try {
     var r = await fetch('/api/chat', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ messages:[{role:'user',content:prompt}], profile: ME })
     });
     var d = await r.json();
-    var txt = d.reply || 'حدث خطأ. حاول مرة أخرى.';
-    ME.positionnement.diagnostic = txt;
+    var txt = d.reply || '';
+    // Split candidate / conseiller parts
+    var candidat = txt, conseiller = txt;
+    if (txt.indexOf('[POUR_LE_CONSEILLER]') !== -1) {
+      var parts = txt.split('[POUR_LE_CONSEILLER]');
+      candidat = parts[0].replace('[POUR_LE_CANDIDAT]', '').replace(/^[\s*#:—-]+/, '').trim();
+      conseiller = parts[1].replace(/^[\s*#:—-]+/, '').trim();
+    }
+    ME.positionnement.diagnostic = candidat;
+    ME.positionnement.diagnosticConseiller = conseiller;
     var profils2 = dbGet('profils');
     var i2 = profils2.findIndex(function(p){ return (p.email||'').toLowerCase() === ME.email.toLowerCase(); });
     if (i2 >= 0) { profils2[i2] = ME; dbSet('profils', profils2); }
-    renderTrefleResults(scores, txt);
+    renderTrefleResults(scores, candidat || 'حدث خطأ. حاول مرة أخرى.');
   } catch(e) {
     renderTrefleResults(scores, '❌ تعذّر الاتصال بالمساعد. النتائج الرقمية محفوظة — أعد المحاولة لاحقاً للتحليل الكامل.');
   }

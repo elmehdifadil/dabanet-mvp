@@ -244,6 +244,15 @@
   </div>
 </div>
 
+<!-- Modal diagnostic conseiller -->
+<div id="diagModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:16px;width:min(680px,94vw);max-height:88vh;overflow-y:auto;padding:24px 28px;position:relative;">
+    <button onclick="document.getElementById('diagModal').style.display='none'" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);">✕</button>
+    <h3 id="diagTitle" style="color:var(--purple-900);margin:0 0 14px;font-size:1.02rem;">Diagnostic</h3>
+    <div id="diagBody"></div>
+  </div>
+</div>
+
 <script>
 /* ══════════ Storage helpers (Vercel Blob shared DB + localStorage fallback) ══════════ */
 window.DB = { rdvs:null, profils:null, news:null, ateliers:null, inscriptions:null };
@@ -276,6 +285,25 @@ function dbSync(onDone){
   }).catch(function(){ if (onDone) onDone(); });
 }
 function esc(s){ var d=document.createElement('div'); d.textContent=String(s==null?'':s); return d.innerHTML; }
+
+/* ══════════ Diagnostic conseiller (modal) ══════════ */
+function voirDiagnostic(email){
+  var p = store('dabanet_profils').find(function(x){ return x.email === email; });
+  if (!p || !p.positionnement) return;
+  var s = p.positionnement.scores || {};
+  var diag = p.positionnement.diagnosticConseiller || p.positionnement.diagnostic || 'Analyse IA non disponible — seuls les scores chiffrés ont été enregistrés.';
+  var date = p.positionnement.date ? new Date(p.positionnement.date).toLocaleDateString('fr-MA') : '—';
+  document.getElementById('diagTitle').textContent = '🍀 Diagnostic de positionnement — ' + p.nom;
+  document.getElementById('diagBody').innerHTML =
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">' +
+      ['<b>Général : '+ (s.global||0) +'/100</b>','SOI : '+(s.soi||0),'PROJET : '+(s.projet||0),'TERRITOIRE : '+(s.territoire||0),'MÉTHODE : '+(s.methode||0)].map(function(t){
+        return '<span style="background:var(--purple-100);border-radius:20px;padding:5px 12px;font-size:0.78rem;font-weight:700;color:var(--purple-800);">'+t+'</span>';
+      }).join('') +
+    '</div>' +
+    '<div style="font-size:0.72rem;color:var(--muted);margin-bottom:10px;">Réalisé le ' + date + ' — analyse réservée au conseiller</div>' +
+    '<div style="white-space:pre-wrap;font-size:0.84rem;line-height:1.7;">' + esc(diag) + '</div>';
+  document.getElementById('diagModal').style.display = 'flex';
+}
 
 /* ══════════ Automatic WhatsApp notifications ══════════ */
 function notifyWA(phoneOrPhones, type, data){
@@ -452,7 +480,8 @@ function renderValidationTable(){
         var s = p.positionnement.scores;
         var col = s.global >= 70 ? 'var(--green)' : s.global >= 45 ? 'var(--gold-700)' : 'var(--red)';
         trefle = '<b style="color:'+col+';font-size:0.95rem;">'+s.global+'/100</b><br>' +
-          '<span style="font-size:0.68rem;color:var(--muted);">S:'+s.soi+' · P:'+s.projet+' · T:'+s.territoire+' · M:'+s.methode+'</span>';
+          '<span style="font-size:0.68rem;color:var(--muted);">S:'+s.soi+' · P:'+s.projet+' · T:'+s.territoire+' · M:'+s.methode+'</span><br>' +
+          '<button class="act del" style="margin-top:4px;padding:3px 10px;" onclick="voirDiagnostic(\''+esc(p.email)+'\')">📋 Diagnostic</button>';
       } else {
         trefle = '<span style="color:var(--muted);font-size:0.75rem;">Non réalisé</span>';
       }
