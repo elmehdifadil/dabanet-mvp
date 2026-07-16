@@ -244,6 +244,31 @@
   </div>
 </div>
 
+<!-- Modal profil candidat (aperçu + modification) -->
+<div id="profilModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:16px;width:min(620px,94vw);max-height:90vh;overflow-y:auto;padding:24px 28px;position:relative;">
+    <button onclick="document.getElementById('profilModal').style.display='none'" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);">✕</button>
+    <h3 id="profilTitle" style="color:var(--purple-900);margin:0 0 4px;font-size:1.02rem;">👤 Profil candidat</h3>
+    <p style="color:var(--muted);font-size:0.76rem;margin:0 0 16px;">Aperçu du profil — vous pouvez corriger les informations puis enregistrer.</p>
+    <div class="form-grid">
+      <div><label>Nom</label><input id="pf-nomfamille"></div>
+      <div><label>Prénom</label><input id="pf-prenom"></div>
+      <div><label>Date de naissance</label><input id="pf-naissance" type="date"></div>
+      <div><label>Ville</label><input id="pf-ville"></div>
+      <div><label>Email (identifiant)</label><input id="pf-email" disabled style="background:#F6F1F8;color:var(--muted);"></div>
+      <div><label>Téléphone WhatsApp</label><input id="pf-tel"></div>
+      <div><label>Niveau d'études</label><input id="pf-niveau"></div>
+      <div><label>Diplôme / Spécialité</label><input id="pf-filiere"></div>
+      <div><label>Expérience</label><input id="pf-experience"></div>
+      <div><label>Langues</label><input id="pf-langues"></div>
+      <div class="full"><label>Compétences</label><input id="pf-competences"></div>
+      <div class="full"><label>Objectif professionnel</label><textarea id="pf-objectif" rows="2"></textarea></div>
+    </div>
+    <button class="btn-add" style="width:100%;margin-top:16px;" onclick="saveProfil()">💾 Enregistrer les modifications</button>
+    <p id="pf-msg" style="text-align:center;font-size:0.8rem;margin:8px 0 0;min-height:16px;"></p>
+  </div>
+</div>
+
 <!-- Modal diagnostic conseiller -->
 <div id="diagModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;align-items:center;justify-content:center;">
   <div style="background:#fff;border-radius:16px;width:min(680px,94vw);max-height:88vh;overflow-y:auto;padding:24px 28px;position:relative;">
@@ -286,6 +311,41 @@ function dbSync(onDone){
 }
 function esc(s){ var d=document.createElement('div'); d.textContent=String(s==null?'':s); return d.innerHTML; }
 
+/* ══════════ Profil candidat : aperçu + modification ══════════ */
+var PF_FIELDS = ['nomfamille','prenom','naissance','ville','email','tel','niveau','filiere','experience','langues','competences','objectif'];
+var pfCurrentEmail = null;
+
+function voirProfil(email){
+  var p = store('dabanet_profils').find(function(x){ return x.email === email; });
+  if (!p) return;
+  pfCurrentEmail = email;
+  document.getElementById('profilTitle').textContent = '👤 Profil candidat — ' + p.nom;
+  PF_FIELDS.forEach(function(f){
+    var el = document.getElementById('pf-' + f);
+    if (el) el.value = p[f] || '';
+  });
+  document.getElementById('pf-msg').textContent = '';
+  document.getElementById('profilModal').style.display = 'flex';
+}
+
+function saveProfil(){
+  var profils = store('dabanet_profils');
+  var p = profils.find(function(x){ return x.email === pfCurrentEmail; });
+  if (!p) return;
+  PF_FIELDS.forEach(function(f){
+    if (f === 'email') return; // identifier stays unchanged
+    var el = document.getElementById('pf-' + f);
+    if (el) p[f] = el.value.trim();
+  });
+  p.nom = (p.prenom + ' ' + p.nomfamille).trim() || p.nom;
+  p.modifieParConseiller = new Date().toISOString();
+  save('dabanet_profils', profils);
+  var msg = document.getElementById('pf-msg');
+  msg.textContent = '✅ Profil mis à jour.';
+  msg.style.color = 'var(--green)';
+  renderConseiller();
+}
+
 /* ══════════ Diagnostic conseiller (modal) ══════════ */
 function voirDiagnostic(email){
   var p = store('dabanet_profils').find(function(x){ return x.email === email; });
@@ -307,10 +367,10 @@ function voirDiagnostic(email){
       '<div style="background:#E8DEEC;border-radius:20px;height:8px;overflow:hidden;"><div style="width:'+v+'%;height:100%;background:'+d.c+';"></div></div></div>';
   }).join('');
 
-  // Short result: candidate-version summary, clamped to a few lines
-  var resume = (p.positionnement.diagnostic || '').trim();
-  if (!resume) resume = 'Résultat chiffré uniquement — analyse IA non disponible.';
-  var lignes = resume.split('\n').filter(function(l){ return l.trim() && !/^[\s*#:—-]+$/.test(l); }).slice(0, 6);
+  // Commentaire adressé au conseiller (concis), clamped to a few lines
+  var resume = (p.positionnement.diagnosticConseiller || p.positionnement.diagnostic || '').trim();
+  if (!resume) resume = 'Résultat chiffré uniquement — commentaire IA non disponible.';
+  var lignes = resume.split('\n').filter(function(l){ return l.trim() && !/^[\s*#:—-]+$/.test(l); }).slice(0, 7);
   resume = lignes.join('\n');
 
   // Recommended prestations from weak dimensions (deterministic, compact)
@@ -328,7 +388,7 @@ function voirDiagnostic(email){
       '<div style="font-size:0.74rem;color:var(--muted);">Score général de positionnement<br>Réalisé le '+date+'</div>' +
     '</div>' +
     barsHtml +
-    '<div style="margin-top:12px;background:var(--purple-100);border-radius:10px;padding:11px 14px;font-size:0.8rem;line-height:1.6;white-space:pre-wrap;">'+esc(resume)+'</div>' +
+    '<div style="margin-top:12px;background:var(--purple-100);border-radius:10px;padding:11px 14px;font-size:0.8rem;line-height:1.6;white-space:pre-wrap;"><b style="color:var(--purple-900);">💬 Commentaire pour le conseiller :</b>\n'+esc(resume)+'</div>' +
     (recos.length
       ? '<div style="margin-top:10px;font-size:0.78rem;"><b style="color:var(--purple-900);">🎯 Prestations recommandées :</b><ul style="margin:6px 0 0;padding-right:18px;padding-left:18px;">'+recos.map(function(r){ return '<li>'+r+'</li>'; }).join('')+'</ul></div>'
       : '<div style="margin-top:10px;font-size:0.78rem;color:var(--green);"><b>✅ Aucune prestation urgente — les 4 dimensions sont satisfaisantes.</b></div>');
@@ -515,10 +575,11 @@ function renderValidationTable(){
       } else {
         trefle = '<span style="color:var(--muted);font-size:0.75rem;">Non réalisé</span>';
       }
-      var actions = p.verifie
+      var actions = '<button class="act del" style="margin-bottom:4px;" onclick="voirProfil(\'' + esc(p.email) + '\')">👤 Profil</button><br>' +
+        (p.verifie
         ? '<span style="color:var(--muted);font-size:0.75rem;">Validé le ' + (p.verifieLe ? new Date(p.verifieLe).toLocaleDateString('fr-MA') : '—') + '</span>'
         : '<button class="act ok" onclick="validerInscrit(\'' + esc(p.email) + '\')">✓ Valider</button>' +
-          '<button class="act no" onclick="rejeterInscrit(\'' + esc(p.email) + '\')">✕ Rejeter</button>';
+          '<button class="act no" onclick="rejeterInscrit(\'' + esc(p.email) + '\')">✕ Rejeter</button>');
       return '<tr><td><b>' + esc(p.nom) + '</b><br><span style="color:var(--muted);font-size:0.76rem;">' + esc(p.email||'') + '</span></td>' +
         '<td>' + esc(p.naissance||'—') + '</td><td>' + esc(p.ville) + '</td>' +
         '<td>' + esc(p.niveau||'') + '<br><span style="color:var(--muted);font-size:0.76rem;">' + esc(p.filiere||'') + '</span></td>' +

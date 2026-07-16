@@ -119,11 +119,14 @@
   <!-- Questionnaire modal -->
   <div id="trefleModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9998;align-items:center;justify-content:center;">
     <div style="background:#fff;border-radius:18px;width:min(640px,95vw);max-height:92vh;overflow-y:auto;padding:26px 28px;position:relative;">
-      <button onclick="document.getElementById('trefleModal').style.display='none'" style="position:absolute;top:12px;left:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);">✕</button>
+      <button id="trefleClose" onclick="document.getElementById('trefleModal').style.display='none'" style="position:absolute;top:12px;left:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);">✕</button>
       <div style="text-align:center;margin-bottom:16px;">
         <div style="font-size:1.8rem;">🍀</div>
         <h3 style="color:var(--purple-900);margin:4px 0;font-size:1.05rem;">ورقة التحضير للمقابلة التشخيصية</h3>
         <p style="color:var(--muted);font-size:0.78rem;margin:0;">Fiche de préparation à l'entretien de positionnement (ANAPEC)</p>
+        <div id="trefleMand" style="display:none;background:#FEF3C7;border-radius:8px;padding:8px 12px;font-size:0.75rem;color:#92400E;margin-top:10px;">
+          ⚠️ هذا التشخيص إجباري لإكمال تسجيلك — Ce diagnostic est obligatoire pour finaliser votre inscription.
+        </div>
       </div>
       <form id="trefleForm"></form>
       <button class="btn-p" style="width:100%;margin-top:16px;padding:13px;font-family:'Cairo',sans-serif;font-size:0.95rem;background:linear-gradient(135deg,#7E1F78,#4F1359);" onclick="submitTrefle()">🤖 تحليل إجاباتي بالذكاء الاصطناعي / Analyser</button>
@@ -293,9 +296,9 @@ function renderEspace(){
   // Trèfle: restore saved diagnosis, or invite new users to take it
   if (p.positionnement && p.positionnement.scores) {
     renderTrefleResults(p.positionnement.scores, p.positionnement.diagnostic || '📋 التشخيص الرقمي محفوظ — أعد التشخيص للحصول على التحليل الكامل بالذكاء الاصطناعي.', true);
-  } else if (!window._trefleInvited) {
-    window._trefleInvited = true;
-    setTimeout(function(){ openTrefle(); }, 1200);
+  } else {
+    // Mandatory questionnaire right after registration
+    setTimeout(function(){ openTrefle(); }, 600);
   }
 }
 
@@ -481,6 +484,10 @@ function buildTrefleForm(){
 
 window.openTrefle = function(){
   buildTrefleForm();
+  // Mandatory until the first diagnosis is completed: hide the close button
+  var mandatory = !(ME && ME.positionnement && ME.positionnement.scores);
+  document.getElementById('trefleClose').style.display = mandatory ? 'none' : 'block';
+  document.getElementById('trefleMand').style.display = mandatory ? 'block' : 'none';
   document.getElementById('trefleModal').style.display = 'flex';
 };
 
@@ -536,8 +543,8 @@ window.submitTrefle = async function(){
   var prompt = 'DIAGNOSTIC DE POSITIONNEMENT (fiche ANAPEC — trèfle chanceux).\n' +
     'Scores calculés : Général ' + scores.global + '/100 | SOI ' + scores.soi + ' | PROJET ' + scores.projet + ' | TERRITOIRE ' + scores.territoire + ' | MÉTHODE ' + scores.methode + '\n\nMes réponses :\n' + lignes.join('\n') +
     '\n\nProduis le diagnostic en DEUX parties séparées par ces marqueurs EXACTS :\n' +
-    '[POUR_LE_CANDIDAT]\n(version courte pour le chercheur d\'emploi : maximum 70 mots, langage simple et encourageant, sans jargon ni détails techniques — 2 constats principaux puis 3 actions concrètes en liste)\n' +
-    '[POUR_LE_CONSEILLER]\n(version professionnelle détaillée pour le conseiller ANAPEC : analyse par dimension du trèfle, difficultés identifiées parmi les 7 types, prestations/ateliers ANAPEC recommandés, points de vigilance pour l\'entretien de positionnement)\n' +
+    '[POUR_LE_CANDIDAT]\n(version courte pour le chercheur d\'emploi : maximum 70 mots, langage simple et encourageant, sans jargon — 2 constats principaux puis 3 actions concrètes en liste)\n' +
+    '[POUR_LE_CONSEILLER]\n(commentaire PRÉCIS et CONCIS adressé directement au conseiller ANAPEC — maximum 5 lignes : lecture synthétique des scores de ce candidat, difficulté principale identifiée, et LA prestation prioritaire à lui proposer. Parle du candidat à la 3e personne, ex. "Ce candidat maîtrise... mais...")\n' +
     'Réponds en français.';
   try {
     var r = await fetch('/api/chat', {

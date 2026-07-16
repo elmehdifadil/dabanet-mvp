@@ -53,15 +53,11 @@ Version COURTE et PRÉCISE pour le chercheur d'emploi (maximum 70 mots) :
 - 3 actions concrètes en liste à puces, réalisables immédiatement
 
 [POUR_LE_CONSEILLER]
-Version PROFESSIONNELLE DÉTAILLÉE réservée au conseiller ANAPEC :
-1. **Analyse par dimension** (SOI, PROJET, TERRITOIRE, MÉTHODE) : forces/faiblesses révélées par chaque réponse
-2. **Difficultés identifiées** parmi les 7 types de difficultés du modèle du trèfle chanceux
-3. **Prestations ANAPEC recommandées** selon les dimensions faibles :
-   - MÉTHODE faible → Atelier CV, Atelier entretien d'embauche, Techniques de Recherche d'Emploi (TRE)
-   - TERRITOIRE faible → Atelier information sur le marché du travail, consultation des offres ANAPEC
-   - SOI faible → Atelier bilan personnel et professionnel
-   - PROJET faible → Atelier élaboration du projet professionnel
-4. **Points de vigilance** pour préparer l'entretien de positionnement avec ce candidat
+Commentaire PRÉCIS et CONCIS adressé directement au conseiller ANAPEC — MAXIMUM 5 lignes, sans titres ni listes longues :
+- Lecture synthétique des scores du candidat (parle de lui à la 3e personne : "Ce candidat...")
+- La difficulté principale identifiée parmi les 7 types du modèle du trèfle chanceux
+- LA prestation prioritaire à lui proposer :
+  MÉTHODE faible → Techniques de Recherche d'Emploi (CV, candidatures, entretiens) | TERRITOIRE faible → Atelier information sur le marché du travail | SOI faible → Atelier bilan personnel et professionnel | PROJET faible → Atelier élaboration du projet professionnel
 
 ## Style de réponse
 - Structuré avec des titres et listes
