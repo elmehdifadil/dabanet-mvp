@@ -242,6 +242,15 @@
  </div>
 </div>
 
+<!-- Modal aperçu profil + CV (lecture seule) -->
+<div id="apercuModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:16px;width:min(720px,94vw);max-height:90vh;overflow-y:auto;padding:24px 28px;position:relative;">
+    <button onclick="document.getElementById('apercuModal').style.display='none'" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);">✕</button>
+    <h3 id="apercuTitle" style="color:var(--purple-900);margin:0 0 14px;font-size:1.02rem;">Aperçu</h3>
+    <div id="apercuBody"></div>
+  </div>
+</div>
+
 <!-- Modal profil candidat (aperçu + modification) -->
 <div id="profilModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;align-items:center;justify-content:center;">
  <div style="background:#fff;border-radius:16px;width:min(620px,94vw);max-height:90vh;overflow-y:auto;padding:24px 28px;position:relative;">
@@ -252,7 +261,9 @@
      <div><label>Nom</label><input id="pf-nomfamille"></div>
      <div><label>Prénom</label><input id="pf-prenom"></div>
      <div><label>Date de naissance</label><input id="pf-naissance" type="date"></div>
-     <div><label>Ville</label><input id="pf-ville"></div>
+     <div><label>CIN</label><input id="pf-cin"></div>
+     <div><label>Province</label><input id="pf-ville"></div>
+     <div class="full"><label>Adresse complète</label><input id="pf-adresse"></div>
      <div><label>Email (identifiant)</label><input id="pf-email" disabled style="background:#F6F1F8;color:var(--muted);"></div>
      <div><label>Téléphone WhatsApp</label><input id="pf-tel"></div>
      <div><label>Niveau d'études</label><input id="pf-niveau"></div>
@@ -310,7 +321,41 @@ function dbSync(onDone){
 function esc(s){ var d=document.createElement('div'); d.textContent=String(s==null?'':s); return d.innerHTML; }
 
 /* ══════════ Profil candidat : aperçu + modification ══════════ */
-var PF_FIELDS = ['nomfamille','prenom','naissance','ville','email','tel','niveau','filiere','experience','langues','competences','objectif'];
+var PF_FIELDS = ['nomfamille','prenom','naissance','cin','ville','adresse','email','tel','niveau','filiere','experience','langues','competences','objectif'];
+
+/* ── Aperçu (lecture seule) : profil + CV ── */
+function voirApercu(email){
+  var p = store('dabanet_profils').find(function(x){ return x.email === email; });
+  if (!p) return;
+  var rows = [
+    ['Nom complet', p.nom], ['Date de naissance', p.naissance], ['CIN', p.cin],
+    ['Province', p.ville], ['Adresse', p.adresse], ['Email', p.email], ['Téléphone WhatsApp', p.tel],
+    ['Niveau d\'études', p.niveau], ['Diplôme / Spécialité', p.filiere], ['Expérience', p.experience],
+    ['Langues', p.langues], ['Compétences', p.competences], ['Objectif professionnel', p.objectif],
+    ['Inscrit le', p.createdAt ? new Date(p.createdAt).toLocaleDateString('fr-MA') : '—'],
+    ['Statut', p.verifie ? 'Compte validé' : 'En attente de validation']
+  ];
+  var html = '<table style="font-size:0.84rem;">' + rows.map(function(r){
+    return '<tr><td style="color:var(--muted);width:180px;padding:7px 10px;">' + r[0] + '</td><td style="padding:7px 10px;"><b>' + esc(r[1] || '—') + '</b></td></tr>';
+  }).join('') + '</table>';
+
+  // CV : lien + aperçu intégré si PDF
+  if (p.cvUrl) {
+    html += '<div style="margin-top:14px;">' +
+      '<b style="color:var(--purple-900);font-size:0.88rem;">CV du candidat</b> — ' +
+      '<a href="' + esc(p.cvUrl) + '" target="_blank" style="color:var(--purple-700);font-weight:700;font-size:0.82rem;">Ouvrir ' + esc(p.cvName || 'le CV') + ' dans un onglet</a>';
+    if ((p.cvName || '').toLowerCase().endsWith('.pdf')) {
+      html += '<iframe src="' + esc(p.cvUrl) + '" style="width:100%;height:420px;border:1px solid var(--border);border-radius:10px;margin-top:8px;"></iframe>';
+    }
+    html += '</div>';
+  } else {
+    html += '<div style="margin-top:14px;color:var(--muted);font-size:0.8rem;">Aucun CV importé par ce candidat.</div>';
+  }
+
+  document.getElementById('apercuTitle').textContent = 'Aperçu — ' + p.nom;
+  document.getElementById('apercuBody').innerHTML = html;
+  document.getElementById('apercuModal').style.display = 'flex';
+}
 var pfCurrentEmail = null;
 
 function voirProfil(email){
@@ -335,7 +380,7 @@ function saveProfil(){
    var el = document.getElementById('pf-'+ f);
    if (el) p[f] = el.value.trim();
  });
- p.nom = (p.prenom + ''+ p.nomfamille).trim() || p.nom;
+ p.nom = (p.prenom + ' ' + p.nomfamille).trim() || p.nom;
  p.modifieParConseiller = new Date().toISOString();
  save('dabanet_profils', profils);
  var msg = document.getElementById('pf-msg');
@@ -515,7 +560,7 @@ function renderCreneauxTable(){
  el.innerHTML = Object.keys(byDate).sort().map(function(d){
    var jour = new Date(d + 'T00:00:00');
    var jours = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
-   var label = jours[jour.getDay()] + ''+ jour.toLocaleDateString('fr-MA');
+   var label = jours[jour.getDay()] + ' ' + jour.toLocaleDateString('fr-MA');
    return '<div style="margin-bottom:14px;">'+
      '<div style="font-weight:800;color:var(--purple-900);font-size:0.88rem;margin-bottom:8px;">'+ label + '</div>'+
      '<div style="display:flex;flex-wrap:wrap;gap:8px;">'+
@@ -573,7 +618,8 @@ function renderValidationTable(){
      } else {
        trefle = '<span style="color:var(--muted);font-size:0.75rem;">Non réalisé</span>';
      }
-     var actions = '<button class="act del" style="margin-bottom:4px;" onclick="voirProfil(\''+ esc(p.email) + '\')">Profil</button><br>'+
+     var actions = '<button class="act del" style="margin-bottom:4px;" title="Aperçu du profil et du CV" onclick="voirApercu(\''+ esc(p.email) + '\')">&#128065; Aperçu</button>' +
+       '<button class="act del" style="margin-bottom:4px;" onclick="voirProfil(\''+ esc(p.email) + '\')">Modifier</button><br>'+
        (p.verifie
        ? '<span style="color:var(--muted);font-size:0.75rem;">Validé le '+ (p.verifieLe ? new Date(p.verifieLe).toLocaleDateString('fr-MA') : '—') + '</span>'
        : '<button class="act ok" onclick="validerInscrit(\''+ esc(p.email) + '\')">✓ Valider</button>'+

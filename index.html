@@ -1485,7 +1485,7 @@
    return h + ':'+ m;
  }
  function updateLastAnalyzed(){
-   lastAnalyzedEl.textContent = i18n[currentLang].lastAnalyzedPrefix + ''+ formatTime();
+   lastAnalyzedEl.textContent = i18n[currentLang].lastAnalyzedPrefix + ' ' + formatTime();
  }
 
  /* ---------- language switching ---------- */
@@ -1630,7 +1630,7 @@
 
  function updateCv(){
    var t = i18n[currentLang];
-   var fullName = (cvVal('cv-prenom') + ''+ cvVal('cv-nom')).trim();
+   var fullName = (cvVal('cv-prenom') + ' ' + cvVal('cv-nom')).trim();
    setPv('pv-name', fullName || t.pvNamePlaceholder);
    setPv('pv-role', cvVal('cv-title'));
 
@@ -1881,14 +1881,33 @@
          <input id="reg-prenom" type="text" data-pha="مثال: أحمد" data-phf="Ex : Ahmed" placeholder="مثال: أحمد" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
        <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="تاريخ الازدياد *" data-fr="Date de naissance *">تاريخ الازدياد *</label>
          <input id="reg-naissance" type="date" min="1960-01-01" max="2010-12-31" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
-       <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="المدينة *" data-fr="Ville *">المدينة *</label>
-         <input id="reg-ville" type="text" list="villesList" data-pha="الرباط، كازابلانكا..." data-phf="Rabat, Casablanca..." placeholder="الرباط، كازابلانكا..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;">
-         <datalist id="villesList">
-           <option>Casablanca</option><option>Rabat</option><option>Marrakech</option><option>Fès</option>
-           <option>Tanger</option><option>Agadir</option><option>Meknès</option><option>Oujda</option>
-           <option>Kénitra</option><option>Tétouan</option><option>Salé</option><option>Laâyoune</option>
-           <option>El Jadida</option><option>Béni Mellal</option><option>Nador</option><option>Safi</option>
-         </datalist></div>
+       <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="رقم البطاقة الوطنية (CIN) *" data-fr="CIN *">رقم البطاقة الوطنية (CIN) *</label>
+         <input id="reg-cin" type="text" placeholder="EE123456" dir="ltr" maxlength="10" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;text-transform:uppercase;"></div>
+       <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="الإقليم / العمالة *" data-fr="Province / Préfecture *">الإقليم / العمالة *</label>
+         <select id="reg-ville" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;background:#fff;">
+           <option value="" data-ar="اختر..." data-fr="Choisir...">اختر...</option>
+           <option>Agadir Ida-Outanane</option><option>Al Haouz</option><option>Al Hoceïma</option><option>Aousserd</option>
+           <option>Assa-Zag</option><option>Azilal</option><option>Béni Mellal</option><option>Benslimane</option>
+           <option>Berkane</option><option>Berrechid</option><option>Boujdour</option><option>Boulemane</option>
+           <option>Casablanca</option><option>Chefchaouen</option><option>Chichaoua</option><option>Chtouka Aït Baha</option>
+           <option>Driouch</option><option>El Hajeb</option><option>El Jadida</option><option>El Kelâa des Sraghna</option>
+           <option>Errachidia</option><option>Es-Semara</option><option>Essaouira</option><option>Fahs-Anjra</option>
+           <option>Fès</option><option>Figuig</option><option>Fquih Ben Salah</option><option>Guelmim</option>
+           <option>Guercif</option><option>Ifrane</option><option>Inezgane-Aït Melloul</option><option>Jerada</option>
+           <option>Kénitra</option><option>Khémisset</option><option>Khénifra</option><option>Khouribga</option>
+           <option>Laâyoune</option><option>Larache</option><option>Marrakech</option><option>Médiouna</option>
+           <option>Meknès</option><option>Midelt</option><option>Mohammédia</option><option>Moulay Yacoub</option>
+           <option>Nador</option><option>Nouaceur</option><option>Ouarzazate</option><option>Oued Ed-Dahab</option>
+           <option>Ouezzane</option><option>Oujda-Angad</option><option>Rabat</option><option>Rehamna</option>
+           <option>Safi</option><option>Salé</option><option>Sefrou</option><option>Settat</option>
+           <option>Sidi Bennour</option><option>Sidi Ifni</option><option>Sidi Kacem</option><option>Sidi Slimane</option>
+           <option>Skhirate-Témara</option><option>Tan-Tan</option><option>Tanger-Assilah</option><option>Taounate</option>
+           <option>Taourirt</option><option>Tarfaya</option><option>Taroudant</option><option>Tata</option>
+           <option>Taza</option><option>Tétouan</option><option>Tinghir</option><option>Tiznit</option>
+           <option>Youssoufia</option><option>Zagora</option>
+         </select></div>
+       <div style="grid-column:span 2;"><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="العنوان الكامل *" data-fr="Adresse complète *">العنوان الكامل *</label>
+         <input id="reg-adresse" type="text" data-pha="مثال: حي المسيرة، شارع الحسن الثاني، رقم 12، مراكش" data-phf="Ex : Quartier Al Massira, Av. Hassan II, N°12, Marrakech" placeholder="مثال: حي المسيرة، شارع الحسن الثاني، رقم 12، مراكش" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
        <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="البريد الإلكتروني *" data-fr="Email *">البريد الإلكتروني *</label>
          <input id="reg-email" type="email" placeholder="exemple@gmail.com" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
        <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="رقم WhatsApp " data-fr="Téléphone WhatsApp ">رقم WhatsApp </label>
@@ -2525,6 +2544,9 @@ window.analyserCV = function() {
        status.style.color = '#dc2626';
        return;
      }
+     // Keep the stored CV reference for the profile
+     window._cvUrl = d.cvUrl || '';
+     window._cvName = d.cvName || file.name;
      var f = d.fields, filled = 0;
      // Niveau: match against the select options
      if (f.niveau) {
@@ -2564,10 +2586,14 @@ window.submitRegistration = function() {
  var p = {
    prenom:     prenom,
    nomfamille: nomfamille,
-   nom:        (prenom + ''+ nomfamille).trim(),
+   nom:        (prenom + ' ' + nomfamille).trim(),
    naissance:  naissance,
    age:        ageFromBirthdate(naissance),
-   ville:      document.getElementById('reg-ville').value.trim(),
+   cin:        document.getElementById('reg-cin').value.trim().toUpperCase(),
+   ville:      document.getElementById('reg-ville').value,
+   adresse:    document.getElementById('reg-adresse').value.trim(),
+   cvUrl:      window._cvUrl || '',
+   cvName:     window._cvName || '',
    email:      document.getElementById('reg-email').value.trim().toLowerCase(),
    tel:        document.getElementById('reg-tel').value.trim(),
    niveau:     document.getElementById('reg-niveau').value,
@@ -2577,7 +2603,7 @@ window.submitRegistration = function() {
    competences:document.getElementById('reg-competences').value.trim(),
    objectif:   document.getElementById('reg-objectif').value.trim()
  };
- if (!prenom || !nomfamille || !naissance || !p.ville || !p.email || !password || !p.niveau || !p.filiere) {
+ if (!prenom || !nomfamille || !naissance || !p.cin || !p.ville || !p.adresse || !p.email || !password || !p.niveau || !p.filiere) {
    alert(L('يرجى ملء الحقول الإجبارية (*)','Veuillez remplir les champs obligatoires (*)'));
    return;
  }

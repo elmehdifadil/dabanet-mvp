@@ -365,7 +365,7 @@ function renderSlots(){
    var jours = LANG === 'fr' ? ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'] : ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
    var d = new Date(c.date + 'T00:00:00');
    return '<button type="button" class="slot" data-id="'+c.id+'" onclick="pickSlot(this,'+c.id+')">'+
-     jours[d.getDay()] + ''+ esc(c.date) + '· <b>'+ esc(c.heure) + '</b><br><span style="font-size:0.72rem;color:var(--muted);">'+ esc(c.type) + '</span></button>';
+     jours[d.getDay()] + ' ' + esc(c.date) + '· <b>'+ esc(c.heure) + '</b><br><span style="font-size:0.72rem;color:var(--muted);">'+ esc(c.type) + '</span></button>';
  }).join('');
 }
 window.pickSlot = function(el, id){
@@ -380,7 +380,7 @@ window.submitRdvEspace = function(){
  var slot = creneaux.find(function(c){ return c.id === selectedSlot && c.status === 'libre'; });
  var date, type;
  if (slot) {
-   date = slot.date + ''+ slot.heure; type = slot.type;
+   date = slot.date + ' ' + slot.heure; type = slot.type;
    slot.status = 'reserve'; slot.reservePar = ME.nom;
    dbSet('creneaux', creneaux);
  } else {

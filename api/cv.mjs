@@ -1,4 +1,5 @@
 import Groq from "groq-sdk";
+import { put } from "@vercel/blob";
 
 // Extracts profile fields from an uploaded CV (PDF or Word) using AI.
 // POST { filename, data (base64) } → { niveau, filiere, experience, langues, competences, objectif }
@@ -84,7 +85,23 @@ export default async function handler(req, res) {
 
     let fields = {};
     try { fields = JSON.parse(completion.choices[0].message.content); } catch { fields = {}; }
+
+    // Store the CV file so the conseiller can view it from the back office
+    let cvUrl = "";
+    try {
+      if (process.env.BLOB_READ_WRITE_TOKEN) {
+        const safe = filename.replace(/[^a-zA-Z0-9._-]/g, "_");
+        const blob = await put(`cvs/${Date.now()}-${safe}`, buffer, {
+          access: "public",
+          contentType: filename.toLowerCase().endsWith(".pdf") ? "application/pdf" : "application/octet-stream",
+        });
+        cvUrl = blob.url;
+      }
+    } catch (e) { console.error("cv store error:", e.message); }
+
     res.status(200).json({
+      cvUrl,
+      cvName: filename,
       success: true,
       fields: {
         niveau: fields.niveau || "",
