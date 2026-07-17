@@ -465,36 +465,29 @@ window.runDiagnosis = function(){
 };
 
 /* ══════════ Trèfle chanceux — Entretien de positionnement (fiche ANAPEC) ══════════ */
+/* Questionnaire affiné : 13 questions, réponses graduées (Oui / Partiellement / Non)
+   pour un diagnostic précis sans alourdir le candidat. */
 var TREFLE_Q = [
- { dim:'projet', titre:'أنا والعمل الذي أبحث عنه — Moi et l\'emploi que je recherche', color:'#7E1F78', items:[
-   { id:'p1', q:'هل تعرف المهنة أو العمل الذي تبحث عنه؟ — Connaissez-vous l\'emploi que vous recherchez ?', type:'ouinon', extra:{ id:'p1x', ph:'إذا نعم، ما هو؟ / Si oui, lequel ?'} },
-   { id:'p2', q:'هل تبحث عن عمل يتناسب مع تكوينك وتجربتك؟ — Cherchez-vous un emploi qui correspond à votre formation et expérience ?', type:'ouinon'},
-   { id:'p3', q:'هل يمكنك الذهاب للعمل في مدينة أخرى؟ — Êtes-vous mobile ?', type:'ouinon'},
+ { dim:'projet', titre:'مشروعي المهني — Mon projet professionnel', color:'#7E1F78', items:[
+   { id:'p1', q:'هل لديك فكرة واضحة عن العمل الذي تبحث عنه؟ — Avez-vous une idée claire de l\'emploi que vous recherchez ?', type:'scale', extra:{ id:'p1x', ph:'إذا نعم، ما هو؟ / Si oui, lequel ?'} },
+   { id:'p2', q:'هل يتناسب هذا العمل مع تكوينك وتجربتك؟ — Cet emploi correspond-il à votre formation et votre expérience ?', type:'ouinon'},
+   { id:'p3', q:'هل أنت مستعد للعمل في مدينة أخرى؟ — Êtes-vous prêt(e) à travailler dans une autre ville ?', type:'ouinon'},
  ]},
- { dim:'soi', titre:'معرفة الذات — Connaissance de mon profil', color:'#9C2484', items:[
-   { id:'s1', q:'هل تعرف الكفاءات المطلوبة لممارسة هذا العمل؟ — Connaissez-vous les compétences nécessaires pour cet emploi ?', type:'ouinon'},
-   { id:'s2', q:'اذكر ثلاثاً من كفاءاتك — Citez trois de vos compétences', type:'text', ph:'1... 2... 3...'},
-   { id:'s3', q:'اذكر ثلاثاً من مميزاتك الشخصية — Citez trois de vos qualités', type:'text', ph:'1... 2... 3...'},
-   { id:'s4', q:'هل تذكر كفاءاتك ومميزاتك في رسائل الترشيح؟ — Mentionnez-vous vos compétences et qualités dans vos candidatures ?', type:'ouinon'},
-   { id:'s5', q:'هل تظن أنك تحتاج إلى تكوين تكميلي؟ — Pensez-vous avoir besoin d\'une formation complémentaire ?', type:'ouinon', noscore:true },
+ { dim:'soi', titre:'معرفة ذاتي — Connaissance de mon profil', color:'#9C2484', items:[
+   { id:'s1', q:'هل تعرف الكفاءات التي يتطلبها هذا العمل؟ — Connaissez-vous les compétences exigées pour cet emploi ?', type:'scale'},
+   { id:'s2', q:'اذكر أهم ثلاث كفاءات لديك — Citez vos trois principales compétences', type:'text', ph:'1... 2... 3...'},
+   { id:'s3', q:'اذكر ثلاث مميزات شخصية لديك — Citez trois de vos qualités personnelles', type:'text', ph:'1... 2... 3...'},
  ]},
  { dim:'territoire', titre:'سوق الشغل — Mon marché de l\'emploi', color:'#B36C00', items:[
-   { id:'t1', q:'هل تعرف المقاولات التي يهمها العمل الذي تبحث عنه؟ — Connaissez-vous les entreprises qui recrutent dans votre domaine ?', type:'ouinon'},
-   { id:'t2', q:'هل تعرف المهن المطلوبة أكثر في سوق الشغل؟ — Connaissez-vous les métiers les plus demandés ?', type:'ouinon'},
-   { id:'t3', q:'هل تعرف القطاعات التي تشغّل أكثر؟ — Connaissez-vous les secteurs qui recrutent le plus ?', type:'ouinon'},
-   { id:'t4', q:'هل تعرف مختلف عقود الشغل؟ — Connaissez-vous les différents contrats de travail ?', type:'ouinon'},
+   { id:'t1', q:'هل تعرف المقاولات والقطاعات التي تشغّل في مجالك؟ — Connaissez-vous les entreprises et secteurs qui recrutent dans votre domaine ?', type:'scale'},
+   { id:'t2', q:'هل تعرف المهن الأكثر طلباً في سوق الشغل المغربي؟ — Connaissez-vous les métiers les plus demandés au Maroc ?', type:'ouinon'},
+   { id:'t3', q:'هل تعرف أنواع عقود الشغل (CDI، CDD، ANAPEC...)؟ — Connaissez-vous les types de contrats de travail (CDI, CDD, ANAPEC...) ?', type:'ouinon'},
  ]},
- { dim:'methode', titre:'المنهجية: سيرتي، رسائلي، مقابلاتي — Ma méthode : CV, candidatures, entretiens', color:'#166534', items:[
-   { id:'m1', q:'هل لديك سيرة ذاتية؟ — Avez-vous un CV ?', type:'ouinon'},
-   { id:'m2', q:'هل تبدو لك سيرتك الذاتية مرضية وجذابة؟ — Votre CV vous semble-t-il attrayant ?', type:'ouinon'},
-   { id:'m3', q:'هل تُكيّف سيرتك الذاتية حسب كل عرض عمل؟ — Adaptez-vous votre CV selon l\'offre d\'emploi ?', type:'ouinon'},
-   { id:'m4', q:'هل تعرف مواقع إلكترونية للتشغيل؟ — Connaissez-vous des sites de recrutement ?', type:'ouinon'},
-   { id:'m5', q:'هل تتصفح عروض العمل الخاصة بـANAPEC؟ — Consultez-vous les offres de l\'ANAPEC ?', type:'ouinon'},
-   { id:'m6', q:'هل تستعلم عن المقاولة قبل إعداد رسالة الترشيح؟ — Vous renseignez-vous sur l\'entreprise avant de postuler ?', type:'ouinon'},
-   { id:'m7', q:'هل تبدو لك رسائلك لطلب العمل مقنعة؟ — Vos candidatures vous semblent-elles convaincantes ?', type:'ouinon'},
-   { id:'m8', q:'هل سبق أن أجريت مقابلة تشغيل؟ — Avez-vous déjà passé un entretien d\'embauche ?', type:'ouinon'},
-   { id:'m9', q:'هل تعرف كيف تحضّر وتنجح في مقابلات التشغيل؟ — Savez-vous préparer et réussir un entretien d\'embauche ?', type:'ouinon'},
-   { id:'m10', q:'هل تعرف الخطوات اللازمة لمضاعفة حظوظك في إيجاد عمل؟ — Connaissez-vous les actions pour augmenter vos chances (plan d\'action) ?', type:'ouinon'},
+ { dim:'methode', titre:'منهجيتي في البحث — Ma méthode de recherche', color:'#166534', items:[
+   { id:'m1', q:'هل لديك سيرة ذاتية جاهزة ومحيّنة؟ — Avez-vous un CV prêt et à jour ?', type:'scale'},
+   { id:'m2', q:'هل تستعمل مواقع التشغيل وعروض ANAPEC في بحثك؟ — Utilisez-vous les sites d\'emploi et les offres ANAPEC dans votre recherche ?', type:'scale'},
+   { id:'m3', q:'هل تعرف كيف تحضّر وتنجح في مقابلة التشغيل؟ — Savez-vous préparer et réussir un entretien d\'embauche ?', type:'scale'},
+   { id:'m4', q:'هل لديك خطة عمل منظمة للبحث عن الشغل؟ — Avez-vous un plan d\'action organisé pour votre recherche d\'emploi ?', type:'scale'},
  ]},
 ];
 
@@ -505,11 +498,14 @@ function buildTrefleForm(){
      '<div style="background:'+g.color+'15;border-right:4px solid '+g.color+';border-radius:8px;padding:8px 12px;font-weight:800;font-size:0.86rem;color:'+g.color+';margin-bottom:10px;">'+T(g.titre)+'</div>'+
      g.items.map(function(it){
        var html = '<div style="margin-bottom:11px;"><div style="font-size:0.8rem;margin-bottom:5px;line-height:1.5;">'+T(it.q)+'</div>';
-       if (it.type === 'ouinon') {
-         ['oui','non'].forEach(function(v){
-           var checked = old[it.id] === v ? 'checked': '';
+       if (it.type === 'ouinon' || it.type === 'scale') {
+         var opts = it.type === 'scale'
+           ? [['oui', L('نعم','Oui')], ['partiel', L('جزئياً','Partiellement')], ['non', L('لا','Non')]]
+           : [['oui', L('نعم','Oui')], ['non', L('لا','Non')]];
+         opts.forEach(function(o){
+           var checked = old[it.id] === o[0] ? ' checked' : '';
            html += '<label style="display:inline-flex;align-items:center;gap:5px;margin-left:16px;font-size:0.8rem;cursor:pointer;font-weight:400;">'+
-             '<input type="radio" name="'+it.id+'" value="'+v+'"'+checked+'style="width:auto;">'+ (v==='oui'?L('نعم','Oui'):L('لا','Non')) + '</label>';
+             '<input type="radio" name="'+it.id+'" value="'+o[0]+'"'+checked+' style="width:auto;">'+ o[1] + '</label>';
          });
          if (it.extra) html += '<input type="text" id="'+it.extra.id+'" placeholder="'+T(it.extra.ph)+'" value="'+(old[it.extra.id]||'')+'" style="margin-top:6px;font-size:0.8rem;padding:8px 10px;">';
        } else {
@@ -536,7 +532,10 @@ function computeTrefle(answers){
    g.items.forEach(function(it){
      if (it.noscore) return;
      tot++;
-     if (it.type === 'ouinon') { if (answers[it.id] === 'oui') pts++; }
+     if (it.type === 'ouinon' || it.type === 'scale') {
+       if (answers[it.id] === 'oui') pts++;
+       else if (answers[it.id] === 'partiel') pts += 0.5;
+     }
      else { if ((answers[it.id]||'').trim().length >= 5) pts++; }
    });
    scores[g.dim] = Math.round(100 * pts / tot);
@@ -549,7 +548,7 @@ window.submitTrefle = async function(){
  var answers = {};
  var missing = 0;
  TREFLE_Q.forEach(function(g){ g.items.forEach(function(it){
-   if (it.type === 'ouinon') {
+   if (it.type === 'ouinon' || it.type === 'scale') {
      var checked = document.querySelector('input[name="'+it.id+'"]:checked');
      if (checked) answers[it.id] = checked.value; else missing++;
      if (it.extra) answers[it.extra.id] = (document.getElementById(it.extra.id).value||'').trim();
@@ -558,7 +557,7 @@ window.submitTrefle = async function(){
    }
  }); });
  if (missing > 0) {
-   document.getElementById('trefleErr').textContent = L('أجب على جميع أسئلة نعم/لا ('+missing+' متبقية)','Répondez à toutes les questions Oui/Non ('+missing+' restantes)');
+   document.getElementById('trefleErr').textContent = L('أجب على جميع الأسئلة ('+missing+' متبقية)','Répondez à toutes les questions ('+missing+' restantes)');
    return;
  }
  var scores = computeTrefle(answers);
@@ -576,7 +575,8 @@ window.submitTrefle = async function(){
  var lignes = [];
  TREFLE_Q.forEach(function(g){ g.items.forEach(function(it){
    var v = answers[it.id] || '—';
-   lignes.push('['+g.dim.toUpperCase()+'] '+ it.q.split('—')[1].trim() + '→ '+ v + (it.extra && answers[it.extra.id] ? '("'+ answers[it.extra.id] + '")': ''));
+   var vLabel = v === 'partiel' ? 'partiellement' : v;
+   lignes.push('['+g.dim.toUpperCase()+'] '+ it.q.split('—')[1].trim() + ' → '+ vLabel + (it.extra && answers[it.extra.id] ? ' ("'+ answers[it.extra.id] + '")': ''));
  }); });
  var prompt = 'DIAGNOSTIC DE POSITIONNEMENT (fiche ANAPEC — trèfle chanceux).\n'+
    'Scores calculés : Général '+ scores.global + '/100 | SOI '+ scores.soi + '| PROJET '+ scores.projet + '| TERRITOIRE '+ scores.territoire + '| MÉTHODE '+ scores.methode + '\n\nMes réponses :\n'+ lignes.join('\n') +
