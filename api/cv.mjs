@@ -16,7 +16,7 @@ const NIVEAUX = [
   "Diplôme OFPPT — Technicien Spécialisé",
   "Diplôme OFPPT — Qualification professionnelle",
 ];
-const EXPERIENCES = ["بدون خبرة", "تدريب فقط (stage)", "أقل من سنة", "1-3 سنوات", "3-5 سنوات", "أكثر من 5 سنوات"];
+const EXPERIENCES = ["Sans expérience", "Stage uniquement", "Moins d'un an", "1-3 ans", "3-5 ans", "Plus de 5 ans"];
 
 async function extractText(filename, buffer) {
   const lower = (filename || "").toLowerCase();
@@ -74,7 +74,8 @@ export default async function handler(req, res) {
             `- "niveau": le diplôme le plus élevé, choisi EXACTEMENT parmi : ${JSON.stringify(NIVEAUX)} (ou "" si introuvable)\n` +
             `- "experience": durée totale d'expérience professionnelle, choisie EXACTEMENT parmi : ${JSON.stringify(EXPERIENCES)} (ou "" si introuvable)\n` +
             '- "filiere": la spécialité/le domaine du diplôme, court (ex: "Informatique — Développement Web", "Comptabilité et Finance")\n' +
-            '- "langues": langues parlées séparées par des virgules (ex: "Arabe, Français, Anglais")\n' +
+            '- "experienceDetail": résumé des expériences en une ligne : postes, entreprises et durées (ex: "Stagiaire comptable chez X (6 mois), assistant chez Y (1 an)")\n' +
+            '- "langues": langues parlées AVEC niveau si mentionné, séparées par des virgules (ex: "Arabe : natif, Français : courant, Anglais : intermédiaire")\n' +
             '- "competences": les 5-8 compétences clés séparées par des virgules\n' +
             '- "objectif": une phrase résumant le poste/secteur visé (déduis-le du CV, ou "")\n' +
             "N'invente RIEN : si une information est absente du CV, mets une chaîne vide.",
@@ -107,6 +108,7 @@ export default async function handler(req, res) {
         niveau: fields.niveau || "",
         filiere: fields.filiere || "",
         experience: fields.experience || "",
+        experienceDetail: fields.experienceDetail || "",
         langues: fields.langues || "",
         competences: fields.competences || "",
         objectif: fields.objectif || "",

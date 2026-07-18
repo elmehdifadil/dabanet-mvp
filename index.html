@@ -1868,7 +1868,7 @@
      <div style="background:#FAF3FB;border:1.5px dashed #9C2484;border-radius:12px;padding:14px 16px;margin-bottom:18px;">
        <label style="font-size:0.82rem;color:#4F1359;font-weight:700;display:block;margin-bottom:6px;" data-ar="استيراد السيرة الذاتية (PDF أو Word) — يملأ الذكاء الاصطناعي ملفك تلقائياً" data-fr="Importer votre CV (PDF ou Word) — l'IA remplit votre profil automatiquement">استيراد السيرة الذاتية (PDF أو Word) — يملأ الذكاء الاصطناعي ملفك تلقائياً</label>
        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-         <input id="reg-cv" type="file" accept=".pdf,.docx,.doc" style="flex:1;min-width:180px;font-size:0.8rem;">
+         <input id="reg-cv" type="file" accept=".pdf,.docx,.doc" onchange="analyserCV()" style="flex:1;min-width:180px;font-size:0.8rem;">
          <button type="button" id="cvAnalyseBtn" onclick="analyserCV()" style="background:#9C2484;color:#fff;border:none;border-radius:9px;padding:9px 16px;font-weight:700;font-size:0.8rem;cursor:pointer;white-space:nowrap;" data-ar="تحليل السيرة الذاتية" data-fr="Analyser le CV">تحليل السيرة الذاتية</button>
        </div>
        <div id="cvStatus" style="font-size:0.76rem;margin-top:6px;min-height:16px;"></div>
@@ -1995,12 +1995,33 @@
        <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="الخبرة المهنية" data-fr="Expérience professionnelle">الخبرة المهنية</label>
          <select id="reg-experience" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;background:#fff;">
            <option value="" data-ar="اختر..." data-fr="Choisir...">اختر...</option>
-           <option data-ar="بدون خبرة" data-fr="Sans expérience">بدون خبرة</option><option data-ar="تدريب فقط (stage)" data-fr="Stage uniquement">تدريب فقط (stage)</option>
-           <option data-ar="أقل من سنة" data-fr="Moins d'un an">أقل من سنة</option><option data-ar="1-3 سنوات" data-fr="1-3 ans">1-3 سنوات</option>
-           <option data-ar="3-5 سنوات" data-fr="3-5 ans">3-5 سنوات</option><option data-ar="أكثر من 5 سنوات" data-fr="Plus de 5 ans">أكثر من 5 سنوات</option>
+           <option value="Sans expérience" data-ar="بدون خبرة" data-fr="Sans expérience">بدون خبرة</option><option value="Stage uniquement" data-ar="تدريب فقط (stage)" data-fr="Stage uniquement">تدريب فقط (stage)</option>
+           <option value="Moins d'un an" data-ar="أقل من سنة" data-fr="Moins d'un an">أقل من سنة</option><option value="1-3 ans" data-ar="1-3 سنوات" data-fr="1-3 ans">1-3 سنوات</option>
+           <option value="3-5 ans" data-ar="3-5 سنوات" data-fr="3-5 ans">3-5 سنوات</option><option value="Plus de 5 ans" data-ar="أكثر من 5 سنوات" data-fr="Plus de 5 ans">أكثر من 5 سنوات</option>
          </select></div>
-       <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="اللغات" data-fr="Langues">اللغات</label>
-         <input id="reg-langues" type="text" data-pha="العربية، الفرنسية، الإنجليزية..." data-phf="Arabe, français, anglais..." placeholder="العربية، الفرنسية، الإنجليزية..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
+       <div style="grid-column:span 2;"><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="تفاصيل الخبرة المهنية (المناصب، المقاولات، المدد)" data-fr="Détail des expériences (postes, entreprises, durées)">تفاصيل الخبرة المهنية (المناصب، المقاولات، المدد)</label>
+         <textarea id="reg-expdetail" rows="2" data-pha="مثال: متدرب محاسبة بشركة X (6 أشهر)، مساعد إداري بشركة Y (سنة)..." data-phf="Ex : Stagiaire comptable chez X (6 mois), assistant administratif chez Y (1 an)..." placeholder="مثال: متدرب محاسبة بشركة X (6 أشهر)، مساعد إداري بشركة Y (سنة)..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;resize:none;"></textarea></div>
+       <div style="grid-column:span 2;">
+         <label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="مستوى اللغات" data-fr="Niveau des langues">مستوى اللغات</label>
+         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+           <div><span style="font-size:0.72rem;color:#7C6B82;" data-ar="العربية" data-fr="Arabe">العربية</span>
+             <select id="reg-lang-ar" style="width:100%;padding:8px 10px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.82rem;box-sizing:border-box;outline:none;background:#fff;">
+               <option value="Natif" data-ar="لغة أم" data-fr="Natif">لغة أم</option><option value="Courant" data-ar="متقن" data-fr="Courant">متقن</option>
+               <option value="Intermédiaire" data-ar="متوسط" data-fr="Intermédiaire">متوسط</option><option value="Débutant" data-ar="مبتدئ" data-fr="Débutant">مبتدئ</option>
+             </select></div>
+           <div><span style="font-size:0.72rem;color:#7C6B82;" data-ar="الفرنسية" data-fr="Français">الفرنسية</span>
+             <select id="reg-lang-fr" style="width:100%;padding:8px 10px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.82rem;box-sizing:border-box;outline:none;background:#fff;">
+               <option value="Courant" data-ar="متقن" data-fr="Courant">متقن</option><option value="Intermédiaire" data-ar="متوسط" data-fr="Intermédiaire" selected>متوسط</option>
+               <option value="Débutant" data-ar="مبتدئ" data-fr="Débutant">مبتدئ</option><option value="Aucun" data-ar="لا شيء" data-fr="Aucun">لا شيء</option>
+             </select></div>
+           <div><span style="font-size:0.72rem;color:#7C6B82;" data-ar="الإنجليزية" data-fr="Anglais">الإنجليزية</span>
+             <select id="reg-lang-en" style="width:100%;padding:8px 10px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.82rem;box-sizing:border-box;outline:none;background:#fff;">
+               <option value="Courant" data-ar="متقن" data-fr="Courant">متقن</option><option value="Intermédiaire" data-ar="متوسط" data-fr="Intermédiaire">متوسط</option>
+               <option value="Débutant" data-ar="مبتدئ" data-fr="Débutant" selected>مبتدئ</option><option value="Aucun" data-ar="لا شيء" data-fr="Aucun">لا شيء</option>
+             </select></div>
+         </div>
+         <input id="reg-lang-autres" type="text" data-pha="لغات أخرى (مثال: الإسبانية - متوسط)" data-phf="Autres langues (ex : Espagnol - intermédiaire)" placeholder="لغات أخرى (مثال: الإسبانية - متوسط)" style="width:100%;margin-top:8px;padding:8px 10px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.82rem;box-sizing:border-box;outline:none;">
+       </div>
        <div style="grid-column:span 2;"><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="المهارات الأساسية" data-fr="Compétences principales">المهارات الأساسية</label>
          <input id="reg-competences" type="text" data-pha="برمجة، Excel، تواصل، تسيير مشاريع..." data-phf="Programmation, Excel, communication, gestion..." placeholder="برمجة، Excel، تواصل، تسيير مشاريع..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
        <div style="grid-column:span 2;"><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="القطاع المستهدف والهدف المهني" data-fr="Secteur visé et objectif professionnel">القطاع المستهدف والهدف المهني</label>
@@ -2562,7 +2583,8 @@ window.analyserCV = function() {
        }
      }
      if (f.filiere)     { document.getElementById('reg-filiere').value = f.filiere; filled++; }
-     if (f.langues)     { document.getElementById('reg-langues').value = f.langues; filled++; }
+     if (f.langues)     { document.getElementById('reg-lang-autres').value = f.langues; filled++; }
+     if (f.experienceDetail) { document.getElementById('reg-expdetail').value = f.experienceDetail; filled++; }
      if (f.competences) { document.getElementById('reg-competences').value = f.competences; filled++; }
      if (f.objectif)    { document.getElementById('reg-objectif').value = f.objectif; filled++; }
      status.textContent = L('تم ملء '+ filled + 'حقول من سيرتك الذاتية — راجعها وأكمل الباقي',
@@ -2599,7 +2621,17 @@ window.submitRegistration = function() {
    niveau:     document.getElementById('reg-niveau').value,
    filiere:    document.getElementById('reg-filiere').value.trim(),
    experience: document.getElementById('reg-experience').value,
-   langues:    document.getElementById('reg-langues').value.trim(),
+   experienceDetail: document.getElementById('reg-expdetail').value.trim(),
+   langues:    (function(){
+     var parts = [
+       'Arabe : ' + document.getElementById('reg-lang-ar').value,
+       'Français : ' + document.getElementById('reg-lang-fr').value,
+       'Anglais : ' + document.getElementById('reg-lang-en').value
+     ];
+     var autres = document.getElementById('reg-lang-autres').value.trim();
+     if (autres) parts.push(autres);
+     return parts.join(' · ');
+   })(),
    competences:document.getElementById('reg-competences').value.trim(),
    objectif:   document.getElementById('reg-objectif').value.trim()
  };

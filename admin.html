@@ -269,6 +269,7 @@
      <div><label>Niveau d'études</label><input id="pf-niveau"></div>
      <div><label>Diplôme / Spécialité</label><input id="pf-filiere"></div>
      <div><label>Expérience</label><input id="pf-experience"></div>
+     <div class="full"><label>Détail des expériences</label><textarea id="pf-experienceDetail" rows="2"></textarea></div>
      <div><label>Langues</label><input id="pf-langues"></div>
      <div class="full"><label>Compétences</label><input id="pf-competences"></div>
      <div class="full"><label>Objectif professionnel</label><textarea id="pf-objectif" rows="2"></textarea></div>
@@ -321,7 +322,7 @@ function dbSync(onDone){
 function esc(s){ var d=document.createElement('div'); d.textContent=String(s==null?'':s); return d.innerHTML; }
 
 /* ══════════ Profil candidat : aperçu + modification ══════════ */
-var PF_FIELDS = ['nomfamille','prenom','naissance','cin','ville','adresse','email','tel','niveau','filiere','experience','langues','competences','objectif'];
+var PF_FIELDS = ['nomfamille','prenom','naissance','cin','ville','adresse','email','tel','niveau','filiere','experience','experienceDetail','langues','competences','objectif'];
 
 /* ── Aperçu (lecture seule) : profil + CV ── */
 function voirApercu(email){
@@ -330,7 +331,7 @@ function voirApercu(email){
   var rows = [
     ['Nom complet', p.nom], ['Date de naissance', p.naissance], ['CIN', p.cin],
     ['Province', p.ville], ['Adresse', p.adresse], ['Email', p.email], ['Téléphone WhatsApp', p.tel],
-    ['Niveau d\'études', p.niveau], ['Diplôme / Spécialité', p.filiere], ['Expérience', p.experience],
+    ['Niveau d\'études', p.niveau], ['Diplôme / Spécialité', p.filiere], ['Expérience', p.experience], ['Détail des expériences', p.experienceDetail],
     ['Langues', p.langues], ['Compétences', p.competences], ['Objectif professionnel', p.objectif],
     ['Inscrit le', p.createdAt ? new Date(p.createdAt).toLocaleDateString('fr-MA') : '—'],
     ['Statut', p.verifie ? 'Compte validé' : 'En attente de validation']
@@ -618,7 +619,8 @@ function renderValidationTable(){
      } else {
        trefle = '<span style="color:var(--muted);font-size:0.75rem;">Non réalisé</span>';
      }
-     var actions = '<button class="act del" style="margin-bottom:4px;" title="Aperçu du profil et du CV" onclick="voirApercu(\''+ esc(p.email) + '\')">&#128065; Aperçu</button>' +
+     var cvLink = p.cvUrl ? '<a class="act del" style="text-decoration:none;display:inline-block;margin-bottom:4px;" target="_blank" href="' + esc(p.cvUrl) + '">CV</a>' : '';
+      var actions = cvLink + '<button class="act del" style="margin-bottom:4px;" title="Aperçu du profil et du CV" onclick="voirApercu(\''+ esc(p.email) + '\')">&#128065; Aperçu</button>' +
        '<button class="act del" style="margin-bottom:4px;" onclick="voirProfil(\''+ esc(p.email) + '\')">Modifier</button><br>'+
        (p.verifie
        ? '<span style="color:var(--muted);font-size:0.75rem;">Validé le '+ (p.verifieLe ? new Date(p.verifieLe).toLocaleDateString('fr-MA') : '—') + '</span>'

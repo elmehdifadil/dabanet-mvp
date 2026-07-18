@@ -344,7 +344,9 @@ window.registerAtelier = function(i, btn){
  btn.textContent = '✓ ' + L('تم التسجيل','Inscrit'); btn.style.background = '#9CA3AF'; btn.disabled = true;
  var w = getAllAteliers()[i];
  var insc = dbGet('inscriptions');
- insc.push({ atelier: T(w.t), nom: ME.nom, email: ME.email, date: new Date().toISOString() });
+ // Toujours stocker la version française : le back office est en français
+ var frTitre = String(w.t).indexOf(' — ') !== -1 ? String(w.t).split(' — ')[1] : String(w.t);
+ insc.push({ atelier: frTitre, nom: ME.nom, email: ME.email, date: new Date().toISOString() });
  dbSet('inscriptions', insc);
  alert('تم تسجيلك في: '+ w.t);
 };
