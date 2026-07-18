@@ -422,10 +422,12 @@ function voirDiagnostic(email){
 
  // Recommended prestations from weak dimensions (deterministic, compact)
  var recos = [];
- if ((s.projet||0)     < 60) recos.push('Atelier élaboration du projet professionnel');
- if ((s.soi||0)        < 60) recos.push('Atelier bilan personnel et professionnel');
- if ((s.territoire||0) < 60) recos.push('Atelier information sur le marché du travail');
- if ((s.methode||0)    < 60) recos.push('Techniques de Recherche d\'Emploi (CV, candidatures, entretiens)');
+ // Ateliers officiels ANAPEC (fiche "Ateliers à prescrire" MO 002_FOR 003)
+ if ((s.projet||0)     < 60) recos.push('Moi et le marché du travail');
+ if ((s.soi||0)        < 60) recos.push('Mettre en valeur ses compétences et ses qualités');
+ if ((s.territoire||0) < 60) recos.push('Organiser sa recherche d\'emploi et connaître le marché du travail');
+ if ((s.methode||0)    < 60) { recos.push('Rédiger ses lettres de motivation'); recos.push('Préparer son entretien d\'embauche'); }
+ if ((s.global||0) < 40 && recos.length >= 3) recos = ['Tous les ateliers de recherche d\'emploi (parcours complet)'];
 
  var col = (s.global||0) >= 70 ? 'var(--green)': (s.global||0) >= 45 ? 'var(--gold-700)': 'var(--red)';
  document.getElementById('diagTitle').textContent = 'Rapport de diagnostic — '+ p.nom;

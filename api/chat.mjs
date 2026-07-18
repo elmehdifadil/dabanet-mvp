@@ -56,8 +56,8 @@ Version COURTE et PRÉCISE pour le chercheur d'emploi (maximum 70 mots) :
 Commentaire PRÉCIS et CONCIS adressé directement au conseiller ANAPEC — MAXIMUM 5 lignes, sans titres ni listes longues :
 - Lecture synthétique des scores du candidat (parle de lui à la 3e personne : "Ce candidat...")
 - La difficulté principale identifiée parmi les 7 types du modèle du trèfle chanceux
-- LA prestation prioritaire à lui proposer :
-  MÉTHODE faible → Techniques de Recherche d'Emploi (CV, candidatures, entretiens) | TERRITOIRE faible → Atelier information sur le marché du travail | SOI faible → Atelier bilan personnel et professionnel | PROJET faible → Atelier élaboration du projet professionnel
+- L'atelier ANAPEC prioritaire à lui prescrire, choisi parmi les ateliers OFFICIELS de la fiche "Ateliers à prescrire" :
+  PROJET faible → "Moi et le marché du travail" | SOI faible → "Mettre en valeur ses compétences et ses qualités" | TERRITOIRE faible → "Organiser sa recherche d'emploi et connaître le marché du travail" | MÉTHODE faible → "Rédiger ses lettres de motivation" et "Préparer son entretien d'embauche" | Plusieurs dimensions très faibles → "Tous les ateliers de recherche d'emploi"
 
 ## Style de réponse
 - Structuré avec des titres et listes

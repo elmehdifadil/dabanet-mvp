@@ -633,10 +633,17 @@ function renderTrefleResults(scores, aiText, noScroll){
 // Ateliers ANAPEC recommandés selon les dimensions faibles du trèfle
 function renderAteliersReco(scores){
  var recos = [];
- if (scores.projet < 60)     recos.push({t:'ورشة بلورة المشروع المهني — Atelier élaboration du projet professionnel', why:'بُعد المشروع ضعيف / Dimension PROJET à renforcer'});
- if (scores.soi < 60)        recos.push({t:'ورشة الحصيلة الشخصية والمهنية — Atelier bilan personnel et professionnel', why:'بُعد الذات ضعيف / Dimension SOI à renforcer'});
- if (scores.territoire < 60) recos.push({t:'ورشة التعرف على سوق الشغل — Atelier information sur le marché du travail', why:'بُعد السوق ضعيف / Dimension TERRITOIRE à renforcer'});
- if (scores.methode < 60)    recos.push({t:'ورشة تقنيات البحث عن عمل (CV، رسائل، مقابلات) — Techniques de Recherche d\'Emploi (TRE)', why:'بُعد المنهجية ضعيف / Dimension MÉTHODE à renforcer'});
+ // Ateliers officiels ANAPEC (fiche "Ateliers à prescrire" MO 002_FOR 003)
+ if (scores.projet < 60)     recos.push({t:'أنا وسوق الشغل — Moi et le marché du travail', why:'بُعد المشروع ضعيف / Dimension PROJET à renforcer'});
+ if (scores.soi < 60)        recos.push({t:'إبراز الكفاءات والمميزات الشخصية — Mettre en valeur ses compétences et ses qualités', why:'بُعد الذات ضعيف / Dimension SOI à renforcer'});
+ if (scores.territoire < 60) recos.push({t:'تنظيم البحث عن عمل ومعرفة سوق الشغل — Organiser sa recherche d\'emploi et connaître le marché du travail', why:'بُعد السوق ضعيف / Dimension TERRITOIRE à renforcer'});
+ if (scores.methode < 60) {
+   recos.push({t:'تحرير رسائل التحفيز — Rédiger ses lettres de motivation', why:'بُعد المنهجية ضعيف / Dimension MÉTHODE à renforcer'});
+   recos.push({t:'التحضير لمقابلة التشغيل — Préparer son entretien d\'embauche', why:'بُعد المنهجية ضعيف / Dimension MÉTHODE à renforcer'});
+ }
+ if (scores.global < 40 && recos.length >= 3) {
+   recos = [{t:'جميع ورشات البحث عن عمل — Tous les ateliers de recherche d\'emploi', why:'عدة أبعاد ضعيفة / Plusieurs dimensions à renforcer — parcours complet recommandé'}];
+ }
  var el = document.getElementById('trefleRecos');
  if (!el) {
    el = document.createElement('div');
