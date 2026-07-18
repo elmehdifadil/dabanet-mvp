@@ -266,7 +266,10 @@
      <div class="full"><label>Adresse complète</label><input id="pf-adresse"></div>
      <div><label>Email (identifiant)</label><input id="pf-email" disabled style="background:#F6F1F8;color:var(--muted);"></div>
      <div><label>Téléphone WhatsApp</label><input id="pf-tel"></div>
-     <div><label>Niveau d'études</label><input id="pf-niveau"></div>
+     <div><label>Diplôme (UCA)</label><input id="pf-niveau"></div>
+     <div><label>Établissement (UCA)</label><input id="pf-etablissement"></div>
+     <div><label>Année d'obtention</label><input id="pf-anneeDiplome"></div>
+     <div class="full"><label>Autres diplômes</label><input id="pf-autresDiplomes"></div>
      <div><label>Diplôme / Spécialité</label><input id="pf-filiere"></div>
      <div><label>Expérience</label><input id="pf-experience"></div>
      <div class="full"><label>Détail des expériences</label><textarea id="pf-experienceDetail" rows="2"></textarea></div>
@@ -322,7 +325,7 @@ function dbSync(onDone){
 function esc(s){ var d=document.createElement('div'); d.textContent=String(s==null?'':s); return d.innerHTML; }
 
 /* ══════════ Profil candidat : aperçu + modification ══════════ */
-var PF_FIELDS = ['nomfamille','prenom','naissance','cin','ville','adresse','email','tel','niveau','filiere','experience','experienceDetail','langues','competences','objectif'];
+var PF_FIELDS = ['nomfamille','prenom','naissance','cin','ville','adresse','email','tel','niveau','etablissement','anneeDiplome','filiere','autresDiplomes','experience','experienceDetail','langues','competences','objectif'];
 
 /* ── Aperçu (lecture seule) : profil + CV ── */
 function voirApercu(email){
@@ -331,7 +334,7 @@ function voirApercu(email){
   var rows = [
     ['Nom complet', p.nom], ['Date de naissance', p.naissance], ['CIN', p.cin],
     ['Province', p.ville], ['Adresse', p.adresse], ['Email', p.email], ['Téléphone WhatsApp', p.tel],
-    ['Niveau d\'études', p.niveau], ['Diplôme / Spécialité', p.filiere], ['Expérience', p.experience], ['Détail des expériences', p.experienceDetail],
+    ['Diplôme (UCA)', p.niveau], ['Établissement', p.etablissement], ['Année d\'obtention', p.anneeDiplome], ['Option / Spécialité', p.filiere], ['Autres diplômes', p.autresDiplomes], ['Expérience', p.experience], ['Détail des expériences', p.experienceDetail],
     ['Langues', p.langues], ['Compétences', p.competences], ['Objectif professionnel', p.objectif],
     ['Inscrit le', p.createdAt ? new Date(p.createdAt).toLocaleDateString('fr-MA') : '—'],
     ['Statut', p.verifie ? 'Compte validé' : 'En attente de validation']

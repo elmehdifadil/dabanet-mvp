@@ -1915,24 +1915,45 @@
          <span style="font-size:0.68rem;color:#7C6B82;" data-ar="لتلقي إشعارات المواعيد والعروض" data-fr="Pour recevoir les notifications RDV et offres">لتلقي إشعارات المواعيد والعروض</span></div>
        <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="كلمة المرور *" data-fr="Mot de passe *">كلمة المرور *</label>
          <input id="reg-password" type="password" placeholder="••••••••" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
-       <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="المستوى الدراسي *" data-fr="Niveau d'études *">المستوى الدراسي *</label>
+       <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="الشهادة الجامعية (جامعة القاضي عياض) *" data-fr="Diplôme universitaire (Université Cadi Ayyad) *">الشهادة الجامعية (جامعة القاضي عياض) *</label>
          <select id="reg-niveau" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;background:#fff;">
            <option value="" data-ar="اختر..." data-fr="Choisir...">اختر...</option>
-           <option>Bac</option>
-           <option>Bac+2 — DEUG / DUT / BTS / DTS</option>
-           <option>Bac+3 — Licence / Licence Pro / Bachelor</option>
-           <option>Bac+4 — Maîtrise</option>
-           <option>Bac+5 — Master / Master Spécialisé</option>
-           <option>Bac+5 — Diplôme d'Ingénieur d'État</option>
-           <option>Bac+6+ — Doctorat / PhD</option>
-           <option>Diplôme OFPPT — Technicien</option>
-           <option>Diplôme OFPPT — Technicien Spécialisé</option>
-           <option>Diplôme OFPPT — Qualification professionnelle</option>
-           <option data-ar="تكوين مهني آخر" data-fr="Autre formation professionnelle">تكوين مهني آخر</option>
-           <option data-ar="بدون شهادة" data-fr="Sans diplôme">بدون شهادة</option>
+           <option>DUT — Diplôme Universitaire de Technologie (Bac+2)</option>
+           <option>DEUG / DEUST (Bac+2)</option>
+           <option>Licence Fondamentale (Bac+3)</option>
+           <option>Licence Professionnelle (Bac+3)</option>
+           <option>Licence d'Éducation (Bac+3)</option>
+           <option>Master (Bac+5)</option>
+           <option>Master Spécialisé (Bac+5)</option>
+           <option>Diplôme d'Ingénieur d'État (Bac+5)</option>
+           <option>Doctorat (Bac+8)</option>
          </select></div>
-       <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="الشهادة / التخصص * " data-fr="Diplôme / Spécialité * ">الشهادة / التخصص * </label>
-         <input id="reg-filiere" type="text" list="diplomesList" data-pha="ابحث عن تخصصك..." data-phf="Recherchez votre diplôme..." placeholder="ابحث عن تخصصك..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;">
+       <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="مؤسسة التخرج (القاضي عياض) *" data-fr="Établissement d'obtention (UCA) *">مؤسسة التخرج (القاضي عياض) *</label>
+         <select id="reg-etablissement" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;background:#fff;">
+           <option value="" data-ar="اختر..." data-fr="Choisir...">اختر...</option>
+           <option>FSSM — Faculté des Sciences Semlalia</option>
+           <option>FSTG — Faculté des Sciences et Techniques Guéliz</option>
+           <option>FSJES — Faculté des Sciences Juridiques, Économiques et Sociales</option>
+           <option>FLSH — Faculté des Lettres et des Sciences Humaines</option>
+           <option>FMPM — Faculté de Médecine et de Pharmacie</option>
+           <option>FLAM — Faculté de la Langue Arabe</option>
+           <option>ENSA Marrakech — École Nationale des Sciences Appliquées</option>
+           <option>ENSA Safi — École Nationale des Sciences Appliquées</option>
+           <option>ENCG — École Nationale de Commerce et de Gestion</option>
+           <option>ENS — École Normale Supérieure</option>
+           <option>EST Safi — École Supérieure de Technologie</option>
+           <option>EST Essaouira — École Supérieure de Technologie</option>
+           <option>FP Safi — Faculté Polydisciplinaire</option>
+         </select></div>
+       <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="سنة الحصول على الشهادة *" data-fr="Année d'obtention *">سنة الحصول على الشهادة *</label>
+         <select id="reg-annee" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;background:#fff;">
+           <option value="" data-ar="اختر..." data-fr="Choisir...">اختر...</option>
+           <option>2026</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option>
+           <option>2021</option><option>2020</option><option>2019</option><option>2018</option><option>2017</option>
+           <option>2016</option><option>2015</option><option value="Avant 2015" data-ar="قبل 2015" data-fr="Avant 2015">قبل 2015</option>
+         </select></div>
+       <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="الشعبة / التخصص (Option) *" data-fr="Option / Spécialité *">الشعبة / التخصص (Option) *</label>
+         <input id="reg-filiere" type="text" list="diplomesList" data-pha="ابحث عن تخصصك..." data-phf="Recherchez votre option..." placeholder="ابحث عن تخصصك..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;">
          <datalist id="diplomesList">
            <option>Informatique — Développement Web</option>
            <option>Informatique — Développement Mobile</option>
@@ -1992,6 +2013,8 @@
            <option>Cuisine et Pâtisserie</option>
            <option>Coiffure et Esthétique</option>
          </datalist></div>
+       <div style="grid-column:span 2;"><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="شهادات أخرى (اختياري)" data-fr="Autres diplômes (optionnel)">شهادات أخرى (اختياري)</label>
+         <input id="reg-autresdiplomes" type="text" data-pha="مثال: تقني في المحاسبة سنة 2022، شهادة في التسويق الرقمي..." data-phf="Ex : Technicien comptabilité en 2022, certificat marketing digital..." placeholder="مثال: تقني في المحاسبة سنة 2022، شهادة في التسويق الرقمي..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;"></div>
        <div><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="الخبرة المهنية" data-fr="Expérience professionnelle">الخبرة المهنية</label>
          <select id="reg-experience" style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;background:#fff;">
            <option value="" data-ar="اختر..." data-fr="Choisir...">اختر...</option>
@@ -2585,6 +2608,19 @@ window.analyserCV = function() {
      if (f.filiere)     { document.getElementById('reg-filiere').value = f.filiere; filled++; }
      if (f.langues)     { document.getElementById('reg-lang-autres').value = f.langues; filled++; }
      if (f.experienceDetail) { document.getElementById('reg-expdetail').value = f.experienceDetail; filled++; }
+     if (f.etablissement) {
+       var setab = document.getElementById('reg-etablissement');
+       for (var k = 0; k < setab.options.length; k++) {
+         if (setab.options[k].text === f.etablissement || setab.options[k].text.indexOf(f.etablissement.split(' — ')[0]) === 0) { setab.selectedIndex = k; filled++; break; }
+       }
+     }
+     if (f.anneeDiplome) {
+       var san = document.getElementById('reg-annee');
+       for (var q2 = 0; q2 < san.options.length; q2++) {
+         if (san.options[q2].value === String(f.anneeDiplome)) { san.selectedIndex = q2; filled++; break; }
+       }
+     }
+     if (f.autresDiplomes) { document.getElementById('reg-autresdiplomes').value = f.autresDiplomes; filled++; }
      if (f.competences) { document.getElementById('reg-competences').value = f.competences; filled++; }
      if (f.objectif)    { document.getElementById('reg-objectif').value = f.objectif; filled++; }
      status.textContent = L('تم ملء '+ filled + 'حقول من سيرتك الذاتية — راجعها وأكمل الباقي',
@@ -2619,7 +2655,10 @@ window.submitRegistration = function() {
    email:      document.getElementById('reg-email').value.trim().toLowerCase(),
    tel:        document.getElementById('reg-tel').value.trim(),
    niveau:     document.getElementById('reg-niveau').value,
+   etablissement: document.getElementById('reg-etablissement').value,
+   anneeDiplome:  document.getElementById('reg-annee').value,
    filiere:    document.getElementById('reg-filiere').value.trim(),
+   autresDiplomes: document.getElementById('reg-autresdiplomes').value.trim(),
    experience: document.getElementById('reg-experience').value,
    experienceDetail: document.getElementById('reg-expdetail').value.trim(),
    langues:    (function(){
@@ -2635,7 +2674,7 @@ window.submitRegistration = function() {
    competences:document.getElementById('reg-competences').value.trim(),
    objectif:   document.getElementById('reg-objectif').value.trim()
  };
- if (!prenom || !nomfamille || !naissance || !p.cin || !p.ville || !p.adresse || !p.email || !password || !p.niveau || !p.filiere) {
+ if (!prenom || !nomfamille || !naissance || !p.cin || !p.ville || !p.adresse || !p.email || !password || !p.niveau || !p.etablissement || !p.anneeDiplome || !p.filiere) {
    alert(L('يرجى ملء الحقول الإجبارية (*)','Veuillez remplir les champs obligatoires (*)'));
    return;
  }

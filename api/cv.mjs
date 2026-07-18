@@ -5,16 +5,30 @@ import { put } from "@vercel/blob";
 // POST { filename, data (base64) } → { niveau, filiere, experience, langues, competences, objectif }
 
 const NIVEAUX = [
-  "Bac",
-  "Bac+2 — DEUG / DUT / BTS / DTS",
-  "Bac+3 — Licence / Licence Pro / Bachelor",
-  "Bac+4 — Maîtrise",
-  "Bac+5 — Master / Master Spécialisé",
-  "Bac+5 — Diplôme d'Ingénieur d'État",
-  "Bac+6+ — Doctorat / PhD",
-  "Diplôme OFPPT — Technicien",
-  "Diplôme OFPPT — Technicien Spécialisé",
-  "Diplôme OFPPT — Qualification professionnelle",
+  "DUT — Diplôme Universitaire de Technologie (Bac+2)",
+  "DEUG / DEUST (Bac+2)",
+  "Licence Fondamentale (Bac+3)",
+  "Licence Professionnelle (Bac+3)",
+  "Licence d'Éducation (Bac+3)",
+  "Master (Bac+5)",
+  "Master Spécialisé (Bac+5)",
+  "Diplôme d'Ingénieur d'État (Bac+5)",
+  "Doctorat (Bac+8)",
+];
+const ETABLISSEMENTS = [
+  "FSSM — Faculté des Sciences Semlalia",
+  "FSTG — Faculté des Sciences et Techniques Guéliz",
+  "FSJES — Faculté des Sciences Juridiques, Économiques et Sociales",
+  "FLSH — Faculté des Lettres et des Sciences Humaines",
+  "FMPM — Faculté de Médecine et de Pharmacie",
+  "FLAM — Faculté de la Langue Arabe",
+  "ENSA Marrakech — École Nationale des Sciences Appliquées",
+  "ENSA Safi — École Nationale des Sciences Appliquées",
+  "ENCG — École Nationale de Commerce et de Gestion",
+  "ENS — École Normale Supérieure",
+  "EST Safi — École Supérieure de Technologie",
+  "EST Essaouira — École Supérieure de Technologie",
+  "FP Safi — Faculté Polydisciplinaire",
 ];
 const EXPERIENCES = ["Sans expérience", "Stage uniquement", "Moins d'un an", "1-3 ans", "3-5 ans", "Plus de 5 ans"];
 
@@ -74,6 +88,9 @@ export default async function handler(req, res) {
             `- "niveau": le diplôme le plus élevé, choisi EXACTEMENT parmi : ${JSON.stringify(NIVEAUX)} (ou "" si introuvable)\n` +
             `- "experience": durée totale d'expérience professionnelle, choisie EXACTEMENT parmi : ${JSON.stringify(EXPERIENCES)} (ou "" si introuvable)\n` +
             '- "filiere": la spécialité/le domaine du diplôme, court (ex: "Informatique — Développement Web", "Comptabilité et Finance")\n' +
+            `- "etablissement": l'établissement de l'Université Cadi Ayyad où le diplôme a été obtenu, choisi EXACTEMENT parmi : ${JSON.stringify(ETABLISSEMENTS)} (ou "" si introuvable ou hors UCA)\n` +
+            '- "anneeDiplome": l\'année d\'obtention du diplôme principal (ex: "2024", ou "" si introuvable)\n' +
+            '- "autresDiplomes": autres diplômes ou certificats avec leur année, séparés par des virgules (ex: "Technicien comptabilité en 2022"), ou ""\n' +
             '- "experienceDetail": résumé des expériences en une ligne : postes, entreprises et durées (ex: "Stagiaire comptable chez X (6 mois), assistant chez Y (1 an)")\n' +
             '- "langues": langues parlées AVEC niveau si mentionné, séparées par des virgules (ex: "Arabe : natif, Français : courant, Anglais : intermédiaire")\n' +
             '- "competences": les 5-8 compétences clés séparées par des virgules\n' +
@@ -106,6 +123,9 @@ export default async function handler(req, res) {
       success: true,
       fields: {
         niveau: fields.niveau || "",
+        etablissement: fields.etablissement || "",
+        anneeDiplome: fields.anneeDiplome || "",
+        autresDiplomes: fields.autresDiplomes || "",
         filiere: fields.filiere || "",
         experience: fields.experience || "",
         experienceDetail: fields.experienceDetail || "",
