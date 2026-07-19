@@ -170,6 +170,13 @@
          <div><label>Date & heure *</label><input id="at-date" placeholder="Ex : Lundi 3 août · 10h00"></div>
          <div><label>Lieu *</label><input id="at-lieu" placeholder="Ex : Agence ANAPEC Rabat / Zoom"></div>
          <div><label>Places disponibles</label><input id="at-places" placeholder="Ex : 15 places restantes"></div>
+         <div><label>Dimension du trèfle (bonus +10 pts)</label>
+           <select id="at-dim">
+             <option value="projet">PROJET — Projet professionnel</option>
+             <option value="soi">SOI — Connaissance du profil</option>
+             <option value="territoire">TERRITOIRE — Marché de l'emploi</option>
+             <option value="methode" selected>MÉTHODE — Techniques de recherche</option>
+           </select></div>
        </div>
        <button class="btn-add" onclick="addAtelier()">Publier l'atelier</button>
      </div>
@@ -394,13 +401,26 @@ function saveProfil(){
 }
 
 /* ══════════ Diagnostic conseiller (modal) ══════════ */
+// Scores effectifs : ajustement du conseiller (prioritaire) + bonus ateliers, plafonnés à 100
+function effScoresAdmin(p){
+ var base = p.positionnement.scoresAjustes || p.positionnement.scores || {};
+ var bonus = p.positionnement.bonus || {};
+ var out = {};
+ ['soi','projet','territoire','methode'].forEach(function(d){ out[d] = Math.min(100, (base[d]||0) + (bonus[d]||0)); });
+ out.global = Math.round((out.soi + out.projet + out.territoire + out.methode) / 4);
+ return out;
+}
+
 function voirDiagnostic(email){
  var p = store('dabanet_profils').find(function(x){ return x.email === email; });
  if (!p || !p.positionnement) return;
- var s = p.positionnement.scores || {};
+ var auto = p.positionnement.scores || {};
+ var adj = p.positionnement.scoresAjustes || null;
+ var bonus = p.positionnement.bonus || {};
+ var s = effScoresAdmin(p);
  var date = p.positionnement.date ? new Date(p.positionnement.date).toLocaleDateString('fr-MA') : '—';
 
- // Compact scoring bars per dimension
+ // Compact scoring bars per dimension (effective) + adjustment inputs
  var DIMS = [
    { k:'soi',        l:'SOI — Connaissance de son profil',      c:'#9C2484'},
    { k:'projet',     l:'PROJET — Projet professionnel',          c:'#7E1F78'},
@@ -409,10 +429,20 @@ function voirDiagnostic(email){
  ];
  var barsHtml = DIMS.map(function(d){
    var v = s[d.k] || 0;
+   var detail = 'auto ' + (auto[d.k]||0) + (adj ? ' · ajusté ' + (adj[d.k]||0) : '') + (bonus[d.k] ? ' · +' + bonus[d.k] + ' ateliers' : '');
    return '<div style="margin-bottom:9px;">'+
-     '<div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:3px;"><b style="color:'+d.c+';">'+d.l+'</b><b>'+v+'/100</b></div>'+
+     '<div style="display:flex;justify-content:space-between;align-items:center;font-size:0.78rem;margin-bottom:3px;">'+
+       '<b style="color:'+d.c+';">'+d.l+'</b>'+
+       '<span><span style="color:var(--muted);font-size:0.68rem;margin-right:8px;">'+detail+'</span><b>'+v+'/100</b>'+
+       ' <input type="number" id="adj-'+d.k+'" min="0" max="100" value="'+(adj ? (adj[d.k]||0) : (auto[d.k]||0))+'" style="width:58px;padding:3px 6px;border:1.5px solid var(--border);border-radius:6px;font-size:0.74rem;margin-left:6px;"></span>'+
+     '</div>'+
      '<div style="background:#E8DEEC;border-radius:20px;height:8px;overflow:hidden;"><div style="width:'+v+'%;height:100%;background:'+d.c+';"></div></div></div>';
  }).join('');
+ barsHtml += '<div style="display:flex;align-items:center;gap:10px;margin:6px 0 4px;">'+
+   '<button class="act ok" onclick="saveAjustement(\''+esc(email)+'\')">Enregistrer l\'ajustement</button>'+
+   (adj ? '<button class="act del" onclick="resetAjustement(\''+esc(email)+'\')">Revenir au score auto</button>' : '')+
+   '<span style="font-size:0.7rem;color:var(--muted);">Corrigez les valeurs après l\'entretien de positionnement puis enregistrez.</span>'+
+ '</div>';
 
  // Commentaire adressé au conseiller (concis), clamped to a few lines
  var resume = (p.positionnement.diagnosticConseiller || p.positionnement.diagnostic || '').trim();
@@ -434,7 +464,9 @@ function voirDiagnostic(email){
  document.getElementById('diagBody').innerHTML =
    '<div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">'+
      '<div style="font-family:\'Cairo\',sans-serif;font-size:1.9rem;font-weight:800;color:'+col+';">'+(s.global||0)+'<span style="font-size:0.85rem;color:var(--muted);">/100</span></div>'+
-     '<div style="font-size:0.74rem;color:var(--muted);">Score général de positionnement<br>Réalisé le '+date+'</div>'+
+     '<div style="font-size:0.74rem;color:var(--muted);">Score général effectif<br>Auto-diagnostic du '+date+
+       (adj && p.positionnement.ajusteLe ? '<br>Ajusté par le conseiller le ' + new Date(p.positionnement.ajusteLe).toLocaleDateString('fr-MA') : '')+
+     '</div>'+
    '</div>'+
    barsHtml +
    '<div style="margin-top:12px;background:var(--purple-100);border-radius:10px;padding:11px 14px;font-size:0.8rem;line-height:1.6;white-space:pre-wrap;"><b style="color:var(--purple-900);">Commentaire pour le conseiller :</b>\n'+esc(resume)+'</div>'+
@@ -442,6 +474,38 @@ function voirDiagnostic(email){
      ? '<div style="margin-top:10px;font-size:0.78rem;"><b style="color:var(--purple-900);">Prestations recommandées :</b><ul style="margin:6px 0 0;padding-right:18px;padding-left:18px;">'+recos.map(function(r){ return '<li>'+r+'</li>'; }).join('')+'</ul></div>'
      : '<div style="margin-top:10px;font-size:0.78rem;color:var(--green);"><b> Aucune prestation urgente — les 4 dimensions sont satisfaisantes.</b></div>');
  document.getElementById('diagModal').style.display = 'flex';
+}
+
+/* ── Ajustement des scores par le conseiller ── */
+function saveAjustement(email){
+ var profils = store('dabanet_profils');
+ var p = profils.find(function(x){ return x.email === email; });
+ if (!p || !p.positionnement) return;
+ var adj = {};
+ var ok = true;
+ ['soi','projet','territoire','methode'].forEach(function(d){
+   var v = parseInt(document.getElementById('adj-' + d).value, 10);
+   if (isNaN(v) || v < 0 || v > 100) ok = false;
+   adj[d] = Math.max(0, Math.min(100, v || 0));
+ });
+ if (!ok) { alert('Valeurs invalides : chaque score doit être entre 0 et 100.'); return; }
+ adj.global = Math.round((adj.soi + adj.projet + adj.territoire + adj.methode) / 4);
+ p.positionnement.scoresAjustes = adj;
+ p.positionnement.ajusteLe = new Date().toISOString();
+ save('dabanet_profils', profils);
+ alert('Ajustement enregistré. Le candidat verra les scores corrigés dans son espace.');
+ renderConseiller();
+ voirDiagnostic(email);
+}
+function resetAjustement(email){
+ var profils = store('dabanet_profils');
+ var p = profils.find(function(x){ return x.email === email; });
+ if (!p || !p.positionnement) return;
+ delete p.positionnement.scoresAjustes;
+ delete p.positionnement.ajusteLe;
+ save('dabanet_profils', profils);
+ renderConseiller();
+ voirDiagnostic(email);
 }
 
 /* ══════════ Automatic WhatsApp notifications ══════════ */
@@ -616,9 +680,13 @@ function renderValidationTable(){
      var badge = p.verifie ? '<span class="badge accepted">✓ Validé</span>': '<span class="badge pending">En attente</span>';
      var trefle = '—';
      if (p.positionnement && p.positionnement.scores) {
-       var s = p.positionnement.scores;
+       var s = effScoresAdmin(p);
+       var marks = [];
+       if (p.positionnement.scoresAjustes) marks.push('ajusté');
+       if (p.positionnement.bonus && Object.keys(p.positionnement.bonus).some(function(k){ return p.positionnement.bonus[k] > 0; })) marks.push('+pts ateliers');
        var col = s.global >= 70 ? 'var(--green)': s.global >= 45 ? 'var(--gold-700)': 'var(--red)';
-       trefle = '<b style="color:'+col+';font-size:0.95rem;">'+s.global+'/100</b><br>'+
+       trefle = '<b style="color:'+col+';font-size:0.95rem;">'+s.global+'/100</b>'+
+         (marks.length ? ' <span style="font-size:0.62rem;color:var(--purple-700);font-weight:700;">('+marks.join(', ')+')</span>' : '')+'<br>'+
          '<span style="font-size:0.68rem;color:var(--muted);">S:'+s.soi+'· P:'+s.projet+'· T:'+s.territoire+'· M:'+s.methode+'</span><br>'+
          '<button class="act del" style="margin-top:4px;padding:3px 10px;" onclick="voirDiagnostic(\''+esc(p.email)+'\')">Rapport de diagnostic</button>';
      } else {
@@ -683,7 +751,7 @@ function addAtelier(){
  var places = document.getElementById('at-places').value.trim() || 'Places disponibles';
  if (!t || !d || !lieu) { alert('Remplissez le titre, la date et le lieu.'); return; }
  var ateliers = store('dabanet_ateliers');
- ateliers.unshift({ id: Date.now(), t:t, d:d, lieu:lieu, places:places });
+ ateliers.unshift({ id: Date.now(), t:t, d:d, lieu:lieu, places:places, dim: document.getElementById('at-dim').value });
  save('dabanet_ateliers', ateliers);
  document.getElementById('at-titre').value=''; document.getElementById('at-date').value='';
  document.getElementById('at-lieu').value=''; document.getElementById('at-places').value='';
