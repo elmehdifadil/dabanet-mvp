@@ -117,8 +117,8 @@ export default async function handler(req, res) {
 
   // Force the interface language when explicitly provided by the client
   let langInstruction = "";
-  if (lang === "fr") langInstruction = "\n\n=== LANGUE IMPOSÉE : FRANÇAIS ===\nTa PROCHAINE réponse doit être écrite ENTIÈREMENT EN FRANÇAIS, sans aucun mot d'arabe, même si le message de l'utilisateur est en arabe. Règle absolue.";
-  else if (lang === "ar") langInstruction = "\n\n=== اللغة المفروضة: العربية ===\nيجب أن يكون ردّك القادم بالكامل بالعربية الفصحى فقط، دون أي كلمة فرنسية، حتى لو كانت رسالة المستخدم بالفرنسية. قاعدة مطلقة.";
+  if (lang === "fr") langInstruction = "\n\n=== LANGUE IMPOSÉE : FRANÇAIS ===\nÉcris ta prochaine réponse UNIQUEMENT avec des mots français, aucun mot arabe autorisé, même si le message ci-dessus est en arabe. Règle absolue et non négociable.";
+  else if (lang === "ar") langInstruction = "\n\n=== اللغة المفروضة: العربية فقط ===\nاكتب ردّك القادم بأحرف عربية فقط، ولا تستعمل ولا كلمة واحدة بالفرنسية أو بالحروف اللاتينية، حتى ولو كانت الرسالة أعلاه بالفرنسية. هذه قاعدة إلزامية غير قابلة للتفاوض.";
 
   // Build profile context if provided
   let profileContext = "";
@@ -164,7 +164,14 @@ export default async function handler(req, res) {
 
   try {
     const chatMessages = [{ role: "system", content: SYSTEM_PROMPT + profileContext + jobsContext }, ...messages];
-    if (langInstruction) chatMessages.push({ role: "system", content: langInstruction });
+    if (langInstruction) {
+      chatMessages.push({ role: "system", content: langInstruction });
+      // Redondance : instruction aussi collée au dernier message utilisateur, que certains modèles suivent mieux
+      const lastUserIdx = chatMessages.map((m) => m.role).lastIndexOf("user");
+      if (lastUserIdx !== -1) {
+        chatMessages[lastUserIdx] = { ...chatMessages[lastUserIdx], content: chatMessages[lastUserIdx].content + langInstruction };
+      }
+    }
 
     const response = await client.chat.completions.create({
       model: "llama-3.3-70b-versatile",
