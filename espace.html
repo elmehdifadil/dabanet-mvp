@@ -494,6 +494,7 @@ window.runDiagnosis = function(){
  var prompt = 'Je suis '+ p.nom + (p.age ? ', '+ p.age + 'ans': '') + ', à '+ (p.ville||'') +
    '. Niveau '+ (p.niveau||'') + 'en '+ (p.filiere||'') +
    (p.experience ? ', expérience : '+ p.experience : '') +
+   (p.expPoste ? ', dernier poste : '+ p.expPoste + (p.expEntreprise ? ' chez '+p.expEntreprise : '') + ' ('+(p.expDebut||'?')+' → '+(p.expEnCours ? 'en cours' : (p.expFin||'?'))+')' : '') +
    (p.competences ? ', compétences : '+ p.competences : '') +
    '. Fais un diagnostic complet de mon profil (score, points forts, points faibles) et un plan d\'action concret avec les offres ANAPEC adaptées.';
  addMsg(L('تشخيص ملفي...','Diagnostic de mon profil...'), 'user');

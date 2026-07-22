@@ -2025,8 +2025,25 @@
            <option value="Moins d'un an" data-ar="أقل من سنة" data-fr="Moins d'un an">أقل من سنة</option><option value="1-3 ans" data-ar="1-3 سنوات" data-fr="1-3 ans">1-3 سنوات</option>
            <option value="3-5 ans" data-ar="3-5 سنوات" data-fr="3-5 ans">3-5 سنوات</option><option value="Plus de 5 ans" data-ar="أكثر من 5 سنوات" data-fr="Plus de 5 ans">أكثر من 5 سنوات</option>
          </select></div>
-       <div style="grid-column:span 2;"><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="تفاصيل الخبرة المهنية (المناصب، المقاولات، المدد)" data-fr="Détail des expériences (postes, entreprises, durées)">تفاصيل الخبرة المهنية (المناصب، المقاولات، المدد)</label>
-         <textarea id="reg-expdetail" rows="2" data-pha="مثال: متدرب محاسبة بشركة X (6 أشهر)، مساعد إداري بشركة Y (سنة)..." data-phf="Ex : Stagiaire comptable chez X (6 mois), assistant administratif chez Y (1 an)..." placeholder="مثال: متدرب محاسبة بشركة X (6 أشهر)، مساعد إداري بشركة Y (سنة)..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;resize:none;"></textarea></div>
+       <div style="grid-column:span 2;background:#FAF3FB;border:1.5px dashed #9C2484;border-radius:12px;padding:14px 16px;">
+         <label style="font-size:0.82rem;color:#4F1359;font-weight:700;display:block;margin-bottom:8px;" data-ar="آخر تجربة مهنية (التفاصيل تساعدنا على تشخيص ملفك)" data-fr="Dernière expérience professionnelle (aide au diagnostic)">آخر تجربة مهنية (التفاصيل تساعدنا على تشخيص ملفك)</label>
+         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;">
+           <div><label style="font-size:0.78rem;color:#7C6B82;display:block;margin-bottom:3px;" data-ar="المنصب" data-fr="Poste occupé">المنصب</label>
+             <input id="reg-exp-poste" type="text" data-pha="مثال: متدرب محاسبة" data-phf="Ex : Stagiaire comptable" placeholder="مثال: متدرب محاسبة" style="width:100%;padding:9px 10px;border:1.5px solid #E8DEEC;border-radius:9px;font-size:0.85rem;box-sizing:border-box;outline:none;"></div>
+           <div><label style="font-size:0.78rem;color:#7C6B82;display:block;margin-bottom:3px;" data-ar="المقاولة / المؤسسة" data-fr="Entreprise / Organisme">المقاولة / المؤسسة</label>
+             <input id="reg-exp-entreprise" type="text" data-pha="مثال: شركة X" data-phf="Ex : Société X" placeholder="مثال: شركة X" style="width:100%;padding:9px 10px;border:1.5px solid #E8DEEC;border-radius:9px;font-size:0.85rem;box-sizing:border-box;outline:none;"></div>
+           <div><label style="font-size:0.78rem;color:#7C6B82;display:block;margin-bottom:3px;" data-ar="تاريخ البداية" data-fr="Date de début">تاريخ البداية</label>
+             <input id="reg-exp-debut" type="month" style="width:100%;padding:9px 10px;border:1.5px solid #E8DEEC;border-radius:9px;font-size:0.85rem;box-sizing:border-box;outline:none;"></div>
+           <div><label style="font-size:0.78rem;color:#7C6B82;display:block;margin-bottom:3px;" data-ar="تاريخ النهاية" data-fr="Date de fin">تاريخ النهاية</label>
+             <input id="reg-exp-fin" type="month" style="width:100%;padding:9px 10px;border:1.5px solid #E8DEEC;border-radius:9px;font-size:0.85rem;box-sizing:border-box;outline:none;">
+             <label style="display:flex;align-items:center;gap:5px;margin-top:5px;font-size:0.74rem;color:#7C6B82;cursor:pointer;font-weight:400;">
+               <input id="reg-exp-encours" type="checkbox" style="width:auto;" onchange="document.getElementById('reg-exp-fin').disabled=this.checked; if(this.checked) document.getElementById('reg-exp-fin').value='';">
+               <span data-ar="لا زلت أعمل هنا حالياً" data-fr="Poste occupé actuellement">لا زلت أعمل هنا حالياً</span>
+             </label></div>
+         </div>
+       </div>
+       <div style="grid-column:span 2;"><label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="تفاصيل أخرى عن الخبرة (تجارب سابقة إضافية)" data-fr="Autres expériences (facultatif)">تفاصيل أخرى عن الخبرة (تجارب سابقة إضافية)</label>
+         <textarea id="reg-expdetail" rows="2" data-pha="مثال: مساعد إداري بشركة Y (سنة)..." data-phf="Ex : Assistant administratif chez Y (1 an)..." placeholder="مثال: مساعد إداري بشركة Y (سنة)..." style="width:100%;padding:10px 12px;border:1.5px solid #E8DEEC;border-radius:10px;font-size:0.88rem;box-sizing:border-box;outline:none;resize:none;"></textarea></div>
        <div style="grid-column:span 2;">
          <label style="font-size:0.8rem;color:#4F1359;font-weight:700;display:block;margin-bottom:4px;" data-ar="مستوى اللغات" data-fr="Niveau des langues">مستوى اللغات</label>
          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
@@ -2663,6 +2680,11 @@ window.submitRegistration = function() {
    filiere:    document.getElementById('reg-filiere').value.trim(),
    autresDiplomes: document.getElementById('reg-autresdiplomes').value.trim(),
    experience: document.getElementById('reg-experience').value,
+   expPoste:      document.getElementById('reg-exp-poste').value.trim(),
+   expEntreprise: document.getElementById('reg-exp-entreprise').value.trim(),
+   expDebut:      document.getElementById('reg-exp-debut').value,
+   expFin:        document.getElementById('reg-exp-encours').checked ? '' : document.getElementById('reg-exp-fin').value,
+   expEnCours:    document.getElementById('reg-exp-encours').checked,
    experienceDetail: document.getElementById('reg-expdetail').value.trim(),
    langues:    (function(){
      var parts = [

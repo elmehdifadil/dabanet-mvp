@@ -279,6 +279,10 @@
      <div class="full"><label>Autres diplômes</label><input id="pf-autresDiplomes"></div>
      <div><label>Diplôme / Spécialité</label><input id="pf-filiere"></div>
      <div><label>Expérience</label><input id="pf-experience"></div>
+     <div><label>Poste (dernière expérience)</label><input id="pf-expPoste"></div>
+     <div><label>Entreprise</label><input id="pf-expEntreprise"></div>
+     <div><label>Début</label><input id="pf-expDebut" type="month"></div>
+     <div><label>Fin (vide si en cours)</label><input id="pf-expFin" type="month"></div>
      <div class="full"><label>Détail des expériences</label><textarea id="pf-experienceDetail" rows="2"></textarea></div>
      <div><label>Langues</label><input id="pf-langues"></div>
      <div class="full"><label>Compétences</label><input id="pf-competences"></div>
@@ -332,7 +336,7 @@ function dbSync(onDone){
 function esc(s){ var d=document.createElement('div'); d.textContent=String(s==null?'':s); return d.innerHTML; }
 
 /* ══════════ Profil candidat : aperçu + modification ══════════ */
-var PF_FIELDS = ['nomfamille','prenom','naissance','cin','ville','adresse','email','tel','niveau','etablissement','anneeDiplome','filiere','autresDiplomes','experience','experienceDetail','langues','competences','objectif'];
+var PF_FIELDS = ['nomfamille','prenom','naissance','cin','ville','adresse','email','tel','niveau','etablissement','anneeDiplome','filiere','autresDiplomes','experience','expPoste','expEntreprise','expDebut','expFin','experienceDetail','langues','competences','objectif'];
 
 /* ── Aperçu (lecture seule) : profil + CV ── */
 function voirApercu(email){
@@ -341,7 +345,10 @@ function voirApercu(email){
   var rows = [
     ['Nom complet', p.nom], ['Date de naissance', p.naissance], ['CIN', p.cin],
     ['Province', p.ville], ['Adresse', p.adresse], ['Email', p.email], ['Téléphone WhatsApp', p.tel],
-    ['Diplôme (UCA)', p.niveau], ['Établissement', p.etablissement], ['Année d\'obtention', p.anneeDiplome], ['Option / Spécialité', p.filiere], ['Autres diplômes', p.autresDiplomes], ['Expérience', p.experience], ['Détail des expériences', p.experienceDetail],
+    ['Diplôme (UCA)', p.niveau], ['Établissement', p.etablissement], ['Année d\'obtention', p.anneeDiplome], ['Option / Spécialité', p.filiere], ['Autres diplômes', p.autresDiplomes], ['Expérience', p.experience],
+    ['Dernier poste', p.expPoste], ['Entreprise', p.expEntreprise],
+    ['Période', (p.expDebut||'—') + ' → ' + (p.expEnCours ? 'en cours' : (p.expFin||'—'))],
+    ['Autres expériences', p.experienceDetail],
     ['Langues', p.langues], ['Compétences', p.competences], ['Objectif professionnel', p.objectif],
     ['Inscrit le', p.createdAt ? new Date(p.createdAt).toLocaleDateString('fr-MA') : '—'],
     ['Statut', p.verifie ? 'Compte validé' : 'En attente de validation']

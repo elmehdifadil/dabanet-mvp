@@ -131,6 +131,11 @@ export default async function handler(req, res) {
     if (profile.niveau) profileContext += `- Niveau d'études : ${profile.niveau}\n`;
     if (profile.filiere) profileContext += `- Filière / Spécialité : ${profile.filiere}\n`;
     if (profile.experience) profileContext += `- Expérience : ${profile.experience}\n`;
+    if (profile.expPoste || profile.expEntreprise) {
+      const periode = `${profile.expDebut || "?"} → ${profile.expEnCours ? "en cours" : (profile.expFin || "?")}`;
+      profileContext += `- Dernier poste occupé : ${profile.expPoste || "—"}${profile.expEntreprise ? ` chez ${profile.expEntreprise}` : ""} (${periode})\n`;
+    }
+    if (profile.experienceDetail) profileContext += `- Autres expériences : ${profile.experienceDetail}\n`;
     if (profile.competences) profileContext += `- Compétences : ${profile.competences}\n`;
     if (profile.langues) profileContext += `- Langues : ${profile.langues}\n`;
     if (profile.secteur) profileContext += `- Secteur cible : ${profile.secteur}\n`;
