@@ -5,25 +5,25 @@ const SITE = "https://paluca.vercel.app";
 function buildMessage(type, data = {}) {
   switch (type) {
     case "welcome_registration":
-      return `✅ *PALUCA — Bienvenue ${data.nom || ""}* 🎓\n\nVotre compte a été créé avec succès sur PALUCA (Plateforme d'Accompagnement des Lauréats Universitaires Cadi Ayyad).\n\nVous recevrez ici :\n📅 Confirmations de vos rendez-vous conseiller\n💼 Offres d'emploi adaptées à votre profil\n🎓 Nouveaux ateliers et formations\n\n👉 Votre espace : ${SITE}`;
+      return `✅ *PALE-UCA — Bienvenue ${data.nom || ""}* 🎓\n\nVotre compte a été créé avec succès sur PALE-UCA (Plateforme d'Accompagnement des Lauréats Universitaires Cadi Ayyad).\n\nVous recevrez ici :\n📅 Confirmations de vos rendez-vous conseiller\n💼 Offres d'emploi adaptées à votre profil\n🎓 Nouveaux ateliers et formations\n\n👉 Votre espace : ${SITE}`;
 
     case "rdv_accepted":
-      return `📅 *PALUCA — Rendez-vous confirmé* ✅\n\nBonjour ${data.nom || ""},\nVotre rendez-vous avec un conseiller emploi a été *accepté* :\n\n🗓 Date : ${data.date || "—"}\n📞 Type : ${data.typeRdv || "—"}\n\nLe conseiller vous contactera à l'heure convenue. Bonne chance ! 🍀`;
+      return `📅 *PALE-UCA — Rendez-vous confirmé* ✅\n\nBonjour ${data.nom || ""},\nVotre rendez-vous avec un conseiller emploi a été *accepté* :\n\n🗓 Date : ${data.date || "—"}\n📞 Type : ${data.typeRdv || "—"}\n\nLe conseiller vous contactera à l'heure convenue. Bonne chance ! 🍀`;
 
     case "rdv_refused":
-      return `📅 *PALUCA — Rendez-vous* ⚠️\n\nBonjour ${data.nom || ""},\nVotre demande de rendez-vous du ${data.date || "—"} n'a pas pu être retenue.\n\n👉 Vous pouvez proposer une nouvelle date depuis votre espace : ${SITE}`;
+      return `📅 *PALE-UCA — Rendez-vous* ⚠️\n\nBonjour ${data.nom || ""},\nVotre demande de rendez-vous du ${data.date || "—"} n'a pas pu être retenue.\n\n👉 Vous pouvez proposer une nouvelle date depuis votre espace : ${SITE}`;
 
     case "atelier_new":
-      return `🎓 *PALUCA — Nouvel atelier disponible*\n\n${data.t || "Atelier"}\n🗓 ${data.d || ""}\n📍 ${data.lieu || ""}\n🔥 ${data.places || "Places limitées"}\n\n👉 Inscrivez-vous vite depuis votre espace : ${SITE}`;
+      return `🎓 *PALE-UCA — Nouvel atelier disponible*\n\n${data.t || "Atelier"}\n🗓 ${data.d || ""}\n📍 ${data.lieu || ""}\n🔥 ${data.places || "Places limitées"}\n\n👉 Inscrivez-vous vite depuis votre espace : ${SITE}`;
 
     case "news_new":
-      return `📰 *PALUCA — Actualité*\n\n*${data.title || ""}*\n\n${data.desc || ""}\n\n👉 Plus de détails : ${SITE}`;
+      return `📰 *PALE-UCA — Actualité*\n\n*${data.title || ""}*\n\n${data.desc || ""}\n\n👉 Plus de détails : ${SITE}`;
 
     case "job_alert":
-      return `🎯 *PALUCA — Nouvelle offre pour vous*\n\n${data.title || "Offre ANAPEC"}\n📍 ${data.region || "Maroc"}\n📋 ${data.contrat || "CDI/CDD"}\n\n👉 Consultez les offres : https://www.anapec.org/sigec-app-rv/front/chercheurs/recherche_offre`;
+      return `🎯 *PALE-UCA — Nouvelle offre pour vous*\n\n${data.title || "Offre ANAPEC"}\n📍 ${data.region || "Maroc"}\n📋 ${data.contrat || "CDI/CDD"}\n\n👉 Consultez les offres : https://www.anapec.org/sigec-app-rv/front/chercheurs/recherche_offre`;
 
     default:
-      return `✅ *PALUCA — Notification*\n\nBonjour ! Vous êtes inscrit aux alertes PALUCA.\n👉 ${SITE}`;
+      return `✅ *PALE-UCA — Notification*\n\nBonjour ! Vous êtes inscrit aux alertes PALE-UCA.\n👉 ${SITE}`;
   }
 }
 
