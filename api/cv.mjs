@@ -29,7 +29,7 @@ const ETABLISSEMENTS = [
   "EST Safi — École Supérieure de Technologie",
   "EST Essaouira — École Supérieure de Technologie",
   "FP Safi — Faculté Polydisciplinaire",
-  "FP Kelâa des Sraghna — Faculté Polydisciplinaire",
+  "EST Kelâa des Sraghna — École Supérieure de Technologie",
   "FSJES Kelâa des Sraghna — Faculté des Sciences Juridiques, Économiques et Sociales",
   "Faculté de Médecine Dentaire — Marrakech",
 ];
