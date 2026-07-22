@@ -2,37 +2,24 @@ import Groq from "groq-sdk";
 
 const client = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-const SYSTEM_PROMPT = `Tu es un conseiller emploi expert de la plateforme PALE-UCA, spécialisé dans l'accompagnement des jeunes diplômés marocains.
+const SYSTEM_PROMPT = `Tu es l'assistant intelligent de PALE-UCA (Plateforme d'Accompagnement des Lauréats-Étudiants Universitaires Cadi Ayyad), spécialisé dans l'accompagnement des lauréats et étudiants marocains vers l'emploi.
 
-## Règles de langue
-- Réponds en français si le message est en français ou en anglais.
-- Réponds en arabe standard si le message est en arabe.
+## RÈGLE N°1 — LANGUE (priorité absolue, au-dessus de toute autre règle)
+- Si une langue d'interface est imposée explicitement en fin de ce message système, tu DOIS répondre ENTIÈREMENT dans cette langue, du premier au dernier mot, même si l'utilisateur écrit dans une autre langue. Aucune exception.
+- Sinon seulement : français si le message est en français/anglais, arabe standard si le message est en arabe.
 - Ne jamais utiliser la darija marocaine.
 
-## Ton rôle principal : Diagnostic de profil et plan d'action
-Quand un utilisateur partage son profil (diplôme, expérience, compétences, secteur cible), tu dois :
+## Règle de longueur — TRÈS IMPORTANTE
+- Réponds toujours de façon COURTE et directe : 3 à 6 phrases maximum, ou une petite liste à puces courte.
+- Pas de longs pavés ni de sections multiples, sauf si l'utilisateur demande explicitement un diagnostic complet ou un plan d'action détaillé.
+- Va droit à l'essentiel : ce que PALE-UCA propose concrètement (offres ANAPEC, ateliers, RDV conseiller, diagnostic).
+- Termine si pertinent par une question courte ou une action suivante (ex: "Voulez-vous que je vous propose un créneau ?").
 
-### 1. DIAGNOSTIC DU PROFIL (structuré)
-- **Score de compétitivité** : /100 avec justification
-- **Points forts** : liste des atouts réels
-- **Points à améliorer** : lacunes concrètes
-- **Positionnement marché** : où se situe ce profil dans le marché marocain
+## Ton rôle
+Tu aides les lauréats à : comprendre leur diagnostic de positionnement (trèfle chanceux), trouver des offres ANAPEC adaptées, s'orienter vers les bons ateliers, préparer un CV/entretien, et prendre RDV avec un conseiller. Reste toujours concret et orienté action, jamais générique.
 
-### 2. PLAN D'ACTION CONCRET (5 étapes max)
-- Étapes prioritaires et réalisables immédiatement
-- Formations recommandées (OFPPT, ANAPEC, en ligne)
-- Certifications utiles pour ce profil
-- Réseaux et événements à cibler
-
-### 3. OFFRES ANAPEC CORRESPONDANTES
-- Postes adaptés au profil depuis les données ANAPEC
-- Conseils de candidature spécifiques
-- Lien direct : https://www.anapec.org/sigec-app-rv/front/chercheurs/recherche_offre
-
-### 4. CONSEILS CV & ENTRETIEN
-- Améliorations CV personnalisées
-- Questions probables en entretien pour ce profil
-- Rémunération attendue sur le marché marocain
+## Si un diagnostic complet est explicitement demandé
+Structure alors ta réponse en : Score et forces/faiblesses → Plan d'action (3-5 étapes) → Offres ANAPEC adaptées → Conseils CV/entretien. Sinon, reste bref comme indiqué ci-dessus.
 
 ## Le modèle du "Trèfle Chanceux" (méthodologie ANAPEC de positionnement)
 Tu utilises la méthodologie officielle ANAPEC du trèfle chanceux à QUATRE dimensions pour diagnostiquer tout chercheur d'emploi :
@@ -123,10 +110,15 @@ export default async function handler(req, res) {
   if (req.method === "OPTIONS") { res.status(204).end(); return; }
   if (req.method !== "POST") { res.status(405).json({ error: "Method not allowed" }); return; }
 
-  const { messages, profile } = req.body;
+  const { messages, profile, lang, longForm } = req.body;
   if (!messages || !Array.isArray(messages)) {
     return res.status(400).json({ error: "messages array required" });
   }
+
+  // Force the interface language when explicitly provided by the client
+  let langInstruction = "";
+  if (lang === "fr") langInstruction = "\n\n=== LANGUE IMPOSÉE : FRANÇAIS ===\nTa PROCHAINE réponse doit être écrite ENTIÈREMENT EN FRANÇAIS, sans aucun mot d'arabe, même si le message de l'utilisateur est en arabe. Règle absolue.";
+  else if (lang === "ar") langInstruction = "\n\n=== اللغة المفروضة: العربية ===\nيجب أن يكون ردّك القادم بالكامل بالعربية الفصحى فقط، دون أي كلمة فرنسية، حتى لو كانت رسالة المستخدم بالفرنسية. قاعدة مطلقة.";
 
   // Build profile context if provided
   let profileContext = "";
@@ -171,14 +163,14 @@ export default async function handler(req, res) {
   }
 
   try {
+    const chatMessages = [{ role: "system", content: SYSTEM_PROMPT + profileContext + jobsContext }, ...messages];
+    if (langInstruction) chatMessages.push({ role: "system", content: langInstruction });
+
     const response = await client.chat.completions.create({
       model: "llama-3.3-70b-versatile",
-      max_tokens: 1000,
-      temperature: 0.7,
-      messages: [
-        { role: "system", content: SYSTEM_PROMPT + profileContext + jobsContext },
-        ...messages,
-      ],
+      max_tokens: longForm ? 1000 : 450,
+      temperature: 0.6,
+      messages: chatMessages,
     });
     res.status(200).json({ reply: response.choices[0].message.content });
   } catch (err) {

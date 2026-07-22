@@ -198,7 +198,7 @@
 
 <script>
 /* ══════════ Langue (AR par défaut, bascule FR) ══════════ */
-var LANG = localStorage.getItem('dabanet_lang') || 'ar';
+var LANG = localStorage.getItem('dabanet_lang') || 'fr';
 function L(ar, fr){ return LANG === 'fr' ? fr : ar; }
 // T('نص عربي — Texte français') → renvoie la partie correspondant à la langue courante
 function T(s){
@@ -469,7 +469,7 @@ async function callChat(prompt){
  try {
    var r = await fetch('/api/chat', {
      method:'POST', headers:{'Content-Type':'application/json'},
-     body: JSON.stringify({ messages: chatHistory.concat([{role:'user',content:prompt}]), profile: ME })
+     body: JSON.stringify({ messages: chatHistory.concat([{role:'user',content:prompt}]), profile: ME, lang: LANG })
    });
    var d = await r.json();
    typing.remove();
@@ -625,7 +625,7 @@ window.submitTrefle = async function(){
  try {
    var r = await fetch('/api/chat', {
      method:'POST', headers:{'Content-Type':'application/json'},
-     body: JSON.stringify({ messages:[{role:'user',content:prompt}], profile: ME })
+     body: JSON.stringify({ messages:[{role:'user',content:prompt}], profile: ME, lang:'fr', longForm: true })
    });
    var d = await r.json();
    var txt = d.reply || '';

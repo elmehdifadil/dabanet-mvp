@@ -5,26 +5,24 @@ import Groq from 'groq-sdk';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const SYSTEM_PROMPT = `أنت مساعد ذكي لمنصة PALE-UCA، تساعد الخريجين المغاربة في إيجاد عمل.
+const SYSTEM_PROMPT_FR = `Tu es l'assistant intelligent de PALE-UCA (Plateforme d'Accompagnement des Lauréats-Étudiants Universitaires Cadi Ayyad).
+Réponds TOUJOURS en français, même si le message de l'utilisateur est écrit en arabe ou dans une autre langue. N'utilise jamais l'arabe ni la darija.
+Réponds toujours en 3 à 6 phrases maximum (ou petite liste courte), sauf si un diagnostic complet est explicitement demandé.
+Ton rôle : aider les lauréats à trouver des offres ANAPEC, s'orienter vers les bons ateliers, préparer CV/entretien, et prendre RDV avec un conseiller. Reste concret et orienté action.`;
 
-قواعد اللغة:
-- إذا كتب المستخدم بالعربية، أجب بالعربية الفصحى البسيطة.
-- إذا كتب بالفرنسية أو بالإنجليزية، أجب بالفرنسية.
-- لا تستخدم الدارجة المغربية أبداً.
+const SYSTEM_PROMPT_AR = `أنت المساعد الذكي لمنصة PALE-UCA (منصة مواكبة خريجي وطلبة جامعة القاضي عياض).
+أجب دائماً بالعربية الفصحى فقط، حتى لو كانت رسالة المستخدم مكتوبة بالفرنسية أو بلغة أخرى. لا تستعمل الفرنسية ولا الدارجة أبداً.
+أجب دائماً في 3 إلى 6 جمل كحد أقصى (أو لائحة قصيرة)، إلا إذا طُلب منك تشخيص كامل صراحة.
+دورك: مساعدة الخريجين على إيجاد عروض ANAPEC، التوجه نحو الورشات المناسبة، تحضير السيرة الذاتية والمقابلات، وحجز موعد مع مستشار. كن دقيقاً وعملياً.`;
 
-مهامك:
-1. اقتراح عروض العمل من ANAPEC بحسب مؤهلات المستخدم
-2. مساعدته في تحسين سيرته الذاتية (CV)
-3. تقديم نصائح للمقابلات (entretiens)
-4. توجيهه نحو التكوينات المناسبة
+const SYSTEM_PROMPT = `Tu es l'assistant intelligent de PALE-UCA (Plateforme d'Accompagnement des Lauréats-Étudiants Universitaires Cadi Ayyad).
 
-أجب بشكل موجز (3-4 جمل) ما لم يطلب تفصيلاً أكثر.
+Règles de langue :
+- Français si le message est en français/anglais, arabe standard si le message est en arabe. Jamais de darija.
 
----
+Règle de longueur — TRÈS IMPORTANTE : réponds toujours en 3 à 6 phrases maximum (ou petite liste courte), sauf si un diagnostic complet est explicitement demandé.
 
-Tu es un assistant intelligent de la plateforme PALE-UCA. Tu aides les jeunes diplômés marocains à trouver un emploi.
-Règle : réponds toujours en français si l'utilisateur écrit en français ou en anglais.
-Sois concis (3-4 phrases) sauf si on te demande plus de détails.`;
+Ton rôle : aider les lauréats à trouver des offres ANAPEC, s'orienter vers les bons ateliers, préparer CV/entretien, et prendre RDV avec un conseiller. Reste concret et orienté action.`;
 
 const ANAPEC_SECTORS = [
   { title: "Technicien Informatique / Développeur", region: "Casablanca, Rabat", contrat: "CDI/CDD" },
@@ -78,7 +76,7 @@ async function handleChat(req, res) {
   let body = '';
   await new Promise(resolve => { req.on('data', c => body += c); req.on('end', resolve); });
   try {
-    const { messages } = JSON.parse(body);
+    const { messages, lang, longForm } = JSON.parse(body);
     const lastMsg = messages[messages.length - 1]?.content || "";
     const keywords = lastMsg.match(/\b(informatique|comptable|ingénieur|commercial|médecin|infirmier|enseignant|électricien|logistique|RH|marketing|développeur|web|مهندس|محاسب|تجاري|مبرمج|offre|emploi)\b/gi);
     const liveJobs = await fetchAnapecJobs(keywords?.[0] || "");
@@ -86,11 +84,14 @@ async function handleChat(req, res) {
       ? `\n\n--- OFFRES ANAPEC EN TEMPS RÉEL ---\n` + liveJobs.map((j, i) => `${i + 1}. ${j.title}${j.company ? ` — ${j.company}` : ""}`).join("\n") + `\nhttps://www.anapec.org/sigec-app-rv/front/chercheurs/recherche_offre`
       : `\n\n--- SECTEURS ANAPEC ---\n` + ANAPEC_SECTORS.map((j, i) => `${i + 1}. ${j.title} | ${j.region} | ${j.contrat}`).join("\n") + `\nhttps://www.anapec.org/sigec-app-rv/front/chercheurs/recherche_offre`;
 
+    const basePrompt = lang === "fr" ? SYSTEM_PROMPT_FR : lang === "ar" ? SYSTEM_PROMPT_AR : SYSTEM_PROMPT;
+    const chatMessages = [{ role: 'system', content: basePrompt + jobsContext }, ...messages];
+
     const client = new Groq({ apiKey: process.env.GROQ_API_KEY });
     const response = await client.chat.completions.create({
       model: 'llama-3.1-8b-instant',
-      max_tokens: 600,
-      messages: [{ role: 'system', content: SYSTEM_PROMPT + jobsContext }, ...messages],
+      max_tokens: longForm ? 900 : 350,
+      messages: chatMessages,
     });
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ reply: response.choices[0].message.content }));

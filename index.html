@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" id="htmlRoot">
+<html lang="fr" dir="ltr" id="htmlRoot">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -497,8 +497,8 @@
      </nav>
 
      <div class="lang-switch" id="langSwitch">
-       <button type="button" data-lang="ar" class="active">عربي</button>
-       <button type="button" data-lang="fr">FR</button>
+       <button type="button" data-lang="ar">عربي</button>
+       <button type="button" data-lang="fr" class="active">FR</button>
      </div>
 
      <button class="menu-toggle" id="menuToggle" aria-label="menu">
@@ -1357,8 +1357,8 @@
    }
  };
 
- var currentLang = 'ar';
- window.currentLang = 'ar';
+ var currentLang = 'fr';
+ window.currentLang = 'fr';
  var currentScore = 72;
  var recoIndex = 0;
 
@@ -2153,7 +2153,7 @@
      var res = await fetch('/api/chat', {
        method: 'POST',
        headers: { 'Content-Type': 'application/json'},
-       body: JSON.stringify({ messages: history, profile: window.userProfile || {} })
+       body: JSON.stringify({ messages: history, profile: window.userProfile || {}, lang: window.currentLang || 'fr' })
      });
      var data = await res.json();
      setTyping(false);
@@ -2749,7 +2749,7 @@ window.openChatDiagnosis = async function() {
  try {
    var res = await fetch('/api/chat', {
      method: 'POST', headers: { 'Content-Type': 'application/json'},
-     body: JSON.stringify({ messages: [{ role:'user', content: diagPrompt }], profile: p })
+     body: JSON.stringify({ messages: [{ role:'user', content: diagPrompt }], profile: p, lang: window.currentLang || 'fr', longForm: true })
    });
    var data = await res.json();
    var t = document.getElementById('diagTyping'); if (t) t.remove();
@@ -2794,6 +2794,9 @@ window.applyEspaceLang = function() {
 if (localStorage.getItem('dabanet_session')) {
  document.getElementById('navEspace').style.display = '';
 }
+
+// Sync bilingual data-ar/data-fr labels to the default language (French) at boot
+applyEspaceLang();
 
 // Init news on load (local first, then refresh with shared server data)
 renderNews();
