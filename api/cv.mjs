@@ -29,6 +29,9 @@ const ETABLISSEMENTS = [
   "EST Safi — École Supérieure de Technologie",
   "EST Essaouira — École Supérieure de Technologie",
   "FP Safi — Faculté Polydisciplinaire",
+  "FP Kelâa des Sraghna — Faculté Polydisciplinaire",
+  "FSJES Kelâa des Sraghna — Faculté des Sciences Juridiques, Économiques et Sociales",
+  "Faculté de Médecine Dentaire — Marrakech",
 ];
 const EXPERIENCES = ["Sans expérience", "Stage uniquement", "Moins d'un an", "1-3 ans", "3-5 ans", "Plus de 5 ans"];
 
